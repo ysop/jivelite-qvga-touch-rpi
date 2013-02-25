@@ -41,7 +41,9 @@ Return the ascend height of the font.
 
 -- C implementation
 
-return jive.ui.Font
+local oo = require("loop.base")
+
+module(..., oo.class)
 
 
 --[[

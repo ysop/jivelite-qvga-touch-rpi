@@ -240,7 +240,13 @@ static int jiveL_initSDL(lua_State *L) {
 	}
 
 	/* store screen surface */
-	tolua_pushusertype(L, srf, "Surface");
+	//tolua_pushusertype(L, srf, "Surface");
+	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+	*p = srf;
+	luaL_getmetatable(L, "JiveSurface");
+	lua_setmetatable(L, -2);
+	// FIXME - does this need the meta table adding - are we creating something here to gc?
+
 	lua_setfield(L, -2, "surface");
 
 	lua_getfield(L, -1, "bounds");
@@ -349,15 +355,6 @@ static int jiveL_process_events(lua_State *L) {
 		jive_sdlevent_pump(L);
 	}
 
-	/* check queue size */
-	if (perfwarn.queue) {
-		/*
-		if (SDL_EventQueueLength() > perfwarn.queue) {
-			printf("SDL_event_queue > %2d : %3d\n", perfwarn.queue, SDL_EventQueueLength());
-		}
-		*/
-	}
-
 	/* process events */
 	process_timers(L);
 	while (SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 ) {
@@ -420,7 +417,9 @@ static int _draw_screen(lua_State *L) {
 	 * 3: standalone_draw (used to draw screen to a new surface)
 	 */
 
-	srf = tolua_tousertype(L, 2, 0);
+	//srf = tolua_tousertype(L, 2, 0);
+	srf = *(JiveSurface **)lua_touserdata(L, 2);
+	
 	standalone_draw = lua_toboolean(L, 3);
 
 	/* Exit if we have no windows, nothing to draw */
@@ -616,7 +615,8 @@ int jiveL_update_screen(lua_State *L) {
 	lua_getfield(L, 1, "screen");
 	lua_getfield(L, -1, "surface");
 	lua_replace(L, -2);
-	screen = tolua_tousertype(L, -1, 0);
+	//screen = tolua_tousertype(L, -1, 0);
+	screen = *(JiveSurface **)lua_touserdata(L, -1);
 
 	lua_pushboolean(L, 0);
 
@@ -835,7 +835,12 @@ int jiveL_set_video_mode(lua_State *L) {
 
 	/* store new screen surface */
 	lua_getfield(L, 1, "screen");
-	tolua_pushusertype(L, srf, "Surface");
+	//tolua_pushusertype(L, srf, "Surface");
+	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+	*p = srf;
+	luaL_getmetatable(L, "JiveSurface");
+	lua_setmetatable(L, -2);
+
 	lua_setfield(L, -2, "surface");
 
 	lua_getfield(L, -1, "bounds");
@@ -856,7 +861,13 @@ int jiveL_set_video_mode(lua_State *L) {
 }
 
 int jiveL_get_background(lua_State *L) {
-	tolua_pushusertype(L, jive_background, "Tile");
+	//tolua_pushusertype(L, jive_background, "Tile");
+	JiveTile **p = (JiveTile **)lua_newuserdata(L, sizeof(JiveTile *));
+	*p = jive_background;
+	// FIXME - do we need to do this?
+	luaL_getmetatable(L, "JiveTile");
+	lua_setmetatable(L, -2);
+
 	return 1;
 }
 
@@ -868,7 +879,8 @@ int jiveL_set_background(lua_State *L) {
 	if (jive_background) {
 		jive_tile_free(jive_background);
 	}
-	jive_background = jive_tile_ref(tolua_tousertype(L, 2, 0));
+	//jive_background = jive_tile_ref(tolua_tousertype(L, 2, 0));
+	jive_background = jive_tile_ref(*(JiveTile **)lua_touserdata(L, 2));
 	next_jive_origin++;
 
 	return 0;
@@ -1251,7 +1263,13 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		lua_rawseti(L, -2, 4);
 		lua_pop(L, 1);
 
-		tolua_pushusertype(L, srf, "Surface");
+		//tolua_pushusertype(L, srf, "Surface");
+		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+		*p = srf;
+		// FIXME - is this needed?
+		luaL_getmetatable(L, "JiveSurface");
+		lua_setmetatable(L, -2);
+
 		lua_setfield(L, -2, "surface");
 
 		lua_pop(L, 1);
@@ -1345,6 +1363,13 @@ int jiveL_perfwarn(lua_State *L) {
 	}
 	
 	return 0;
+}
+
+
+static void _set_const(lua_State *L, int index, const char *name, double value) {
+	lua_pushstring(L, name);
+	lua_pushnumber(L, value);
+	lua_rawset(L, index < 0 ? index - 2 : index);
 }
 
 
@@ -1462,6 +1487,73 @@ static const struct luaL_Reg event_methods[] = {
 	{ NULL, NULL }
 };
 
+static const struct luaL_Reg font_methods[] = {
+	{ "load", jiveL_font_load },
+	{ "free", jiveL_font_free },
+	{ "width", jiveL_font_width },
+	{ "capheight", jiveL_font_capheight },
+	{ "height", jiveL_font_height },
+	{ "ascend", jiveL_font_ascend },
+	{ "offset", jiveL_font_offset },
+	{ NULL, NULL }
+};
+
+static const struct luaL_Reg surface_methods[] = {
+	{ "newRGB", jiveL_surface_newRGB },
+	{ "newRGBA", jiveL_surface_newRGBA },
+	{ "loadImage", jiveL_surface_load_image },
+	{ "loadImageData", jiveL_surface_load_image_data },
+	{ "drawText", jiveL_surface_draw_text },
+	{ "free", jiveL_surface_free },
+	{ "release", jiveL_surface_release },
+	{ "saveBMP", jiveL_surface_save_bmp },
+	{ "compare", jiveL_surface_cmp },
+	{ "setOffset", jiveL_surface_set_offset },
+	{ "setClip", jiveL_surface_set_clip_arg },
+	{ "getClip", jiveL_surface_get_clip_arg },
+	{ "blit", jiveL_surface_blit },
+	{ "blitClip", jiveL_surface_blit_clip },
+	{ "blitAlpha", jiveL_surface_blit_alpha },
+	{ "getSize", jiveL_surface_get_size },
+	{ "getBytes", jiveL_surface_get_bytes },
+	/*
+	{ "rotozoom", jiveL_surface_rotozoomSurface },
+	{ "zoom", jiveL_surface_zoomSurface },
+	{ "shrink", jiveL_surface_shrinkSurface },
+	{ "pixel", jiveL_surface_pixelColor },
+	{ "hline", jiveL_surface_hlineColor },
+	{ "vline", jiveL_surface_vlineColor },
+	{ "rectangle", jiveL_surface_rectangle },
+	{ "filledRectangle", jiveL_surface_boxColor },
+	{ "line", jiveL_surface_lineColor },
+	{ "aaline", jiveL_surface_aalineColor },
+	{ "circle", jiveL_surface_circleColor },
+	{ "aacircle", jiveL_surface_aacircleColor },
+	{ "filledCircle", jiveL_surface_filledCircleColor },
+	{ "ellipse", jiveL_surface_ellipseColor },
+	{ "aaellipse", jiveL_surface_aaellipseColor },
+	{ "filledEllipse", jiveL_surface_filledEllipseColor },
+	{ "pie", jiveL_surface_pieColor },
+	{ "filledPie", jiveL_surface_filledPieColor },
+	{ "trigon", jiveL_surface_trigonColor },
+	{ "aatrigon", jiveL_surface_aatrigonColor },
+	{ "filledTrigon", jiveL_surface_filledTrigonColor },
+	*/
+	{ NULL, NULL }
+};
+
+static const struct luaL_Reg tile_methods[] = {
+	{ "fillColor", jiveL_tile_fill_color },
+	{ "loadImage", jiveL_tile_load_image },
+	{ "loadTiles", jiveL_tile_load_tiles },
+	{ "loadVTiles", jiveL_tile_load_vtiles },
+	{ "loadHTiles", jiveL_tile_load_htiles },
+	{ "free", jiveL_tile_free },
+	{ "blit", jiveL_tile_blit },
+	{ "getMinSize", jiveL_tile_min_size },
+	{ NULL, NULL }
+};
+
 static const struct luaL_Reg core_methods[] = {
 	{ "initSDL", jiveL_initSDL },
 	{ "quit", jiveL_quit },
@@ -1536,10 +1628,34 @@ static int jiveL_core_init(lua_State *L) {
 	luaL_register(L, NULL, event_methods);
 	lua_pop(L, 1);
 
+	luaL_newmetatable(L, "JiveFont");
+	lua_pushcfunction(L, jiveL_font_gc);
+	lua_setfield(L, -2, "__gc");
+	lua_getfield(L, 2, "Font");
+	luaL_register(L, NULL, font_methods);
+	lua_setfield(L, -2, "__index");
+	lua_pop(L, 1);
+
+	luaL_newmetatable(L, "JiveSurface"); 
+	lua_pushcfunction(L, jiveL_surfacetile_gc);
+	lua_setfield(L, -2, "__gc");
+	lua_getfield(L, 2, "Surface");
+	luaL_register(L, NULL, surface_methods);
+	lua_setfield(L, -2, "__index");
+	lua_pop(L, 1);
+
+	luaL_newmetatable(L, "JiveTile");
+	lua_pushcfunction(L, jiveL_surfacetile_gc);
+	lua_setfield(L, -2, "__gc");
+	lua_getfield(L, 2, "Tile");
+	luaL_register(L, NULL, tile_methods);
+	lua_setfield(L, -2, "__index");
+	lua_pop(L, 1);
+
 	lua_getfield(L, 2, "Framework");
 	luaL_register(L, NULL, core_methods);
 	lua_pop(L, 1);
-	
+
 	return 0;
 }
 
@@ -1547,6 +1663,115 @@ static const struct luaL_Reg core_funcs[] = {
 	{ "frameworkOpen", jiveL_core_init },
 	{ NULL, NULL }
 };
+
+int luaopen_jive(lua_State *L) {
+
+	// set constants in jive.ui table - need before frameworkOpen is called
+	lua_getglobal(L, "jive");
+	lua_newtable(L);
+	lua_setfield(L, -2, "ui");
+	lua_getfield(L, -1, "ui");
+
+	_set_const(L, -1, "FRAME_RATE", JIVE_FRAME_RATE);
+	_set_const(L, -1, "XY_NIL",JIVE_XY_NIL);
+	_set_const(L, -1, "WH_NIL",JIVE_WH_NIL);
+	_set_const(L, -1, "WH_FILL",JIVE_WH_FILL);
+	_set_const(L, -1, "ALIGN_CENTER",JIVE_ALIGN_CENTER);
+	_set_const(L, -1, "ALIGN_LEFT",JIVE_ALIGN_LEFT);
+	_set_const(L, -1, "ALIGN_RIGHT",JIVE_ALIGN_RIGHT);
+	_set_const(L, -1, "ALIGN_TOP",JIVE_ALIGN_TOP);
+	_set_const(L, -1, "ALIGN_BOTTOM",JIVE_ALIGN_BOTTOM);
+	_set_const(L, -1, "ALIGN_TOP_LEFT",JIVE_ALIGN_TOP_LEFT);
+	_set_const(L, -1, "ALIGN_TOP_RIGHT",JIVE_ALIGN_TOP_RIGHT);
+	_set_const(L, -1, "ALIGN_BOTTOM_LEFT",JIVE_ALIGN_BOTTOM_LEFT);
+	_set_const(L, -1, "ALIGN_BOTTOM_RIGHT",JIVE_ALIGN_BOTTOM_RIGHT);
+	_set_const(L, -1, "LAYOUT_NORTH",JIVE_LAYOUT_NORTH);
+	_set_const(L, -1, "LAYOUT_EAST",JIVE_LAYOUT_EAST);
+	_set_const(L, -1, "LAYOUT_SOUTH",JIVE_LAYOUT_SOUTH);
+	_set_const(L, -1, "LAYOUT_WEST",JIVE_LAYOUT_WEST);
+	_set_const(L, -1, "LAYOUT_CENTER",JIVE_LAYOUT_CENTER);
+	_set_const(L, -1, "LAYOUT_NONE",JIVE_LAYOUT_NONE);
+	_set_const(L, -1, "LAYER_FRAME",JIVE_LAYER_FRAME);
+	_set_const(L, -1, "LAYER_TITLE",JIVE_LAYER_TITLE);
+	_set_const(L, -1, "LAYER_CONTENT",JIVE_LAYER_CONTENT);
+	_set_const(L, -1, "LAYER_CONTENT_OFF_STAGE",JIVE_LAYER_CONTENT_OFF_STAGE);
+	_set_const(L, -1, "LAYER_CONTENT_ON_STAGE",JIVE_LAYER_CONTENT_ON_STAGE);
+	_set_const(L, -1, "LAYER_LOWER",JIVE_LAYER_LOWER);
+	_set_const(L, -1, "LAYER_ALL",JIVE_LAYER_ALL);
+	_set_const(L, -1, "EVENT_NONE",JIVE_EVENT_NONE);
+	_set_const(L, -1, "EVENT_SCROLL",JIVE_EVENT_SCROLL);
+	_set_const(L, -1, "EVENT_ACTION",JIVE_EVENT_ACTION);
+	_set_const(L, -1, "EVENT_GESTURE",JIVE_EVENT_GESTURE);
+	_set_const(L, -1, "EVENT_KEY_DOWN",JIVE_EVENT_KEY_DOWN);
+	_set_const(L, -1, "EVENT_KEY_UP",JIVE_EVENT_KEY_UP);
+	_set_const(L, -1, "EVENT_KEY_PRESS",JIVE_EVENT_KEY_PRESS);
+	_set_const(L, -1, "EVENT_KEY_HOLD",JIVE_EVENT_KEY_HOLD);
+	_set_const(L, -1, "EVENT_CHAR_PRESS",JIVE_EVENT_CHAR_PRESS);
+	_set_const(L, -1, "EVENT_MOUSE_DOWN",JIVE_EVENT_MOUSE_DOWN);
+	_set_const(L, -1, "EVENT_MOUSE_UP",JIVE_EVENT_MOUSE_UP);
+	_set_const(L, -1, "EVENT_MOUSE_PRESS",JIVE_EVENT_MOUSE_PRESS);
+	_set_const(L, -1, "EVENT_MOUSE_HOLD",JIVE_EVENT_MOUSE_HOLD);
+	_set_const(L, -1, "EVENT_MOUSE_MOVE",JIVE_EVENT_MOUSE_MOVE);
+	_set_const(L, -1, "EVENT_MOUSE_DRAG",JIVE_EVENT_MOUSE_DRAG);
+	_set_const(L, -1, "EVENT_WINDOW_PUSH",JIVE_EVENT_WINDOW_PUSH);
+	_set_const(L, -1, "EVENT_WINDOW_POP",JIVE_EVENT_WINDOW_POP);
+	_set_const(L, -1, "EVENT_WINDOW_ACTIVE",JIVE_EVENT_WINDOW_ACTIVE);
+	_set_const(L, -1, "EVENT_WINDOW_INACTIVE",JIVE_EVENT_WINDOW_INACTIVE);
+	_set_const(L, -1, "EVENT_SHOW",JIVE_EVENT_SHOW);
+	_set_const(L, -1, "EVENT_HIDE",JIVE_EVENT_HIDE);
+	_set_const(L, -1, "EVENT_FOCUS_GAINED",JIVE_EVENT_FOCUS_GAINED);
+	_set_const(L, -1, "EVENT_FOCUS_LOST",JIVE_EVENT_FOCUS_LOST);
+	_set_const(L, -1, "EVENT_WINDOW_RESIZE",JIVE_EVENT_WINDOW_RESIZE);
+	_set_const(L, -1, "EVENT_SWITCH",JIVE_EVENT_SWITCH);
+	_set_const(L, -1, "EVENT_MOTION",JIVE_EVENT_MOTION);
+	_set_const(L, -1, "EVENT_IR_PRESS",JIVE_EVENT_IR_PRESS);
+	_set_const(L, -1, "EVENT_IR_UP",JIVE_EVENT_IR_UP);
+	_set_const(L, -1, "EVENT_IR_DOWN",JIVE_EVENT_IR_DOWN);
+	_set_const(L, -1, "EVENT_IR_REPEAT",JIVE_EVENT_IR_REPEAT);
+	_set_const(L, -1, "EVENT_IR_HOLD",JIVE_EVENT_IR_HOLD);
+	_set_const(L, -1, "EVENT_IR_ALL",JIVE_EVENT_IR_ALL);
+	_set_const(L, -1, "EVENT_KEY_ALL",JIVE_EVENT_KEY_ALL);
+	_set_const(L, -1, "ACTION",JIVE_ACTION);
+	_set_const(L, -1, "EVENT_MOUSE_ALL",JIVE_EVENT_MOUSE_ALL);
+	_set_const(L, -1, "EVENT_ALL_INPUT",JIVE_EVENT_ALL_INPUT);
+	_set_const(L, -1, "EVENT_VISIBLE_ALL",JIVE_EVENT_VISIBLE_ALL);
+	_set_const(L, -1, "EVENT_ALL",JIVE_EVENT_ALL);
+	_set_const(L, -1, "EVENT_UNUSED",JIVE_EVENT_UNUSED);
+	_set_const(L, -1, "EVENT_CONSUME",JIVE_EVENT_CONSUME);
+	_set_const(L, -1, "EVENT_QUIT",JIVE_EVENT_QUIT);
+	_set_const(L, -1, "GESTURE_L_R",JIVE_GESTURE_L_R);
+	_set_const(L, -1, "GESTURE_R_L",JIVE_GESTURE_R_L);
+	_set_const(L, -1, "KEY_NONE",JIVE_KEY_NONE);
+	_set_const(L, -1, "KEY_GO",JIVE_KEY_GO);
+	_set_const(L, -1, "KEY_BACK",JIVE_KEY_BACK);
+	_set_const(L, -1, "KEY_UP",JIVE_KEY_UP);
+	_set_const(L, -1, "KEY_DOWN",JIVE_KEY_DOWN);
+	_set_const(L, -1, "KEY_LEFT",JIVE_KEY_LEFT);
+	_set_const(L, -1, "KEY_RIGHT",JIVE_KEY_RIGHT);
+	_set_const(L, -1, "KEY_HOME",JIVE_KEY_HOME);
+	_set_const(L, -1, "KEY_PLAY",JIVE_KEY_PLAY);
+	_set_const(L, -1, "KEY_ADD",JIVE_KEY_ADD);
+	_set_const(L, -1, "KEY_PAUSE",JIVE_KEY_PAUSE);
+	_set_const(L, -1, "KEY_REW",JIVE_KEY_REW);
+	_set_const(L, -1, "KEY_FWD",JIVE_KEY_FWD);
+	_set_const(L, -1, "KEY_VOLUME_UP",JIVE_KEY_VOLUME_UP);
+	_set_const(L, -1, "KEY_VOLUME_DOWN",JIVE_KEY_VOLUME_DOWN);
+	_set_const(L, -1, "KEY_MUTE",JIVE_KEY_MUTE);
+	_set_const(L, -1, "KEY_ALARM",JIVE_KEY_ALARM);
+	_set_const(L, -1, "KEY_POWER",JIVE_KEY_POWER);
+	_set_const(L, -1, "KEY_PRESET_1",JIVE_KEY_PRESET_1);
+	_set_const(L, -1, "KEY_PRESET_2",JIVE_KEY_PRESET_2);
+	_set_const(L, -1, "KEY_PRESET_3",JIVE_KEY_PRESET_3);
+	_set_const(L, -1, "KEY_PRESET_4",JIVE_KEY_PRESET_4);
+	_set_const(L, -1, "KEY_PRESET_5",JIVE_KEY_PRESET_5);
+	_set_const(L, -1, "KEY_PRESET_6",JIVE_KEY_PRESET_6);
+	_set_const(L, -1, "KEY_PAGE_UP",JIVE_KEY_PAGE_UP);
+	_set_const(L, -1, "KEY_PAGE_DOWN",JIVE_KEY_PAGE_DOWN);
+	_set_const(L, -1, "KEY_PRINT",JIVE_KEY_PRINT);
+	lua_pop(L, 2);
+
+	return 0;
+}
 
 int luaopen_jive_ui_framework(lua_State *L) {
 	luaL_register(L, "jive", core_funcs);

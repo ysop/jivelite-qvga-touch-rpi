@@ -539,10 +539,17 @@ JiveSurface *jive_style_image(lua_State *L, int index, const char *key, JiveSurf
 	lua_pushcfunction(L, jiveL_style_value);
 	lua_pushvalue(L, index);
 	lua_pushstring(L, key);
-	tolua_pushusertype(L, def, "Surface");
+
+	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+	*p = def;
+	luaL_getmetatable(L, "JiveSurface");
+	lua_setmetatable(L, -2);
+	//tolua_pushusertype(L, def, "Surface");
 	lua_call(L, 3, 1);
 
-	value = tolua_tousertype(L, -1, 0);
+	//value = tolua_tousertype(L, -1, 0);
+	// FIXME - why do we get boolean types here?
+	value = lua_isuserdata(L, -1) ? *(JiveSurface **)lua_touserdata(L, -1) : def;
 	lua_pop(L, 1);
 
 	JIVEL_STACK_CHECK_END(L);
@@ -559,10 +566,18 @@ JiveTile *jive_style_tile(lua_State *L, int index, const char *key, JiveTile *de
 	lua_pushcfunction(L, jiveL_style_value);
 	lua_pushvalue(L, index);
 	lua_pushstring(L, key);
-	tolua_pushusertype(L, def, "Tile");
+
+	JiveTile **p = (JiveTile **)lua_newuserdata(L, sizeof(JiveTile *));
+	*p = def;
+	luaL_getmetatable(L, "JiveTile");
+	lua_setmetatable(L, -2);
+	//tolua_pushusertype(L, def, "Tile");
 	lua_call(L, 3, 1);
 
-	value = tolua_tousertype(L, -1, 0);
+	//value = tolua_tousertype(L, -1, 0);
+	// FIXME - why do we get boolean types here?
+	value = lua_isuserdata(L, -1) ? *(JiveTile **)lua_touserdata(L, -1) : def;
+
 	lua_pop(L, 1);
 
 	JIVEL_STACK_CHECK_END(L);
@@ -585,7 +600,10 @@ int jiveL_style_font(lua_State *L) {
 		lua_pop(L, 1);
 
 		/* default font */
-		tolua_pushusertype(L, jive_font_load("fonts/FreeSans.ttf", 15), "Font");
+		JiveFont **p = (JiveFont **)lua_newuserdata(L, sizeof(JiveFont *));
+		*p = jive_font_load("fonts/FreeSans.ttf", 15);
+		luaL_getmetatable(L, "JiveFont");
+		lua_setmetatable(L, -2);
 	}
 
 	return 1;
@@ -603,7 +621,7 @@ JiveFont *jive_style_font(lua_State *L, int index, const char *key)  {
 	lua_pushnil(L);
 	lua_call(L, 3, 1);
 
-	value = (JiveFont *) tolua_tousertype(L, -1, NULL);
+	value = *(JiveFont **)lua_touserdata(L, -1);
 	lua_pop(L, 1);
 
 	assert(value);
@@ -768,7 +786,7 @@ JiveFont *jive_style_array_font(lua_State *L, int index, const char *array, int 
 	lua_pushnil(L);
 	lua_call(L, 5, 1);
 
-	value = (JiveFont *) tolua_tousertype(L, -1, NULL);
+	value = *(JiveFont **)lua_touserdata(L, -1);
 	lua_pop(L, 1);
 
 	JIVEL_STACK_CHECK_END(L);

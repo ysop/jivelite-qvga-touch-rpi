@@ -130,7 +130,9 @@ The following methods are from the SDL_gfx package. See L<http://www.ferzkopp.ne
 
 -- C implementation
 
-return jive.ui.Surface
+local oo = require("loop.base")
+
+module(..., oo.class)
 
 --[[
 

@@ -136,7 +136,8 @@ int jiveL_textinput_draw(lua_State *L) {
 	 */
 
 	TextinputWidget *peer = jive_getpeer(L, 1, &textinputPeerMeta);
-	JiveSurface *srf = tolua_tousertype(L, 2, 0);
+	//JiveSurface *srf = tolua_tousertype(L, 2, 0);
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 2);
 	bool drawLayer = luaL_optinteger(L, 3, JIVE_LAYER_ALL) & peer->w.layer;
 
 	const char *text;

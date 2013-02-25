@@ -82,7 +82,9 @@ Returns the minimum I<width>,I<height> the tile can be painted.
 
 -- C implementation
 
-return jive.ui.Tile
+local oo = require("loop.base")
+
+module(..., oo.class)
 
 --[[
 

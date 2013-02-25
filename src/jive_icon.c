@@ -97,7 +97,8 @@ static void prepare(lua_State *L, IconWidget *peer) {
 	/* use image from widget, or skin image as default */
 	lua_getfield(L, 1, "image");
 	if (!lua_isnil(L, -1)) {
-		img = tolua_tousertype(L, -1, 0);
+		//img = tolua_tousertype(L, -1, 0);
+		img = *(JiveSurface **)lua_touserdata(L, -1);
 	}
 	else {
 		/* use skin image as default */
@@ -243,7 +244,8 @@ int jiveL_icon_draw(lua_State *L) {
 	 */
 	SDL_Rect pop_clip, new_clip;
 	IconWidget *peer = jive_getpeer(L, 1, &iconPeerMeta);
-	JiveSurface *srf = tolua_tousertype(L, 2, 0);
+	//JiveSurface *srf = tolua_tousertype(L, 2, 0);
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 2);
 	bool drawLayer = luaL_optinteger(L, 3, JIVE_LAYER_ALL) & peer->w.layer;
 
 	if (drawLayer && peer->bg_tile) {

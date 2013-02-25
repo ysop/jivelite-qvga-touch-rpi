@@ -355,3 +355,102 @@ Uint32 utf8_get_char(const char *ptr, const char **nptr)
 	}
 	return v;
 }
+
+
+/*
+   tolua_cclass(tolua_S,"Font","Font","",tolua_jive_jive_ui_Font__free00);
+   tolua_beginmodule(tolua_S,"Font");
+    tolua_function(tolua_S,"load",tolua_jive_jive_ui_Font_load00);
+    tolua_function(tolua_S,"_free",tolua_jive_jive_ui_Font__free00);
+    tolua_function(tolua_S,"width",tolua_jive_jive_ui_Font_width00);
+    tolua_function(tolua_S,"capheight",tolua_jive_jive_ui_Font_capheight00);
+    tolua_function(tolua_S,"height",tolua_jive_jive_ui_Font_height00);
+    tolua_function(tolua_S,"ascend",tolua_jive_jive_ui_Font_ascend00);
+    tolua_function(tolua_S,"offset",tolua_jive_jive_ui_Font_offset00);
+   tolua_endmodule(tolua_S);
+*/
+
+int jiveL_font_load(lua_State *L) {
+	/*
+	  class
+	  fontname
+	  size
+	*/
+	const char *fontname = luaL_checklstring(L, 2, NULL);
+	int size = luaL_checkint(L, 3);
+
+	if (fontname && size) {
+		JiveFont *font = jive_font_load(fontname, size);
+		if (font) {
+			JiveFont **p = (JiveFont **)lua_newuserdata(L, sizeof(JiveFont *));
+			*p = font;
+			luaL_getmetatable(L, "JiveFont");
+			lua_setmetatable(L, -2);
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int jiveL_font_free(lua_State *L) {
+	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		jive_font_free(font);
+	}
+	return 0;
+}
+
+int jiveL_font_width(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	const char *str = luaL_checklstring(L, 2, NULL);
+	if (font) {
+		lua_pushinteger(L, jive_font_width(font, str));
+		return 1;
+	}
+	return 0;
+}
+
+int jiveL_font_capheight(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		lua_pushinteger(L, jive_font_capheight(font));
+		return 1;
+	}
+	return 0;
+}
+
+int jiveL_font_height(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		lua_pushinteger(L, jive_font_height(font));
+		return 1;
+	}
+	return 0;
+}
+
+int jiveL_font_ascend(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		lua_pushinteger(L, jive_font_ascend(font));
+		return 1;
+	}
+	return 0;
+}
+
+int jiveL_font_offset(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		lua_pushinteger(L, jive_font_height(font));
+		return 1;
+	}
+	return 0;
+}
+
+int jiveL_font_gc(lua_State *L) {
+ 	JiveFont *font = *(JiveFont **)lua_touserdata(L, 1);
+	if (font) {
+		jive_font_free(font);
+	}
+	return 0;
+}

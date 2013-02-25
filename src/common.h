@@ -104,7 +104,6 @@ typedef _W64 int   ssize_t;
 
 #include "lua.h"
 #include "lauxlib.h"
-#include "tolua++.h"
 
 #include "log.h"
 #include "types.h"
