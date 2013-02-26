@@ -1506,14 +1506,13 @@ static const struct luaL_Reg surface_methods[] = {
 	{ "blitAlpha", jiveL_surface_blit_alpha },
 	{ "getSize", jiveL_surface_get_size },
 	{ "getBytes", jiveL_surface_get_bytes },
-	/*
 	{ "rotozoom", jiveL_surface_rotozoomSurface },
 	{ "zoom", jiveL_surface_zoomSurface },
 	{ "shrink", jiveL_surface_shrinkSurface },
 	{ "pixel", jiveL_surface_pixelColor },
 	{ "hline", jiveL_surface_hlineColor },
 	{ "vline", jiveL_surface_vlineColor },
-	{ "rectangle", jiveL_surface_rectangle },
+	{ "rectangle", jiveL_surface_rectangleColor },
 	{ "filledRectangle", jiveL_surface_boxColor },
 	{ "line", jiveL_surface_lineColor },
 	{ "aaline", jiveL_surface_aalineColor },
@@ -1528,7 +1527,6 @@ static const struct luaL_Reg surface_methods[] = {
 	{ "trigon", jiveL_surface_trigonColor },
 	{ "aatrigon", jiveL_surface_aatrigonColor },
 	{ "filledTrigon", jiveL_surface_filledTrigonColor },
-	*/
 	{ NULL, NULL }
 };
 

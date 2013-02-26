@@ -1810,13 +1810,13 @@ int jiveL_surface_blit_clip(lua_State *L) {
 	  dy
 	*/
 	JiveSurface *src = *(JiveSurface **)lua_touserdata(L, 1);
-	int sx = luaL_checkint(L, 3);
-	int sy = luaL_checkint(L, 4);
-	int sw = luaL_checkint(L, 5);
-	int sh = luaL_checkint(L, 6);
-	JiveSurface *dst = *(JiveSurface **)lua_touserdata(L, 7);
-	int dx = luaL_checkint(L, 8);
-	int dy = luaL_checkint(L, 9);
+	int sx = luaL_checkint(L, 2);
+	int sy = luaL_checkint(L, 3);
+	int sw = luaL_checkint(L, 4);
+	int sh = luaL_checkint(L, 5);
+	JiveSurface *dst = *(JiveSurface **)lua_touserdata(L, 6);
+	int dx = luaL_checkint(L, 7);
+	int dy = luaL_checkint(L, 8);
 	if (src && dst) {
 		jive_surface_blit_clip(src, sx, sy, sw, sh, dst, dx, dy);
 	}
@@ -1870,86 +1870,452 @@ int jiveL_surface_get_bytes(lua_State *L) {
 }
 
 int jiveL_surface_rotozoomSurface(lua_State *L) {
+	/*
+	  surface
+	  angle
+	  zoom
+	  smooth
+	*/
+	JiveSurface *srf1 = *(JiveSurface **)lua_touserdata(L, 1);
+	double angle = luaL_checknumber(L, 2);
+	double zoom  = luaL_checknumber(L, 3);
+	int smooth = lua_isnumber(L, 4) ? luaL_checkint(L, 4) : 1;
+
+	JiveSurface *srf2 = jive_surface_rotozoomSurface(srf1, angle, zoom, smooth);
+	if (srf2) {
+		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+		*p = srf2;
+		luaL_getmetatable(L, "JiveSurface");
+		lua_setmetatable(L, -2);
+		return 1;
+	}
+
 	return 0;
 }
 
 int jiveL_surface_zoomSurface(lua_State *L) {
+	/*
+	  surface
+	  zoomx
+	  zoomy
+	  smooth
+	*/
+	JiveSurface *srf1 = *(JiveSurface **)lua_touserdata(L, 1);
+	double zoomx = luaL_checknumber(L, 2);
+	double zoomy  = luaL_checknumber(L, 3);
+	int smooth = lua_isnumber(L, 4) ? luaL_checkint(L, 4) : 1;
+
+	JiveSurface *srf2 = jive_surface_zoomSurface(srf1, zoomx, zoomy, smooth);
+	if (srf2) {
+		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+		*p = srf2;
+		luaL_getmetatable(L, "JiveSurface");
+		lua_setmetatable(L, -2);
+		return 1;
+	}
+
 	return 0;
 }
 
 int jiveL_surface_shrinkSurface(lua_State *L) {
+	/*
+	  surface
+	  factorx
+	  factory
+	*/
+	JiveSurface *srf1 = *(JiveSurface **)lua_touserdata(L, 1);
+	int factorx = luaL_checkint(L, 2);
+	int factory = luaL_checkint(L, 3);
+
+	JiveSurface *srf2 = jive_surface_shrinkSurface(srf1, factorx, factory);
+	if (srf2) {
+		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
+		*p = srf2;
+		luaL_getmetatable(L, "JiveSurface");
+		lua_setmetatable(L, -2);
+		return 1;
+	}
+
 	return 0;
 }
 
 int jiveL_surface_pixelColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int color = luaL_checkint(L, 4);
+
+	jive_surface_pixelColor(srf, x, y, color);
+
 	return 0;
 }
 
 int jiveL_surface_hlineColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  x2
+	  y
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int x2 = luaL_checkint(L, 3);
+	int y  = luaL_checkint(L, 4);
+	int color = luaL_checkint(L, 5);
+
+	jive_surface_hlineColor(srf, x1, x2, y, color);
+
 	return 0;
 }
 
 int jiveL_surface_vlineColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y1
+	  y2
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int y2 = luaL_checkint(L, 4);
+	int color = luaL_checkint(L, 5);
+
+	jive_surface_vlineColor(srf, x, y1, y2, color);
+
 	return 0;
 }
 
-int jiveL_surface_rectangle(lua_State *L) {
+int jiveL_surface_rectangleColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_rectangleColor(srf, x1, y1, x2, y2, color);
+
 	return 0;
 }
 
 int jiveL_surface_boxColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_boxColor(srf, x1, y1, x2, y2, color);
+
 	return 0;
 }
 
 int jiveL_surface_lineColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int x2 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_lineColor(srf, x1, y1, x2, y2, color);
+
 	return 0;
 }
 
 int jiveL_surface_aalineColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int x2 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_aalineColor(srf, x1, y1, x2, y2, color);
+
 	return 0;
 }
 
 int jiveL_surface_circleColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  r
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int r = luaL_checkint(L, 4);
+	int color = luaL_checkint(L, 5);
+
+	jive_surface_aacircleColor(srf, x, y, r, color);
+
 	return 0;
 }
 
 int jiveL_surface_aacircleColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  r
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int r = luaL_checkint(L, 4);
+	int color = luaL_checkint(L, 5);
+
+	jive_surface_aacircleColor(srf, x, y, r, color);
+
 	return 0;
 }
 
 int jiveL_surface_filledCircleColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  r
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int r = luaL_checkint(L, 4);
+	int color = luaL_checkint(L, 5);
+
+	jive_surface_filledCircleColor(srf, x, y, r, color);
+
 	return 0;
 }
 
 int jiveL_surface_ellipseColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  rx
+	  ry
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int rx = luaL_checkint(L, 4);
+	int ry = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_ellipseColor(srf, x, y, rx, ry, color);
+
 	return 0;
 }
 
 int jiveL_surface_aaellipseColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  rx
+	  ry
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int rx = luaL_checkint(L, 4);
+	int ry = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_aaellipseColor(srf, x, y, rx, ry, color);
+
 	return 0;
 }
 
 int jiveL_surface_filledEllipseColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  rx
+	  ry
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int rx = luaL_checkint(L, 4);
+	int ry = luaL_checkint(L, 5);
+	int color = luaL_checkint(L, 6);
+
+	jive_surface_filledEllipseColor(srf, x, y, rx, ry, color);
+
 	return 0;
 }
 
 int jiveL_surface_pieColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  rad
+	  start
+	  end
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int rad = luaL_checkint(L, 4);
+	int start = luaL_checkint(L, 5);
+	int end = luaL_checkint(L, 6);
+	int color = luaL_checkint(L, 7);
+
+	jive_surface_pieColor(srf, x, y, rad, start, end, color);
+
 	return 0;
 }
 
 int jiveL_surface_filledPieColor(lua_State *L) {
+	/*
+	  surface
+	  x
+	  y
+	  rad
+	  start
+	  end
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int rad = luaL_checkint(L, 4);
+	int start = luaL_checkint(L, 5);
+	int end = luaL_checkint(L, 6);
+	int color = luaL_checkint(L, 7);
+
+	jive_surface_pieColor(srf, x, y, rad, start, end, color);
+
 	return 0;
 }
 
 int jiveL_surface_trigonColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  x3
+	  y3
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int x3 = luaL_checkint(L, 6);
+	int y3 = luaL_checkint(L, 7);
+	int color = luaL_checkint(L, 8);
+
+	jive_surface_trigonColor(srf, x1, y1, x2, y2, x3, y3, color);
+
 	return 0;
 }
 
 int jiveL_surface_aatrigonColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  x3
+	  y3
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int x3 = luaL_checkint(L, 6);
+	int y3 = luaL_checkint(L, 7);
+	int color = luaL_checkint(L, 8);
+
+	jive_surface_aatrigonColor(srf, x1, y1, x2, y2, x3, y3, color);
+
 	return 0;
 }
 
 int jiveL_surface_filledTrigonColor(lua_State *L) {
+	/*
+	  surface
+	  x1
+	  y1
+	  x2
+	  y2
+	  x3
+	  y3
+	  color
+	*/
+	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
+	int x3 = luaL_checkint(L, 6);
+	int y3 = luaL_checkint(L, 7);
+	int color = luaL_checkint(L, 8);
+
+	jive_surface_filledTrigonColor(srf, x1, y1, x2, y2, x3, y3, color);
+
 	return 0;
 }
 

@@ -578,7 +578,7 @@ int jiveL_surface_shrinkSurface(lua_State *L);
 int jiveL_surface_pixelColor(lua_State *L);
 int jiveL_surface_hlineColor(lua_State *L);
 int jiveL_surface_vlineColor(lua_State *L);
-int jiveL_surface_rectangle(lua_State *L);
+int jiveL_surface_rectangleColor(lua_State *L);
 int jiveL_surface_boxColor(lua_State *L);
 int jiveL_surface_lineColor(lua_State *L);
 int jiveL_surface_aalineColor(lua_State *L);
