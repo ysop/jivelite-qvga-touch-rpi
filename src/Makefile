@@ -1,4 +1,4 @@
-CFLAGS  = -I. -I/usr/local/include/luajit-2.0 -I/usr/include/SDL -I./tolua -Wall -fPIC
+CFLAGS  = -I. -I/usr/local/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC
 LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1
 EXE = ../bin/jivelite
 

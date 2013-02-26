@@ -2103,7 +2103,7 @@ int jiveL_tile_min_size(lua_State *L) {
 int jiveL_surfacetile_gc(lua_State *L) {
 	JiveTile *tile = *(JiveTile **)lua_touserdata(L, 1);
 	if (tile) {
-		//jive_tile_free(tile);
+		jive_tile_free(tile);
 	}
 	return 0;
 }

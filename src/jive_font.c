@@ -357,19 +357,6 @@ Uint32 utf8_get_char(const char *ptr, const char **nptr)
 }
 
 
-/*
-   tolua_cclass(tolua_S,"Font","Font","",tolua_jive_jive_ui_Font__free00);
-   tolua_beginmodule(tolua_S,"Font");
-    tolua_function(tolua_S,"load",tolua_jive_jive_ui_Font_load00);
-    tolua_function(tolua_S,"_free",tolua_jive_jive_ui_Font__free00);
-    tolua_function(tolua_S,"width",tolua_jive_jive_ui_Font_width00);
-    tolua_function(tolua_S,"capheight",tolua_jive_jive_ui_Font_capheight00);
-    tolua_function(tolua_S,"height",tolua_jive_jive_ui_Font_height00);
-    tolua_function(tolua_S,"ascend",tolua_jive_jive_ui_Font_ascend00);
-    tolua_function(tolua_S,"offset",tolua_jive_jive_ui_Font_offset00);
-   tolua_endmodule(tolua_S);
-*/
-
 int jiveL_font_load(lua_State *L) {
 	/*
 	  class

@@ -544,11 +544,8 @@ JiveSurface *jive_style_image(lua_State *L, int index, const char *key, JiveSurf
 	*p = def;
 	luaL_getmetatable(L, "JiveSurface");
 	lua_setmetatable(L, -2);
-	//tolua_pushusertype(L, def, "Surface");
 	lua_call(L, 3, 1);
 
-	//value = tolua_tousertype(L, -1, 0);
-	// FIXME - why do we get boolean types here?
 	value = lua_isuserdata(L, -1) ? *(JiveSurface **)lua_touserdata(L, -1) : def;
 	lua_pop(L, 1);
 
@@ -571,11 +568,8 @@ JiveTile *jive_style_tile(lua_State *L, int index, const char *key, JiveTile *de
 	*p = def;
 	luaL_getmetatable(L, "JiveTile");
 	lua_setmetatable(L, -2);
-	//tolua_pushusertype(L, def, "Tile");
 	lua_call(L, 3, 1);
 
-	//value = tolua_tousertype(L, -1, 0);
-	// FIXME - why do we get boolean types here?
 	value = lua_isuserdata(L, -1) ? *(JiveTile **)lua_touserdata(L, -1) : def;
 
 	lua_pop(L, 1);

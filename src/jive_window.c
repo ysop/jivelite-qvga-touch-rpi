@@ -204,7 +204,6 @@ int jiveL_window_draw(lua_State *L) {
 	 */
 
 	WindowWidget *peer = jive_getpeer(L, 1, &windowPeerMeta);
-	//JiveSurface *srf = tolua_tousertype(L, 2, 0);
 	JiveSurface *srf = *(JiveSurface **)lua_touserdata(L, 2);
 	Uint32 layer = luaL_optinteger(L, 3, JIVE_LAYER_ALL);
 	bool_t is_transparent, is_mask;

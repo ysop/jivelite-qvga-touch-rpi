@@ -240,12 +240,10 @@ static int jiveL_initSDL(lua_State *L) {
 	}
 
 	/* store screen surface */
-	//tolua_pushusertype(L, srf, "Surface");
 	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
 	*p = srf;
 	luaL_getmetatable(L, "JiveSurface");
 	lua_setmetatable(L, -2);
-	// FIXME - does this need the meta table adding - are we creating something here to gc?
 
 	lua_setfield(L, -2, "surface");
 
@@ -417,7 +415,6 @@ static int _draw_screen(lua_State *L) {
 	 * 3: standalone_draw (used to draw screen to a new surface)
 	 */
 
-	//srf = tolua_tousertype(L, 2, 0);
 	srf = *(JiveSurface **)lua_touserdata(L, 2);
 	
 	standalone_draw = lua_toboolean(L, 3);
@@ -615,7 +612,6 @@ int jiveL_update_screen(lua_State *L) {
 	lua_getfield(L, 1, "screen");
 	lua_getfield(L, -1, "surface");
 	lua_replace(L, -2);
-	//screen = tolua_tousertype(L, -1, 0);
 	screen = *(JiveSurface **)lua_touserdata(L, -1);
 
 	lua_pushboolean(L, 0);
@@ -835,7 +831,6 @@ int jiveL_set_video_mode(lua_State *L) {
 
 	/* store new screen surface */
 	lua_getfield(L, 1, "screen");
-	//tolua_pushusertype(L, srf, "Surface");
 	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
 	*p = srf;
 	luaL_getmetatable(L, "JiveSurface");
@@ -861,10 +856,8 @@ int jiveL_set_video_mode(lua_State *L) {
 }
 
 int jiveL_get_background(lua_State *L) {
-	//tolua_pushusertype(L, jive_background, "Tile");
 	JiveTile **p = (JiveTile **)lua_newuserdata(L, sizeof(JiveTile *));
-	*p = jive_background;
-	// FIXME - do we need to do this?
+	*p = jive_tile_ref(jive_background);
 	luaL_getmetatable(L, "JiveTile");
 	lua_setmetatable(L, -2);
 
@@ -879,7 +872,6 @@ int jiveL_set_background(lua_State *L) {
 	if (jive_background) {
 		jive_tile_free(jive_background);
 	}
-	//jive_background = jive_tile_ref(tolua_tousertype(L, 2, 0));
 	jive_background = jive_tile_ref(*(JiveTile **)lua_touserdata(L, 2));
 	next_jive_origin++;
 
@@ -1263,10 +1255,8 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		lua_rawseti(L, -2, 4);
 		lua_pop(L, 1);
 
-		//tolua_pushusertype(L, srf, "Surface");
 		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
 		*p = srf;
-		// FIXME - is this needed?
 		luaL_getmetatable(L, "JiveSurface");
 		lua_setmetatable(L, -2);
 
@@ -1664,9 +1654,14 @@ static const struct luaL_Reg core_funcs[] = {
 	{ NULL, NULL }
 };
 
+int luaopen_jive_ui_framework(lua_State *L) {
+	luaL_register(L, "jive", core_funcs);
+	return 1;
+}
+
 int luaopen_jive(lua_State *L) {
 
-	// set constants in jive.ui table - need before frameworkOpen is called
+	// set constants in jive.ui table - needed before frameworkOpen is called
 	lua_getglobal(L, "jive");
 	lua_newtable(L);
 	lua_setfield(L, -2, "ui");
@@ -1771,9 +1766,4 @@ int luaopen_jive(lua_State *L) {
 	lua_pop(L, 2);
 
 	return 0;
-}
-
-int luaopen_jive_ui_framework(lua_State *L) {
-	luaL_register(L, "jive", core_funcs);
-	return 1;
 }
