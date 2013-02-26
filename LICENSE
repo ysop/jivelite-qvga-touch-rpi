@@ -46,4 +46,7 @@ Repository also includes lua and binaries from the following lua libraries.  The
 - luasocket
 - luazipfiler (logitech)
 
+Repository also includes the following additional skins:
+- Joggler, by "justblair" and others: http://www.justblair.co.uk/more-fixing-of-squeezeplay-for-the-joggler.html
+
 <Todo: add details of these licenses>

@@ -241,7 +241,7 @@ static int jiveL_initSDL(lua_State *L) {
 
 	/* store screen surface */
 	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
-	*p = srf;
+	*p = jive_surface_ref(srf);
 	luaL_getmetatable(L, "JiveSurface");
 	lua_setmetatable(L, -2);
 
@@ -832,7 +832,7 @@ int jiveL_set_video_mode(lua_State *L) {
 	/* store new screen surface */
 	lua_getfield(L, 1, "screen");
 	JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
-	*p = srf;
+	*p = jive_surface_ref(srf);
 	luaL_getmetatable(L, "JiveSurface");
 	lua_setmetatable(L, -2);
 
@@ -1256,7 +1256,7 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		lua_pop(L, 1);
 
 		JiveSurface **p = (JiveSurface **)lua_newuserdata(L, sizeof(JiveSurface *));
-		*p = srf;
+		*p = jive_surface_ref(srf);
 		luaL_getmetatable(L, "JiveSurface");
 		lua_setmetatable(L, -2);
 
