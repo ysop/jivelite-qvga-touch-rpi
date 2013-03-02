@@ -37,14 +37,14 @@ Copyright 2013, Adrian Smith, triode1@btinternet.
 These additions are subject to the same license as above.
 
 
-Repository also includes lua and binaries from the following lua libraries.  These are unchanged and follow their own licenses:
+Repository also includes sourcr for the following lua libraries.  These are unchanged except for include file modification
+to support luajit-2.0 installed from source:
+and follow their own licenses:
 - cjson
-- lua file system
-- lua expat
+- luafilesystem
+- luaexpat
 - luamd5
-- luaprofiler
 - luasocket
-- luazipfiler (logitech)
 
 Repository also includes the following additional skins:
 - Joggler, by "justblair" and others: http://www.justblair.co.uk/more-fixing-of-squeezeplay-for-the-joggler.html

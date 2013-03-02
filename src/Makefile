@@ -1,5 +1,5 @@
-CFLAGS  = -I. -I/usr/local/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC
-LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1
+CFLAGS  = -I. -I/usr/local/include/luajit-2.0 -I/usr/include/SDL -Wall -fPIC -g
+LDFLAGS = -lSDL -lSDL_ttf -lSDL_image -lSDL_gfx -lluajit-5.1 -g
 EXE = ../bin/jivelite
 
 DEPS    = jive.h common.h config.h log.h version.h

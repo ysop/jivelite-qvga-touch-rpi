@@ -191,18 +191,7 @@ static void paths_setup(lua_State *L, char *app) {
 		// lua cpath
 #if !defined(WIN32)
 		strcpy(temp, binpath);
-
-// addition to allow multiple sets of library binaries in repo during development
-#if defined(__i386__)
-		strcat(temp, "/../lib-i386/lua/5.1");
-#elif defined(__x86_64__)
-		strcat(temp, "/../lib-x86_64/lua/5.1");
-#elif defined(__ARM_ARCH_7A__)
-		strcat(temp, "/../lib-arm7a/lua/5.1");
-#elif defined(__arm__)
-		strcat(temp, "/../lib-arm/lua/5.1");
-#endif
-
+		strcat(temp, "/../lib/lua/5.1");
 		realpath(temp, path);
 #endif
 
