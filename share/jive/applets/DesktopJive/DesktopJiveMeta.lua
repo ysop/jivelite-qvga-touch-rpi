@@ -6,12 +6,9 @@ local string        = require("string")
 local table         = require("jive.utils.table")
 local os            = require("os")
 
---local Decode        = require("squeezeplay.decode")
 local AppletMeta    = require("jive.AppletMeta")
---local LocalPlayer   = require("jive.slim.LocalPlayer")
 local Framework     = require("jive.ui.Framework")
 local System        = require("jive.System")
---local Player        = require("jive.slim.Player")
 local SlimServer        = require("jive.slim.SlimServer")
 
 local appletManager = appletManager
@@ -107,9 +104,6 @@ function registerApplet(meta)
 		["presetKeys"] = 1,
 	})
 
-	--uncomment this to simulate fab4 scrollbar behavior
---	System:setTouchpadBottomCorrection(30)
-	
 	-- SN hosthame
 	if settings.snaddress then
 		jnt:setSNHostname(settings.snaddress)
@@ -118,20 +112,16 @@ function registerApplet(meta)
 	end
 	
 	appletManager:addDefaultSetting("ScreenSavers", "whenStopped", "false:false")
-	appletManager:addDefaultSetting("Playback", "enableAudio", 1)
 
-	jiveMain:setDefaultSkin("WQVGAsmallSkin")
+	jiveMain:setDefaultSkin("HDSkin")
 
 	Framework:addActionListener("soft_reset", self, _softResetAction, true)
 
-	-- open audio device
-	--Decode:open(settings)
 end
 
 
 --disconnect from player and server and re-set "clean (no server)" LocalPlayer as current player
 function _softResetAction(self, event)
---	LocalPlayer:disconnectServerAndPreserveLocalPlayer()
 	jiveMain:goHome()
 end
 

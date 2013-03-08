@@ -172,6 +172,7 @@ static int jiveL_initSDL(lua_State *L) {
 	if ((video_info = SDL_GetVideoInfo())) {
 		LOG_INFO(log_ui_draw, "%d,%d %d bits/pixel %d bytes/pixel [R<<%d G<<%d B<<%d]", video_info->current_w, video_info->current_h, video_info->vfmt->BitsPerPixel, video_info->vfmt->BytesPerPixel, video_info->vfmt->Rshift, video_info->vfmt->Gshift, video_info->vfmt->Bshift);
 		LOG_INFO(log_ui_draw, "Hardware acceleration %s available", video_info->hw_available?"is":"is not");
+		LOG_INFO(log_ui_draw, "Window manager %s available", video_info->wm_available?"is":"is not");
 	}
 
 	/* Register callback for additional events (used for multimedia keys)*/
@@ -220,7 +221,7 @@ static int jiveL_initSDL(lua_State *L) {
 		}
 	}
 
-	srf = jive_surface_set_video_mode(screen_w, screen_h, screen_bpp, false);
+	srf = jive_surface_set_video_mode(screen_w, screen_h, screen_bpp, video_info->wm_available ? false : true);
 	if (!srf) {
 		SDL_Quit();
 		exit(-1);
@@ -804,6 +805,7 @@ int jiveL_set_video_mode(lua_State *L) {
 	JiveSurface *srf;
 	Uint16 w, h, bpp;
 	bool isfull;
+	const SDL_VideoInfo *video_info;
 
 	/* stack is:
 	 * 1: framework
@@ -817,6 +819,12 @@ int jiveL_set_video_mode(lua_State *L) {
 	h = luaL_optinteger(L, 3, 0);
 	bpp = luaL_optinteger(L, 4, 16);
 	isfull = lua_toboolean(L, 5);
+
+	// force fullscreen if no window manager is available - this prevents sdl crashing on some hardware
+	video_info = SDL_GetVideoInfo();
+	if (!video_info->wm_available) {
+		isfull = true;
+	}
 
 	if (w == screen_w &&
 	    h == screen_h &&
