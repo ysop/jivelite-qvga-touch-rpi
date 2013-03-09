@@ -90,7 +90,7 @@ function param(self)
 			-- every skin needs to start off with a nowplaying style
 			{
 				style = 'nowplaying', 
-				artworkSize = '300x300',
+				artworkSize = '900x900',
 				text = self:string("ART_AND_TEXT"),
 			},
 			{
@@ -2765,12 +2765,12 @@ function skin(self, s)
 
 	-- BEGIN NowPlaying skin code
 
-	local NP_ARTISTALBUM_FONT_SIZE = 30
-	local NP_TRACK_FONT_SIZE = 28
+	local NP_ARTISTALBUM_FONT_SIZE = 48
+	local NP_TRACK_FONT_SIZE = 42
 
-	local controlHeight = 76
-	local controlWidth = 83
-	local volumeBarWidth = 196 -- screenWidth - (transport controls + volume controls + dividers + border around volume bar)
+	local controlHeight = 66
+	local controlWidth = 100
+	local volumeBarWidth = 750
 	local buttonPadding = 0
 
 	local _transportControlButton = {
@@ -2787,8 +2787,8 @@ function skin(self, s)
 	})
 
 	local _transportVolumeBorder = _uses(_transportControlButton, {
-		w = 90,
-		padding = { 88, 0, 0, 0 },
+		w = 450,
+		padding = { 440, 0, 0, 0 },
 		img = touchToolbarKeyDivider,
 	}) 
 
@@ -2797,13 +2797,13 @@ function skin(self, s)
 	})
 
 	local _tracklayout = {
-		border = { 4, 0, 4, 0 },
+		border = { 10, 0, 10, 0 },
 		position = LAYOUT_NONE,
 		w = WH_FILL,
 		align = "left",
 		lineHeight = NP_TRACK_FONT_SIZE,
 		fg = TEXT_COLOR,
-		x = 318,
+		x = 1050,
 	}
 
 	s.nowplaying = _uses(s.window, {
@@ -2830,10 +2830,10 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 32 + 30,
-			h          = 32,
+			y          = TITLE_HEIGHT + 150,
+			h          = 70,
 			nptrack =  {
-				w          = screenWidth - _tracklayout.x ,
+				w          = screenWidth - _tracklayout.x - 100,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2846,11 +2846,11 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 32 + 32 + 100 ,
-			h          = 32,
+			y          = TITLE_HEIGHT + 300,
+			h          = 70,
 			npartist = {
 				padding    = { 0, 6, 0, 0 },
-				w          = screenWidth - _tracklayout.x - 10,
+				w          = screenWidth - _tracklayout.x - 40,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2863,10 +2863,10 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 32 + 32 + 32 + 110,
-			h          = 32,
+			y          = TITLE_HEIGHT + 400,
+			h          = 70,
 			npalbum = {
-				w          = screenWidth - _tracklayout.x - 10,
+				w          = screenWidth - _tracklayout.x - 40,
 				padding    = { 0, 6, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2881,15 +2881,16 @@ function skin(self, s)
 	
 		-- cover art
 		npartwork = {
-			w = 300,
+			w = 900,
 			position = LAYOUT_NONE,
-			x = 8,
-			y = TITLE_HEIGHT + 25,
+			x = 50,
+			y = TITLE_HEIGHT + 15,
 			align = "center",
-			h = 300,
+			h = 900,
 
 			artwork = {
-				w = 300,
+				w = 900,
+				h = 900,
 				align = "center",
 				padding = 0,
 				img = false,
@@ -2952,11 +2953,9 @@ function skin(self, s)
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_song_on.png"),
 			}),
 			volDown   = _uses(_transportControlButton, {
-				w = 34,
 				img = _loadImage(self, "Icons/icon_toolbar_vol_down.png"),
 			}),
 			volUp   = _uses(_transportControlButton, {
-				w = 34,
 				img = _loadImage(self, "Icons/icon_toolbar_vol_up.png"),
 			}),
 			thumbsUp   = _uses(_transportControlButton, {
@@ -2994,8 +2993,8 @@ function skin(self, s)
 		-- Progress bar
 		npprogress = {
 			position = LAYOUT_NONE,
-			x = 322,
-			y = TITLE_HEIGHT + 29 + 26 + 32 + 32 + 23 + 110,
+			x = 1000,
+			y = TITLE_HEIGHT + 800,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
@@ -3031,10 +3030,10 @@ function skin(self, s)
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = 340,
+				w = 760,
 				h = 50,
 				padding     = { 0, 0, 0, 0 },
-		                position = LAYOUT_SOUTH,
+				position = LAYOUT_SOUTH,
 				horizontal = 1,
 				bgImg = _songProgressBackground,
 				img = _songProgressBar,
