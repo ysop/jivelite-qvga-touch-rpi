@@ -93,6 +93,7 @@ function param(self)
 				artworkSize = '900x900',
 				text = self:string("ART_AND_TEXT"),
 			},
+			--[[
 			{
 				style = 'nowplaying_art_only',
 				artworkSize = '470x262',
@@ -116,6 +117,7 @@ function param(self)
 				localPlayerOnly = 1,
 				text = self:string("ANALOG_VU_METER"),
 			},
+			--]]
 		},
         }
 end
@@ -261,7 +263,7 @@ function skin(self, s)
 	local touchToolbarKeyDivider  = _loadImageTile(self,  imgpath .. "Touch_Toolbar/toolbar_divider.png")
 	local deleteKeyBackground     = _loadImageTile(self,  imgpath .. "Buttons/button_delete_text_entry.png")
 	local deleteKeyPressedBackground = _loadImageTile(self,  imgpath .. "Buttons/button_delete_text_entry_press.png")
-        local helpTextBackground  = _loadImageTile(self, imgpath .. "Titlebar/tbar_dropdwn_bkrgd.png")
+	local helpTextBackground      = _loadImageTile(self,  imgpath .. "Titlebar/tbar_dropdwn_bkrgd.png")
 
 
 	local nocturneWallpaper = _loadImageTile(self, "applets/SetupWallpaper/wallpaper/fab4_nocturne.png")
@@ -649,7 +651,7 @@ function skin(self, s)
 	local SELECT_SH_COLOR = { }
 
 	local TITLE_HEIGHT = 65
-	local TITLE_FONT_SIZE = 20
+	local TITLE_FONT_SIZE = 25
 	local ALBUMMENU_FONT_SIZE = 25
 	local ALBUMMENU_SMALL_FONT_SIZE = 18
 	local TEXTMENU_FONT_SIZE = 25
@@ -2789,7 +2791,7 @@ function skin(self, s)
 	local _transportVolumeBorder = _uses(_transportControlButton, {
 		w = 450,
 		padding = { 440, 0, 0, 0 },
-		img = touchToolbarKeyDivider,
+		--img = touchToolbarKeyDivider,
 	}) 
 
 	s.toolbar_spacer = _uses(_transportControlButton, {
@@ -2884,7 +2886,7 @@ function skin(self, s)
 			w = 900,
 			position = LAYOUT_NONE,
 			x = 50,
-			y = TITLE_HEIGHT + 15,
+			y = TITLE_HEIGHT + 20,
 			align = "center",
 			h = 900,
 
@@ -2902,7 +2904,7 @@ function skin(self, s)
 		--transport controls
 		npcontrols = {
 			order = { 'rew', 'div1', 'play', 'div2', 'fwd', 'div3', 'repeatMode', 'div4', 'shuffleMode', 
-				 'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
+					  'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
 			position = LAYOUT_SOUTH,
 			h = controlHeight,
 			w = WH_FILL,
@@ -2994,7 +2996,7 @@ function skin(self, s)
 		npprogress = {
 			position = LAYOUT_NONE,
 			x = 1000,
-			y = TITLE_HEIGHT + 800,
+			y = TITLE_HEIGHT + 780,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
@@ -3044,11 +3046,12 @@ function skin(self, s)
 		npprogressNB = {
 			order = { "elapsed" },
 			position = LAYOUT_NONE,
-			x = 322,
-			y = TITLE_HEIGHT + 29 + 26 + 32 + 32 + 23 + 100,
+			x = 1000,
+			y = TITLE_HEIGHT + 790,
 			elapsed = {
-				w = WH_FILL,
+				w = 55, --WH_FILL,
 				align = "left",
+				padding = { 0, 0, 4, 20 },
 				font = _boldfont(18),
 				fg = { 0xe7, 0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
@@ -3066,8 +3069,8 @@ function skin(self, s)
 		w = volumeBarWidth,
 		border = { 5, 20, 5, 0 },
 		padding = { 6, 0, 6, 0 },
-                position = LAYOUT_SOUTH,
-                horizontal = 1,
+		position = LAYOUT_SOUTH,
+		horizontal = 1,
                 bgImg = _volumeSliderBackground,
                 img = _volumeSliderBar,
                 pillImg = _volumeSliderPill,
@@ -3120,6 +3123,7 @@ function skin(self, s)
 		rewDisabled = _uses(s.nowplaying.npcontrols.rewDisabled),
 	}
 	
+	--[[
 	s.nowplaying_art_only = _uses(s.nowplaying, {
 
 		bgImg = nocturneWallpaper,
@@ -3382,6 +3386,8 @@ function skin(self, s)
 			padding = { screenWidth, 0, 0, 0 }
 		},
 	})
+
+	--]]
 
 	s.brightness_group = {
 		order = {  'down', 'div1', 'slider', 'div2', 'up' },
