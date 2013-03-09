@@ -74,8 +74,9 @@ end
 
 
 function param(self)
-        return {
-		THUMB_SIZE = 40 ,
+	return {
+		THUMB_SIZE = 72,
+		THUMB_SIZE_MENU = 64,
 		NOWPLAYING_MENU = true, --changed by justblair
 		-- NOWPLAYING_TRACKINFO_LINES used in assisting scroll behavior animation on NP
 		-- 3 is for a three line track, artist, and album (e.g., SBtouch)
@@ -119,7 +120,7 @@ function param(self)
 			},
 			--]]
 		},
-        }
+	}
 end
 
 local function _loadImage(self, file)
@@ -245,7 +246,7 @@ function skin(self, s)
 	Framework.mostRecentInputType = "mouse"
 
 	-- skin
-	local thisSkin = 'touch'
+	local thisSkin = 'remote'
 	local skinSuffix = "_" .. thisSkin .. ".png"
 
 	-- Images and Tiles
@@ -636,7 +637,7 @@ function skin(self, s)
 	local CHECK_PADDING  = { 2, 0, 6, 0 }
 	local CHECKBOX_RADIO_PADDING  = { 2, 0, 0, 0 }
 
-	local MENU_ITEM_ICON_PADDING = { 0, 0, 8, 0 }
+	local MENU_ITEM_ICON_PADDING = { 0, 0, 24, 0 }
 	local MENU_PLAYLISTITEM_TEXT_PADDING = { 16, 1, 9, 1 }
 
 	local MENU_CURRENTALBUM_TEXT_PADDING = { 6, 20, 0, 10 }
@@ -652,9 +653,9 @@ function skin(self, s)
 
 	local TITLE_HEIGHT = 65
 	local TITLE_FONT_SIZE = 25
-	local ALBUMMENU_FONT_SIZE = 25
-	local ALBUMMENU_SMALL_FONT_SIZE = 18
-	local TEXTMENU_FONT_SIZE = 25
+	local ALBUMMENU_FONT_SIZE = 32
+	local ALBUMMENU_SMALL_FONT_SIZE = 24
+	local TEXTMENU_FONT_SIZE = 40
 	local POPUP_TEXT_SIZE_1 = 34
 	local POPUP_TEXT_SIZE_2 = 26
 	local TRACK_FONT_SIZE = 18
@@ -667,17 +668,17 @@ function skin(self, s)
 	local TEXTINPUT_SELECTED_FONT_SIZE = 24
 	
 
-	local HELP_FONT_SIZE = 18
+	local HELP_FONT_SIZE = 36
 	local UPDATE_SUBTEXT_SIZE = 20
 
 	local ITEM_ICON_ALIGN   = 'center'
-	local ITEM_LEFT_PADDING = 12
+	local ITEM_LEFT_PADDING = 24
 	local THREE_ITEM_HEIGHT = 72
-	local FIVE_ITEM_HEIGHT = 45
+	local FIVE_ITEM_HEIGHT = 76
 	local TITLE_BUTTON_WIDTH = 76
 
 	local smallSpinny = {
-		img = _loadImage(self, "Alerts/wifi_connecting_sm.png"),
+		img = _loadImage(self, "Alerts/wifi_connecting_med.png"),
 		frameRate = 8,
 		frameWidth = 26,
 		padding = 0,
@@ -861,8 +862,8 @@ function skin(self, s)
 			align = 'center',
 		},
 		arrow = {
-	      		align = ITEM_ICON_ALIGN,
-	      		img = _loadImage(self, "Icons/selection_right_5line.png"),
+			align = ITEM_ICON_ALIGN,
+			img = _loadImage(self, "Icons/selection_right_5line.png"),
 			padding = { 0, 0, 0, 0 },
 		},
 		bgImg = fiveItemBox,
@@ -1032,7 +1033,7 @@ function skin(self, s)
 		w = screenWidth - 30,
 		padding = { 18, 18, 12, 0},
 		font = _font(HELP_FONT_SIZE),
-		lineHeight = 23,
+		lineHeight = 38,
 		fg = TEXT_COLOR,
 		sh = TEXT_SH_COLOR,
 		align = "top-left",
@@ -1200,10 +1201,10 @@ function skin(self, s)
 	})
 
 	s.keyboard.doneSpinny =  {
-                icon = _uses(s.keyboard.key_bottomRight, {
+		icon = _uses(s.keyboard.key_bottomRight, {
 			bgImg = keyBottomRight,
 			hidden = 0,
-                        img = _loadImage(self, "Alerts/wifi_connecting_sm.png"),
+            img = _loadImage(self, "Alerts/wifi_connecting_sm.png"),
 			frameRate = 8,
 			frameWidth = 26,
 			w = WH_FILL, 
@@ -1211,9 +1212,8 @@ function skin(self, s)
 			align = 'center',
 		}),
 		text = { hidden = 1, w = 0 },
-        }
-
-
+    }
+	
 	s.keyboard.space = _uses(s.keyboard.key_bottom_small, {
 		bgImg = keyBottom,
 		text = self:string("SPACEBAR_SMALL"),
@@ -1647,7 +1647,7 @@ function skin(self, s)
 					line = {
 						{
 							font = _boldfont(ALBUMMENU_FONT_SIZE),
-							height = 25,
+							height = 35,
 						},
 						{
 							font = _font(ALBUMMENU_SMALL_FONT_SIZE),
@@ -1696,54 +1696,54 @@ function skin(self, s)
 	})
 
 	s.icon_list.menu.selected = {
-                item               = _uses(s.icon_list.menu.item, {
+		item = _uses(s.icon_list.menu.item, {
 			bgImg = fiveItemSelectionBox
 		}),
-                albumcurrent       = _uses(s.icon_list.menu.albumcurrent, {
+		albumcurrent = _uses(s.icon_list.menu.albumcurrent, {
 			arrow = { 
 				img = _loadImage(self, "Icons/icon_nplay_3line_sel.png"),
 			},
 			bgImg = fiveItemSelectionBox,
 		}),
-                item_checked        = _uses(s.icon_list.menu.item_checked, {
+		item_checked = _uses(s.icon_list.menu.item_checked, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_play           = _uses(s.icon_list.menu.item_play, {
+		item_play = _uses(s.icon_list.menu.item_play, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_add            = _uses(s.icon_list.menu.item_add, {
+		item_add = _uses(s.icon_list.menu.item_add, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_no_arrow        = _uses(s.icon_list.menu.item_no_arrow, {
+		item_no_arrow = _uses(s.icon_list.menu.item_no_arrow, {
 			bgImg = fiveItemSelectionBox
 		}),
 		item_checked_no_arrow = _uses(s.icon_list.menu.item_checked_no_arrow, {
 			bgImg = fiveItemSelectionBox
 		}),
-        }
-        s.icon_list.menu.pressed = {
-                item = _uses(s.icon_list.menu.item, { 
+	}
+	s.icon_list.menu.pressed = {
+		item = _uses(s.icon_list.menu.item, { 
 			bgImg = fiveItemPressedBox 
 		}),
-                albumcurrent       = _uses(s.icon_list.menu.albumcurrent, {
+		albumcurrent = _uses(s.icon_list.menu.albumcurrent, {
 			bgImg = fiveItemSelectionBox
 		}),
-                item_checked = _uses(s.icon_list.menu.item_checked, { 
+		item_checked = _uses(s.icon_list.menu.item_checked, { 
 			bgImg = fiveItemPressedBox 
 		}),
-                item_play = _uses(s.icon_list.menu.item_play, { 
+		item_play = _uses(s.icon_list.menu.item_play, { 
 			bgImg = fiveItemPressedBox 
 		}),
-                item_add = _uses(s.icon_list.menu.item_add, { 
+		item_add = _uses(s.icon_list.menu.item_add, { 
 			bgImg = fiveItemPressedBox 
 		}),
-                item_no_arrow = _uses(s.icon_list.menu.item_no_arrow, { 
+		item_no_arrow = _uses(s.icon_list.menu.item_no_arrow, { 
 			bgImg = fiveItemPressedBox 
 		}),
-                item_checked_no_arrow = _uses(s.icon_list.menu.item_checked_no_arrow, { 
+		item_checked_no_arrow = _uses(s.icon_list.menu.item_checked_no_arrow, { 
 			bgImg = fiveItemPressedBox 
 		}),
-        }
+	}
 	s.icon_list.menu.locked = {
 		item = _uses(s.icon_list.menu.pressed.item, {
 			arrow = smallSpinny
@@ -1757,7 +1757,7 @@ function skin(self, s)
 		item_add = _uses(s.icon_list.menu.pressed.item_add, {
 			arrow = smallSpinny
 		}),
-                albumcurrent       = _uses(s.icon_list.menu.pressed.albumcurrent, {
+		albumcurrent = _uses(s.icon_list.menu.pressed.albumcurrent, {
 			arrow = smallSpinny
 		}),
 	}
@@ -1847,16 +1847,16 @@ function skin(self, s)
 		},
 	})
 	s.play_list.menu.selected = {
-                item = _uses(s.play_list.menu.item, {
+		item = _uses(s.play_list.menu.item, {
 			bgImg = fiveItemSelectionBox
 		}),
-                item_checked = _uses(s.play_list.menu.item_checked, {
+		item_checked = _uses(s.play_list.menu.item_checked, {
 			bgImg = fiveItemSelectionBox
 		}),
         }
         s.play_list.menu.pressed = {
-                item = _uses(s.play_list.menu.item, { bgImg = fiveItemPressedBox }),
-                item_checked = _uses(s.play_list.menu.item_checked, { bgImg = fiveItemPressedBox }),
+			item = _uses(s.play_list.menu.item, { bgImg = fiveItemPressedBox }),
+			item_checked = _uses(s.play_list.menu.item_checked, { bgImg = fiveItemPressedBox }),
         }
 	s.play_list.menu.locked = {
 		item = _uses(s.play_list.menu.pressed.item, {
@@ -1876,7 +1876,7 @@ function skin(self, s)
 		font = _boldfont(21),
 		fg = TEXT_COLOR,
 		sh = TEXT_SH_COLOR,
-        }
+	}
 
 	-- toast_popup popup with art and text
 	s.toast_popup = {
@@ -1996,20 +1996,20 @@ function skin(self, s)
 		layer = LAYER_TITLE,
 
 		multiline_text = {
-                        w = WH_FILL,
-                        h = 172,
-                        padding = { 18, 2, 14, 18 },
-                        border = { 0, 0, 6, 15 },
-                        lineHeight = 22,
-                        font = _font(18),
-                        fg = { 0xe6, 0xe6, 0xe6 },
-                        sh = { },
-                        align = "top-left",
-                        scrollbar = {
-                                h = 164,
-                                border = {0, 2, 2, 10},
-                        },
-                },
+			w = WH_FILL,
+			h = 172,
+			padding = { 18, 2, 14, 18 },
+			border = { 0, 0, 6, 15 },
+			lineHeight = 22,
+			font = _font(18),
+			fg = { 0xe6, 0xe6, 0xe6 },
+			sh = { },
+			align = "top-left",
+			scrollbar = {
+				h = 164,
+				border = {0, 2, 2, 10},
+			},
+		},
 
 		title = {
 		layer = LAYER_TITLE,
@@ -2158,8 +2158,7 @@ function skin(self, s)
 		padding = 0,
 		bgImg = contextMenuBox,
 		layer = LAYER_TITLE,
-
-     		title = {
+		title = {
 			layer = LAYER_TITLE,
 			w = WH_FILL,
 			h = 52,
@@ -2259,12 +2258,12 @@ function skin(self, s)
 	s.volume_slider = {
 		w = WH_FILL,
 		border = { 0, 0, 0, 10 },
-                bgImg = _volumeSliderBackground,
-                img = _popupSliderBar,
+		bgImg = _volumeSliderBackground,
+		img = _popupSliderBar,
 	}
 
-        s.scanner_slider = _uses(s.volume_slider, {
-                img = _volumeSliderBar,
+	s.scanner_slider = _uses(s.volume_slider, {
+		img = _volumeSliderBar,
 	})
 	
 --------- BUTTONS ---------
@@ -2415,11 +2414,11 @@ function skin(self, s)
 	}
 
 	local _popupicon = {
-                padding = 0,
-                border = { 22, 22, 0, 0 },
-                h = WH_FILL,
-                w = 146,
-        }
+		padding = 0,
+		border = { 22, 22, 0, 0 },
+		h = WH_FILL,
+		w = 146,
+	}
 
 	-- icon for albums with no artwork
 	s.icon_no_artwork = {
@@ -2433,12 +2432,12 @@ function skin(self, s)
 		img = _loadImage(self, "Alerts/wifi_connecting.png"),
 		frameRate = 8,
 		frameWidth = 120,
-                padding = { 0, 2, 0, 10 },
+		padding = { 0, 2, 0, 10 },
 	})
 
 	s.icon_connected = _uses(_icon, {
 		img = _loadImage(self, "Alerts/connecting_success_icon.png"),
-                padding = { 0, 2, 0, 10 },
+		padding = { 0, 2, 0, 10 },
 	})
 
 	s.icon_photo_loading = _uses(_icon, {
@@ -2488,28 +2487,28 @@ function skin(self, s)
 	})
 
 	s.icon_popup_shuffle0 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_shuffle_off.png"),
-        })
+		img = _loadImage(self, "Icons/icon_popup_box_shuffle_off.png"),
+	})
 
-        s.icon_popup_shuffle1 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_shuffle.png"),
-        })
+	s.icon_popup_shuffle1 = _uses(_popupicon, {
+		img = _loadImage(self, "Icons/icon_popup_box_shuffle.png"),
+	})
 
-        s.icon_popup_shuffle2 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_shuffle_album.png"),
-        })
+	s.icon_popup_shuffle2 = _uses(_popupicon, {
+    	img = _loadImage(self, "Icons/icon_popup_box_shuffle_album.png"),
+	})
 
 	s.icon_popup_repeat0 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_repeat_off.png"),
-        })
+		img = _loadImage(self, "Icons/icon_popup_box_repeat_off.png"),
+	})
 
-        s.icon_popup_repeat1 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_repeat_song.png"),
-        })
+	s.icon_popup_repeat1 = _uses(_popupicon, {
+		img = _loadImage(self, "Icons/icon_popup_box_repeat_song.png"),
+	})
 
-        s.icon_popup_repeat2 = _uses(_popupicon, {
-                img = _loadImage(self, "Icons/icon_popup_box_repeat.png"),
-        })
+	s.icon_popup_repeat2 = _uses(_popupicon, {
+		img = _loadImage(self, "Icons/icon_popup_box_repeat.png"),
+	})
 
 	s.icon_popup_sleep_15 = {
 		img = _loadImage(self, "Icons/icon_popup_box_sleep_15.png"),
@@ -2547,10 +2546,10 @@ function skin(self, s)
 		img = _loadImage(self, "Icons/icon_alarm.png"),
 	}
 
-        s.icon_art = _uses(_icon, {
-                padding = 0,
-                img = false,
-        })
+	s.icon_art = _uses(_icon, {
+		padding = 0,
+        img = false,
+	})
 
 	s.player_transporter = _uses(_buttonicon, {
 		img = _loadImage(self, "IconsResized/icon_transporter" .. skinSuffix),
@@ -2628,8 +2627,8 @@ function skin(self, s)
 	})
 	s.hm__myMusic = _uses(s.hm_myMusic)
    	s.hm_otherLibrary = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_ml_other_library" .. skinSuffix),
-        })
+		img = _loadImage(self, "IconsResized/icon_ml_other_library" .. skinSuffix),
+	})
 	s.hm_myMusicSelector = _uses(s.hm_myMusic)
 
 	s.hm_favorites = _uses(_buttonicon, {
@@ -2699,36 +2698,36 @@ function skin(self, s)
 		img = _loadImage(self, "IconsResized/icon_blank" .. skinSuffix),
 	})
 
-        s.hm_settingsRepeat = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_repeat" .. skinSuffix),
-        })
-        s.hm_settingsShuffle = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_shuffle" .. skinSuffix),
-        })
-        s.hm_settingsSleep = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_sleep" .. skinSuffix),
-        })
-        s.hm_settingsScreen = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_screen" .. skinSuffix),
-        })
-        s.hm_appletCustomizeHome = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_home" .. skinSuffix),
-        })
-        s.hm_settingsAudio = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_audio" .. skinSuffix),
-        })
-        s.hm_linein = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_linein" .. skinSuffix),
-        })
+	s.hm_settingsRepeat = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_repeat" .. skinSuffix),
+	})
+	s.hm_settingsShuffle = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_shuffle" .. skinSuffix),
+	})
+	s.hm_settingsSleep = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_sleep" .. skinSuffix),
+	})
+	s.hm_settingsScreen = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_screen" .. skinSuffix),
+	})
+	s.hm_appletCustomizeHome = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_home" .. skinSuffix),
+	})
+	s.hm_settingsAudio = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_audio" .. skinSuffix),
+	})
+	s.hm_linein = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_linein" .. skinSuffix),
+	})
 
         -- ??
-        s.hm_loading = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_loading" .. skinSuffix),
-        })
+	s.hm_loading = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_loading" .. skinSuffix),
+	})
         -- ??
-        s.hm_settingsPlugin = _uses(_buttonicon, {
-                img = _loadImage(self, "IconsResized/icon_settings_plugin" .. skinSuffix),
-        })
+	s.hm_settingsPlugin = _uses(_buttonicon, {
+    	img = _loadImage(self, "IconsResized/icon_settings_plugin" .. skinSuffix),
+	})
 
 	-- indicator icons, on right of menus
 	local _indicator = {
@@ -2767,7 +2766,7 @@ function skin(self, s)
 
 	-- BEGIN NowPlaying skin code
 
-	local NP_ARTISTALBUM_FONT_SIZE = 48
+	local NP_ARTISTALBUM_FONT_SIZE = 42
 	local NP_TRACK_FONT_SIZE = 42
 
 	local controlHeight = 66
@@ -2848,11 +2847,11 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 300,
+			y          = TITLE_HEIGHT + 250,
 			h          = 70,
 			npartist = {
 				padding    = { 0, 6, 0, 0 },
-				w          = screenWidth - _tracklayout.x - 40,
+				w          = screenWidth - _tracklayout.x - 100,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2865,10 +2864,10 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 400,
+			y          = TITLE_HEIGHT + 350,
 			h          = 70,
 			npalbum = {
-				w          = screenWidth - _tracklayout.x - 40,
+				w          = screenWidth - _tracklayout.x - 100,
 				padding    = { 0, 6, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -3071,9 +3070,9 @@ function skin(self, s)
 		padding = { 6, 0, 6, 0 },
 		position = LAYOUT_SOUTH,
 		horizontal = 1,
-                bgImg = _volumeSliderBackground,
-                img = _volumeSliderBar,
-                pillImg = _volumeSliderPill,
+		bgImg = _volumeSliderBackground,
+		img = _volumeSliderBar,
+		pillImg = _volumeSliderPill,
 	}
 
 	-- pressed styles
@@ -3411,8 +3410,7 @@ function skin(self, s)
 		}),
 	}
 	s.brightness_group.pressed = {
-
-		down   = _uses(s.brightness_group.down, { bgImg = sliderButtonPressed }),
+		down = _uses(s.brightness_group.down, { bgImg = sliderButtonPressed }),
 		up   = _uses(s.brightness_group.up, { bgImg = sliderButtonPressed }),
 	}
 
@@ -3420,11 +3418,11 @@ function skin(self, s)
 		w = WH_FILL,
 		border = { 5, 12, 5, 0 },
 		padding = { 6, 0, 6, 0 },
-                position = LAYOUT_SOUTH,
-                horizontal = 1,
-                bgImg = _volumeSliderBackground,
-                img = _volumeSliderBar,
-                pillImg = _volumeSliderPill,
+		position = LAYOUT_SOUTH,
+		horizontal = 1,
+		bgImg = _volumeSliderBackground,
+		img = _volumeSliderBar,
+		pillImg = _volumeSliderPill,
 	}
 	
 	s.settings_slider_group = _uses(s.brightness_group, {
@@ -3472,16 +3470,16 @@ function skin(self, s)
 			zOrder = 9999
 	}
 
-        s.demo_text = {
-                font = _boldfont(18),
-                position = LAYOUT_SOUTH,
-                w = screenWidth,
+	s.demo_text = {
+		font = _boldfont(18),
+		position = LAYOUT_SOUTH,
+		w = screenWidth,
 		h = 50,
-                align = 'center',
-                padding = { 6, 0, 6, 10 },
-                fg = TEXT_COLOR,
-                sh = TEXT_SH_COLOR,
-        }
+		align = 'center',
+		padding = { 6, 0, 6, 10 },
+		fg = TEXT_COLOR,
+		sh = TEXT_SH_COLOR,
+	}
 
 
 end

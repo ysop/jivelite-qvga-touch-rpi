@@ -494,6 +494,7 @@ function __init(self, jnt, id, name, version)
 
 	local machine = System:getMachine()
 	-- this is not relevant to desktop SP
+	--[[
 	if machine ~= 'squeezeplay' then
 		obj.comet:subscribe('/slim/firmwarestatus',
 			_getSink(obj, '_upgradeSink'),
@@ -507,7 +508,7 @@ function __init(self, jnt, id, name, version)
 			}
 		)
 	end
-
+	--]]
 
 	setmetatable(obj.imageCache, { __mode = "kv" })
 
