@@ -1,0 +1,17 @@
+APPLET_NAME
+	EN	Audio Output Device
+
+ENABLE_SQUEEZELITE
+	EN	Squeezelite Player
+
+OUTPUT_DEVICE
+	EN	Active Output Device
+
+ACTIVE
+	EN	 [Active]
+
+ACTIVE_DEVICE
+	EN	[Active Device]
+
+SELECT_DEVICE
+	EN	Select Device
