@@ -552,7 +552,7 @@ local function _menuSink(self, isCurrentServer, server)
 				else
 					iconServer = _server
 				end
-				local _size = jiveMain:getSkinParam('THUMB_SIZE_MENU') or jiveMain:getSkinParam('THUMB_SIZE') 
+				local _size = jiveMain:getSkinParam('THUMB_SIZE_MENU')
 				item.icon = Icon('icon')
 				iconServer:fetchArtwork(itemIcon, item.icon, _size, 'png')
 
@@ -561,7 +561,7 @@ local function _menuSink(self, isCurrentServer, server)
 				-- should replace this with resizable icons.
 				local _style = item.icon.checkSkin
 				item.icon.checkSkin = function(...)
-					local s = jiveMain:getSkinParam('THUMB_SIZE_MENU') or jiveMain:getSkinParam('THUMB_SIZE')
+					local s = jiveMain:getSkinParam('THUMB_SIZE_MENU')
 					if s ~= _size then
 						_size = s
 						iconServer:fetchArtwork(itemIcon, item.icon, _size, 'png')
