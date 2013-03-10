@@ -199,26 +199,9 @@ static int jiveL_initSDL(lua_State *L) {
 
 	screen_bpp = video_info->vfmt->BitsPerPixel;
 
-	if (video_info->wm_available) {
-		/* desktop build */
-		splash = jive_surface_load_image("jive/splash.png");
-		if (splash) {
-			jive_surface_get_size(splash, &splash_w, &splash_h);
-
-			screen_w = splash_w;
-			screen_h = splash_h;
-		}
-	}
-	else {
-		/* product build */
-		char splashfile[40];
-
-		sprintf(splashfile, "jive/splash%dx%d.png", screen_w, screen_h);
-
-		splash = jive_surface_load_image(splashfile);
-		if (splash) {
-			jive_surface_get_size(splash, &splash_w, &splash_h);
-		}
+	splash = jive_surface_load_image("jive/splash.png");
+	if (splash) {
+		jive_surface_get_size(splash, &splash_w, &splash_h);
 	}
 
 	srf = jive_surface_set_video_mode(screen_w, screen_h, screen_bpp, video_info->wm_available ? false : true);
@@ -228,7 +211,7 @@ static int jiveL_initSDL(lua_State *L) {
 	}
 
 	if (splash) {
-		jive_surface_blit(splash, srf, MIN(0, (screen_w - splash_w) / 2), MIN(0, (screen_h - splash_h) / 2));
+		jive_surface_blit(splash, srf, MAX(0, (screen_w - splash_w) / 2), MAX(0, (screen_h - splash_h) / 2));
 		jive_surface_flip(srf);
 	}
 
