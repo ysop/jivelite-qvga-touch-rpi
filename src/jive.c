@@ -31,13 +31,11 @@ extern int luaopen_jive_debug(lua_State *L);
 */
 #define LUA_DEFAULT_SCRIPT "jive.JiveMain"
 
-/* LUA_DEFAULT_PATH
-** Relative path from the standard location of jive to the directory
-** containing scripts (no trailing "/")
-** Default value is "../share/jive"
+/* LUA_DEFAULT_*_PATH
+** Try relative path to binary first then fixed path to system install
 */
-#define LUA_DEFAULT_PATH "../share/jive"
-
+#define LUA_DEFAULT_REL_PATH "../share/jive"
+#define LUA_DEFAULT_FIX_PATH "/usr/share/jive"
 
 
 /* GLOBALS
@@ -171,10 +169,14 @@ static void paths_setup(lua_State *L, char *app) {
 
 		// script path relative to executale
 		strcpy(temp, binpath);
-		strcat(temp, "/" LUA_DEFAULT_PATH);
+		strcat(temp, "/" LUA_DEFAULT_REL_PATH);
 		realpath(temp, path);
 
 		luaL_addstring(&b, path);
+		luaL_addstring(&b, DIR_SEPARATOR_STR "?.lua;");
+
+		// script fixed path for system install
+		luaL_addstring(&b, LUA_DEFAULT_FIX_PATH);
 		luaL_addstring(&b, DIR_SEPARATOR_STR "?.lua;");
 		
 		// set lua path
@@ -202,11 +204,19 @@ static void paths_setup(lua_State *L, char *app) {
 
 		// cpath relative to executable
 		strcpy(temp, binpath);
-		strcat(temp, "/" LUA_DEFAULT_PATH);
+		strcat(temp, "/" LUA_DEFAULT_REL_PATH);
 		realpath(temp, path);
 
 		luaL_addstring(&b, path);
 		luaL_addstring(&b, DIR_SEPARATOR_STR "?." LIBRARY_EXT ";");
+		luaL_addstring(&b, path);
+		luaL_addstring(&b, DIR_SEPARATOR_STR "?" DIR_SEPARATOR_STR "core." LIBRARY_EXT ";");
+		
+		// fixed cpath for sytem install
+		luaL_addstring(&b, LUA_DEFAULT_FIX_PATH);
+		luaL_addstring(&b, DIR_SEPARATOR_STR "?." LIBRARY_EXT ";");
+		luaL_addstring(&b, LUA_DEFAULT_FIX_PATH);
+		luaL_addstring(&b, DIR_SEPARATOR_STR "?" DIR_SEPARATOR_STR "core." LIBRARY_EXT ";");
 
 		// set lua cpath
 		luaL_pushresult(&b);
