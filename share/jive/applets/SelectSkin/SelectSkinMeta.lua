@@ -23,6 +23,7 @@ local AppletMeta    = require("jive.AppletMeta")
 local appletManager = appletManager
 local jiveMain      = jiveMain
 
+local arg           = arg
 
 module(...)
 oo.class(_M, AppletMeta)
@@ -50,7 +51,14 @@ function configureApplet(meta)
 		meta:getSettings().skin = jiveMain:getDefaultSkin()
 	end
 
-	local skin = meta:getSettings().skin
+	local skin
+
+	if arg[1] and arg[1] == "--smallskin" then
+		skin = "WQVGAsmallSkin"
+	else
+		skin = meta:getSettings().skin
+	end
+
 	jiveMain:setSelectedSkin(skin)
 
 	local skins = 0

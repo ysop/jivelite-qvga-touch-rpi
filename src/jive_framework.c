@@ -202,6 +202,10 @@ static int jiveL_initSDL(lua_State *L) {
 	splash = jive_surface_load_image("jive/splash.png");
 	if (splash) {
 		jive_surface_get_size(splash, &splash_w, &splash_h);
+		if (video_info->wm_available) {
+			screen_w = splash_w;
+			screen_h = splash_h;
+		}
 	}
 
 	srf = jive_surface_set_video_mode(screen_w, screen_h, screen_bpp, video_info->wm_available ? false : true);
@@ -1228,6 +1232,9 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		free(event->user.data1);
 		break;
 
+		/* disable for the moment as it causes continual resizing
+		   if the event for a resize gets delayed as we have a stack of resize notifications which cause resize to the old size
+
 	case SDL_VIDEORESIZE: {
 		JiveSurface *srf;
 		int bpp = 16;
@@ -1259,11 +1266,11 @@ static int process_event(lua_State *L, SDL_Event *event) {
 
 		jevent.type = JIVE_EVENT_WINDOW_RESIZE;
 		
-		/* Avoid mouse_up causing a mouse press event to occur */
 		mouse_state = MOUSE_STATE_NONE;
 		break;
 
 	}
+	*/
 
 	default:
 		return 0;

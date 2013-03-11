@@ -495,10 +495,12 @@ static int pmain (lua_State *L) {
 	redirect_stdio();	
 #endif
 
-	// do we have an argument?
+	/* 
+	// do we have an argument? - disabled as we do not want to run alternative scripts, but want to see the arguments
 	if (argv[1] != NULL) {
 		script = 1;
 	}
+	*/
 	
 	// do a script
 	s->status = handle_script(L, argv, script);
