@@ -15,3 +15,41 @@ ACTIVE_DEVICE
 
 SELECT_DEVICE
 	EN	Select Device
+
+OPTIONS
+	EN	Optional Parameters (Advanced)
+
+OPT_BUFFER
+	EN	Alsa Buffer Size
+
+OPT_COUNT
+	EN	Alsa Period Count
+
+OPT_FORMAT
+	EN	Alsa Format
+
+OPT_MMAP
+	EN	Use Alsa MMAP
+
+OPT_MAXRATE
+	EN	Max Sample Rate
+
+DEFAULT
+	EN	Default
+
+HELP_BUFFER
+	EN	Specify the alsa output buffer size.  You may need to increase this from the default value if audio stutters.
+
+HELP_COUNT
+	EN	Specify the alsa period count.  For advanced users.
+
+HELP_FORMAT
+	EN	Specify the alsa sample format to use.  For advanced users.
+
+HELP_MMAP
+	EN	Specify whether alsa mmap mode should be used.  For advanced users.
+
+HELP_MAXRATE
+	EN	Specify the maximum sample rate supported by your DAC.  If this is not set the squeezelite player requires the dac to be active when started.  Setting this option allows squeezelite to startup without the dac connected or powered on.  The server will resample streams which are higher sample rate than the value specified.
+	
+

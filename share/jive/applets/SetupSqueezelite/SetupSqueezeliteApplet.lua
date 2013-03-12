@@ -1,6 +1,6 @@
 --[[
 
-SetupSqueezelite Applet - support of usb audio and extended digital output capabilties via addon kernel
+SetupSqueezelite Applet - configuration for squeezelite playback
 
 (c) 2012, 2013, Adrian Smith, triode1@btinternet.com
 
@@ -29,13 +29,25 @@ local debug            = require("jive.utils.debug")
 
 local appletManager    = appletManager
 
-local string, ipairs, tonumber, tostring, require, type, table, bit = string, ipairs, tonumber, tostring, require, type, table, bit
+local string, pairs, ipairs, tonumber, tostring, require, type, table, bit = string, pairs, ipairs, tonumber, tostring, require, type, table, bit
 
 module(..., Framework.constants)
 oo.class(_M, Applet)
 
 
+-- squeezelite alsa options
+local opts = {
+	{ name = 'buffer', vals = { 20, 40, 80, 160, 250, 500 } },
+	{ name = 'count',  vals = { 2, 4, 8, 16, 32 } },
+	{ name = 'format', vals = { '16', '24', '24_3', '32' } },
+	{ name = 'mmap',   vals = { 0, 1 } },
+	{ name = 'maxrate', vals = { 44100, 48000, 88200, 96000, 172400, 192000, 352800, 394000 } },
+}
+
+
 function deviceMenu(self, menuItem)
+	self:_parseConfig()
+
 	local window = Window("text_list", menuItem.text)
 	local menu = SimpleMenu("menu")
 	window:addWidget(menu)
@@ -49,15 +61,65 @@ function deviceMenu(self, menuItem)
 		local items = {}
 
 		if slEnabled then
+
 			for num, card in ipairs(info) do
 				items[#items+1] = {
-					text = card.desc .. (self:_isActiveOutput(card.id) and tostring(self:string("ACTIVE")) or ""),
+					text = card.desc .. (self:_isDevice(card.id) and tostring(self:string("ACTIVE")) or ""),
 					callback = function(event, menuItem)
 								   timer:stop()
 								   self:cardMenu(card.id, card.desc)
 							   end,
 				}
 			end
+
+			items[#items+1] = {
+				text = self:string("OPTIONS"),
+					callback = function(event, menuItem)
+								   timer:stop()
+								   local window = Window("text_list", menuItem.text)
+								   local items = {}
+								   for _, opt in ipairs(opts) do
+									   items[#items+1] = {
+										   text = tostring(self:string("OPT_" .. string.upper(opt.name))),
+										   callback = function(event, menuItem)
+														  local window = Window("text_list", menuItem.text)
+														  local group = RadioGroup()
+														  local items = {}
+														  items[1] = {
+															  text  = self:string("DEFAULT"),
+															  style = 'item_choice',
+															  check = RadioButton("radio", group,
+																				  function(event, menuItem)
+																					  self:_setParam(opt.name, nil)
+																				  end,
+																				  self:_getParam(opt.name) == nil)
+														  }
+														  for k, v in ipairs(opt.vals) do
+															  items[#items+1] = {
+																  text  = v,
+																  style = 'item_choice',
+																  check = RadioButton("radio", group,
+																					  function(event, menuItem)
+																						  self:_setParam(opt.name, v)
+																					  end,
+																					  tostring(self:_getParam(opt.name)) == tostring(v))
+															  }
+														  end
+														  local menu = SimpleMenu("menu", items)
+														  menu:setHeaderWidget(
+															  Textarea("help_text", self:string("HELP_" .. string.upper(opt.name)))
+														  )
+														  window:addWidget(menu)
+														  self:tieAndShowWindow(window)
+													  end,
+									   }
+								   end
+								   local menu = SimpleMenu("menu", items)
+								   window:addWidget(menu)
+								   self:tieAndShowWindow(window)
+							   end,
+			}
+
 		end
 
 		items[#items+1] = {
@@ -102,7 +164,7 @@ end
 
 
 function cardMenu(self, card, desc)
-	local isActive = self:_isActiveOutput(card)
+	local isSelected = self:_isDevice(card)
 	local window = Window("text_list", desc)
 	local menu = SimpleMenu("menu")
 	local items = {}
@@ -115,13 +177,13 @@ function cardMenu(self, card, desc)
 		style = "item_no_arrow",
 	}
 
-	if isActive then
+	if isSelected then
 		items[1] = activeEntry
 	else
 		items[1] = {
 			text = self:string("SELECT_DEVICE"),
 			callback = function(event, menuItem)
-						   self:_setActiveOutput(card)
+						   self:_setDevice(card)
 						   items[1] = activeEntry
 						   menu:reLayout()
 					   end,
@@ -319,11 +381,142 @@ end
 
 -- make these system specific...
 
-local active
+--[[
+This is the format of the config file we want to parse and change lines in:
+NAME="-n SqueezeLiteNC10"
+MAC="-m 00:21:63:a3:b9:0d"
+MAX_RATE="-r 192000"
+AUDIO_DEV="-o hw:CARD=Intel,DEV=0"
+LOG_FILE="-f /var/log/squeezelite/squeezelite.log"
+# LOG_LEVEL="-d <log>=<level>"
+# PRIORITY="-p <priority>"
+# BUFFER="-b <stream>:<output>"
+# CODEC="-c <codec1>,<codec2>"
+# ALSA_PARAMS="-a <b>:<c>:<f>:<m>"
+SERVER_IP="192.168.0.20"
+--]]
+
+local configFile    = "/etc/sysconfig/squeezelite"
+local configFileTmp = "/tmp/squeezelite.config"
+
+local current
+
+
+function _getParam(self, key)
+	return current[key]
+end
+
+
+function _setParam(self, key, val)
+	log:debug("set " .. key .. ": ", (val or "nil"))
+	current[key] = val
+	self:_writeConfig()
+end
+
+
+function _isDevice(self, card)
+	return card == current.device
+end
+
+
+function _setDevice(self, card)
+	log:debug("set device: " .. (card or "nil"))
+	current.device = card
+	self:_writeConfig()
+end
+
+
+function _parseConfig(self)
+	local conf = io.open(configFile, "r")
+	if conf == nil then
+		log:warn("can't open config file")
+		return
+	end
+
+	current = {}
+
+	for line in conf:lines() do
+		if string.match(line, "AUDIO_DEV") then
+			local dev = string.match(line, '^AUDIO_DEV="%-o%s(.-)"')
+			log:info("dev: ", dev)
+			if dev then
+				current.device = string.match(dev, "hw:CARD=(.-),DEV") or string.match(dev, "hw:CARD=(.-)")
+			end
+		end
+		if string.match(line, "ALSA_PARAMS") then
+			local params = string.match(line, '^ALSA_PARAMS="%-a%s(.-)"')
+			if params then
+				if string.match(params, "%d-:%d-:[%d_]-:%d-") then
+					current.buffer, current.count, current.format, current.mmap = string.match(params, "(%d-):(%d-):([%d_]-):(%d-)")
+				elseif string.match(params, "%d-:%d-:[%d_]-") then
+					current.buffer, current.count, current.format = string.match(params, "(%d-):(%d-):([%d_]-)")
+				elseif string.match(params, "%d-:%d-") then
+					current.buffer, current.count = string.match(params, "(%d-):(%d-)")
+				elseif string.match(params, "%d-") then
+					current.buffer = params
+				end
+				if current.buffer == "" then current.buffer = nil end
+				if current.count  == "" then current.count  = nil end
+				if current.format == "" then current.format = nil end
+				if current.mmap   == "" then current.mmap   = nil end
+			end
+		end
+		if string.match(line, "MAX_RATE") then		
+			current.maxrate = string.match(line, '^MAX_RATE="%-r%s(%d-)"')
+		end
+	end
+
+	conf:close()
+end
+
+
+function _writeConfig(self)
+	local inconf  = io.open(configFile, "r")
+	local outconf = io.open(configFileTmp, "w")
+	if inconf == nil or outconf == nil then
+		log:warn("can't open config files, aborting save")
+		return
+	end
+
+	log:info("writing config")
+
+	for line in inconf:lines() do
+		if string.match(line, "AUDIO_DEV") then
+			if current.device then
+				outconf:write('AUDIO_DEV="-o hw:CARD=' .. current.device .. ',DEV=0"\n')
+			else
+				outconf:write('# AUDIO_DEV=""\n')
+			end
+		elseif string.match(line, "ALSA_PARAMS") then
+			if current.buffer or current.count or current.format or current.mmap then
+				outconf:write('ALSA_PARAMS="-a ' .. (current.buffer or "") .. ":" .. (current.count or "") .. ":" ..
+							  (current.format or "") .. ":" .. (current.mmap or "") .. '"\n')
+			else
+				outconf:write('# ALSA_PARAMS=""\n')
+			end
+		elseif string.match(line, "MAX_RATE") then
+			if current.maxrate then
+				outconf:write('ALSA_PARAMS="-r ' .. current.maxrate .. '"\n')
+			else
+				outconf:write('# ALSA_PARAMS=""\n')
+			end
+		else
+			outconf:write(line .. "\n")
+		end
+	end
+
+	inconf:close()
+	outconf:close()
+
+	os.execute("sudo cp /tmp/squeezelite.config /etc/sysconfig/squeezelite")
+	os.execute("sudo systemctl restart squeezelite.service")
+end
+
 
 function _slIsEnabled(self)
 	return os.execute("systemctl --quiet is-active squeezelite.service") == 0
 end
+
 
 function _slEnable(self, new)
 	if new then
@@ -333,14 +526,3 @@ function _slEnable(self, new)
 	end
 end
 
-function _isActiveOutput(self, card)
-	--FIXME parse the active configuration...
-	return card == active
-end
-
-function _setActiveOutput(self, card)
-	active = card
-	os.execute("echo 'AUDIO_DEV=" .. '"-o hw:CARD=' .. card .. ',DEV=0"\nALSA_PARAMS="-a 40:::"' .. "' > /tmp/squeezelite.config")
-	os.execute("sudo cp /tmp/squeezelite.config /etc/sysconfig/squeezelite")
-	os.execute("sudo systemctl restart squeezelite.service")
-end
