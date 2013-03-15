@@ -60,7 +60,7 @@ function deviceMenu(self, menuItem)
 		local slEnabled = self:_slIsEnabled()
 		local items = {}
 
-		if slEnabled then
+		if true then
 
 			for num, card in ipairs(info) do
 				items[#items+1] = {
@@ -508,8 +508,11 @@ function _writeConfig(self)
 	inconf:close()
 	outconf:close()
 
-	os.execute("sudo cp /tmp/squeezelite.config /etc/sysconfig/squeezelite")
-	os.execute("sudo systemctl restart squeezelite.service")
+	os.execute("sudo cp " .. configFileTmp .. " " .. configFile)
+
+	if self:_slIsEnabled() then
+		os.execute("sudo systemctl restart squeezelite.service")
+	end
 end
 
 
