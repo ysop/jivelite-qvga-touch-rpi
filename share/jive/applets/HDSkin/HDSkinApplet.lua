@@ -50,7 +50,7 @@ local WH_FILL                = jive.ui.WH_FILL
 
 local jiveMain               = jiveMain
 local appletManager          = appletManager
-
+local math                   = math
 
 module(..., Framework.constants)
 oo.class(_M, Applet)
@@ -77,7 +77,7 @@ function param(self)
 	return {
 		THUMB_SIZE = 72,
 		THUMB_SIZE_MENU = 64,
-		NOWPLAYING_MENU = true, --changed by justblair
+		NOWPLAYING_MENU = true,
 		-- NOWPLAYING_TRACKINFO_LINES used in assisting scroll behavior animation on NP
 		-- 3 is for a three line track, artist, and album (e.g., SBtouch)
 		-- 2 is for a two line track, artist+album (e.g., SBradio, SBcontroller)
@@ -94,31 +94,6 @@ function param(self)
 				artworkSize = '900x900',
 				text = self:string("ART_AND_TEXT"),
 			},
-			--[[
-			{
-				style = 'nowplaying_art_only',
-				artworkSize = '470x262',
-				suppressTitlebar = 1,
-				text = self:string("ART_ONLY"),
-			},
-			{
-				style = 'nowplaying_text_only',
-				artworkSize = '300x300',
-				text = self:string("TEXT_ONLY"),
-			},
-			{
-				style = 'nowplaying_spectrum_text',
-				artworkSize = '300x300',
-				localPlayerOnly = 1,
-				text = self:string("SPECTRUM_ANALYZER"),
-			},
-			{
-				style = 'nowplaying_vuanalog_text',
-				artworkSize = '300x300',
-				localPlayerOnly = 1,
-				text = self:string("ANALOG_VU_METER"),
-			},
-			--]]
 		},
 	}
 end
@@ -533,99 +508,89 @@ function skin(self, s)
 		imgpath .. "Text_Entry/Keyboard_Touch/keyboard_divider_vert.png",
 	})
 
-	local titleBox                =
-		_loadTile(self, {
-				 imgpath .. "Titlebar/titlebar.png",
-				 nil,
-				 nil,
-				 nil,
-				 nil,
-				 nil,
-				 imgpath .. "Titlebar/titlebar_shadow.png",
-				 nil,
-				 nil,
-		})
+	local titleBox = _loadTile(self, {
+		imgpath .. "Titlebar/titlebar.png",
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
+		imgpath .. "Titlebar/titlebar_shadow.png",
+		nil,
+		nil,
+	})
 
-	local textinputBackground     = 
-		_loadTile(self, {
-				 imgpath .. "Text_Entry/Keyboard_Touch/titlebar_box.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_tl.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_t.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_tr.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_r.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_br.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_b.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_bl.png",
-				 imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_l.png",
-				})
+	local textinputBackground = _loadTile(self, {
+		imgpath .. "Text_Entry/Keyboard_Touch/titlebar_box.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_tl.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_t.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_tr.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_r.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_br.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_b.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_bl.png",
+		imgpath .. "Text_Entry/Keyboard_Touch/text_entry_titlebar_box_l.png",
+	})
 
-	local pressedTitlebarButtonBox =
-		_loadTile(self, {
-					imgpath .. "Buttons/button_titlebar_press.png",
-					imgpath .. "Buttons/button_titlebar_tl_press.png",
-					imgpath .. "Buttons/button_titlebar_t_press.png",
-					imgpath .. "Buttons/button_titlebar_tr_press.png",
-					imgpath .. "Buttons/button_titlebar_r_press.png",
-					imgpath .. "Buttons/button_titlebar_br_press.png",
-					imgpath .. "Buttons/button_titlebar_b_press.png",
-					imgpath .. "Buttons/button_titlebar_bl_press.png",
-					imgpath .. "Buttons/button_titlebar_l_press.png",
-				})
+	local pressedTitlebarButtonBox = _loadTile(self, {
+		imgpath .. "Buttons/button_titlebar_press.png",
+		imgpath .. "Buttons/button_titlebar_tl_press.png",
+		imgpath .. "Buttons/button_titlebar_t_press.png",
+		imgpath .. "Buttons/button_titlebar_tr_press.png",
+		imgpath .. "Buttons/button_titlebar_r_press.png",
+		imgpath .. "Buttons/button_titlebar_br_press.png",
+		imgpath .. "Buttons/button_titlebar_b_press.png",
+		imgpath .. "Buttons/button_titlebar_bl_press.png",
+		imgpath .. "Buttons/button_titlebar_l_press.png",
+	})
 
-	local titlebarButtonBox =
-		_loadTile(self, {
-					imgpath .. "Buttons/button_titlebar.png",
-					imgpath .. "Buttons/button_titlebar_tl.png",
-					imgpath .. "Buttons/button_titlebar_t.png",
-					imgpath .. "Buttons/button_titlebar_tr.png",
-					imgpath .. "Buttons/button_titlebar_r.png",
-					imgpath .. "Buttons/button_titlebar_br.png",
-					imgpath .. "Buttons/button_titlebar_b.png",
-					imgpath .. "Buttons/button_titlebar_bl.png",
-					imgpath .. "Buttons/button_titlebar_l.png",
-				})
+	local titlebarButtonBox =_loadTile(self, {
+		imgpath .. "Buttons/button_titlebar.png",
+		imgpath .. "Buttons/button_titlebar_tl.png",
+		imgpath .. "Buttons/button_titlebar_t.png",
+		imgpath .. "Buttons/button_titlebar_tr.png",
+		imgpath .. "Buttons/button_titlebar_r.png",
+		imgpath .. "Buttons/button_titlebar_br.png",
+		imgpath .. "Buttons/button_titlebar_b.png",
+		imgpath .. "Buttons/button_titlebar_bl.png",
+		imgpath .. "Buttons/button_titlebar_l.png",
+	})
 
-	local popupBox = 
-		_loadTile(self, {
-				       imgpath .. "Popup_Menu/popup_box.png",
-				       imgpath .. "Popup_Menu/popup_box_tl.png",
-				       imgpath .. "Popup_Menu/popup_box_t.png",
-				       imgpath .. "Popup_Menu/popup_box_tr.png",
-				       imgpath .. "Popup_Menu/popup_box_r.png",
-				       imgpath .. "Popup_Menu/popup_box_br.png",
-				       imgpath .. "Popup_Menu/popup_box_b.png",
-				       imgpath .. "Popup_Menu/popup_box_bl.png",
-				       imgpath .. "Popup_Menu/popup_box_l.png",
-			       })
+	local popupBox = _loadTile(self, {
+       imgpath .. "Popup_Menu/popup_box.png",
+       imgpath .. "Popup_Menu/popup_box_tl.png",
+       imgpath .. "Popup_Menu/popup_box_t.png",
+       imgpath .. "Popup_Menu/popup_box_tr.png",
+       imgpath .. "Popup_Menu/popup_box_r.png",
+       imgpath .. "Popup_Menu/popup_box_br.png",
+       imgpath .. "Popup_Menu/popup_box_b.png",
+       imgpath .. "Popup_Menu/popup_box_bl.png",
+       imgpath .. "Popup_Menu/popup_box_l.png",
+	})
 
-	local contextMenuBox = 
-		_loadTile(self, {
-				       imgpath .. "Popup_Menu/cm_popup_box.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_tl.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_t.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_tr.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_r.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_br.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_b.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_bl.png",
-				       imgpath .. "Popup_Menu/cm_popup_box_l.png",
-			       })
+	local contextMenuBox = _loadTile(self, {
+		imgpath .. "Popup_Menu/cm_popup_box.png",
+		imgpath .. "Popup_Menu/cm_popup_box_tl.png",
+		imgpath .. "Popup_Menu/cm_popup_box_t.png",
+		imgpath .. "Popup_Menu/cm_popup_box_tr.png",
+		imgpath .. "Popup_Menu/cm_popup_box_r.png",
+		imgpath .. "Popup_Menu/cm_popup_box_br.png",
+		imgpath .. "Popup_Menu/cm_popup_box_b.png",
+		imgpath .. "Popup_Menu/cm_popup_box_bl.png",
+		imgpath .. "Popup_Menu/cm_popup_box_l.png",
+	})
 
+	local scrollBackground = _loadVTile(self, {
+		imgpath .. "Scroll_Bar/scrollbar_bkgrd_t.png",
+		imgpath .. "Scroll_Bar/scrollbar_bkgrd.png",
+		imgpath .. "Scroll_Bar/scrollbar_bkgrd_b.png",
+	})
 
-
-	local scrollBackground = 
-		_loadVTile(self, {
-					imgpath .. "Scroll_Bar/scrollbar_bkgrd_t.png",
-					imgpath .. "Scroll_Bar/scrollbar_bkgrd.png",
-					imgpath .. "Scroll_Bar/scrollbar_bkgrd_b.png",
-			       })
-
-	local scrollBar = 
-		_loadVTile(self, {
-					imgpath .. "Scroll_Bar/scrollbar_body_t.png",
-					imgpath .. "Scroll_Bar/scrollbar_body.png",
-					imgpath .. "Scroll_Bar/scrollbar_body_b.png",
-			       })
+	local scrollBar = _loadVTile(self, {
+		imgpath .. "Scroll_Bar/scrollbar_body_t.png",
+		imgpath .. "Scroll_Bar/scrollbar_body.png",
+		imgpath .. "Scroll_Bar/scrollbar_body_b.png",
+	})
 
 	local popupBackground = Tile:fillColor(0x000000ff)
 
@@ -664,10 +629,9 @@ function skin(self, s)
 
 	local CM_MENU_HEIGHT = 45
 
-	local TEXTINPUT_FONT_SIZE = 40 --justblair was 20
+	local TEXTINPUT_FONT_SIZE = 40
 	local TEXTINPUT_SELECTED_FONT_SIZE = 24
 	
-
 	local HELP_FONT_SIZE = 36
 	local UPDATE_SUBTEXT_SIZE = 20
 
@@ -706,6 +670,9 @@ function skin(self, s)
 	local addArrow  = { 
 		img = _loadImage(self, "Icons/selection_add_3line_off.png"),
 	}
+	local favItem  = { 
+		img = _loadImage(self, "Icons/icon_toolbar_fav.png"),
+	}
 
 
 	---- REVIEWED BELOW THIS LINE ----
@@ -726,21 +693,21 @@ function skin(self, s)
 	})
 
 	local _songProgressBar = _loadHTile(self, {
-			nil,
-			nil,
-			imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_slider.png"
+		nil,
+		nil,
+		imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_slider.png"
 	})
 
 	local _songProgressBarDisabled = _loadHTile(self, {
-			nil,
-			nil,
-			imgpath .. "Song_Progress_Bar/SP_Bar_Remote/rem_progressbar_slider.png"
+		nil,
+		nil,
+		imgpath .. "Song_Progress_Bar/SP_Bar_Remote/rem_progressbar_slider.png"
 	})
 
 	local _vizProgressBar = _loadHTile(self, {
-			imgpath .. "UNOFFICIAL/viz_progress_fill_l.png",
-			imgpath .. "UNOFFICIAL/viz_progress_fill.png",
-			imgpath .. "UNOFFICIAL/viz_progress_fill_r.png",
+		imgpath .. "UNOFFICIAL/viz_progress_fill_l.png",
+		imgpath .. "UNOFFICIAL/viz_progress_fill.png",
+		imgpath .. "UNOFFICIAL/viz_progress_fill_r.png",
 	})
 	local _vizProgressBarPill = _loadImageTile(self, imgpath .. "UNOFFICIAL/viz_progress_slider.png")
 
@@ -751,9 +718,9 @@ function skin(self, s)
 	})
 
 	local _volumeSliderBar = _loadHTile(self, {
-               imgpath .. "UNOFFICIAL/tch_volumebar_fill_l.png",
-               imgpath .. "UNOFFICIAL/tch_volumebar_fill.png",
-               imgpath .. "UNOFFICIAL/tch_volumebar_fill_r.png",
+		imgpath .. "UNOFFICIAL/tch_volumebar_fill_l.png",
+		imgpath .. "UNOFFICIAL/tch_volumebar_fill.png",
+		imgpath .. "UNOFFICIAL/tch_volumebar_fill_r.png",
 	})
 	
 	local _volumeSliderPill = _loadImageTile(self, imgpath .. "Touch_Toolbar/tch_volume_slider.png")
@@ -762,7 +729,7 @@ function skin(self, s)
 		imgpath .. "Touch_Toolbar/tch_volumebar_fill_l.png",
 		imgpath .. "Touch_Toolbar/tch_volumebar_fill.png",
 		imgpath .. "Touch_Toolbar/tch_volumebar_fill_r.png",
-        })
+	})
 
 --------- DEFAULT WIDGET STYLES ---------
 	--
@@ -825,15 +792,16 @@ function skin(self, s)
 		text = {
 			w = WH_FILL,
 			h = 100,
-                        padding = { 10, 160, 10, 0 },
-                        align = "center",
-                        font = _font(100),
-                        fg = TEXT_COLOR,
-                        sh = TEXT_SH_COLOR,
-                },
+			padding = { 10, 160, 10, 0 },
+			align = "center",
+			font = _font(100),
+			fg = TEXT_COLOR,
+			sh = TEXT_SH_COLOR,
+		},
 	}
 
 	s.menu = {
+		h = math.floor((screenHeight - TITLE_HEIGHT) / FIVE_ITEM_HEIGHT) * FIVE_ITEM_HEIGHT, 
 		position = LAYOUT_CENTER,
 		padding = { 0, 0, 0, 0 },
 		itemHeight = FIVE_ITEM_HEIGHT,
@@ -877,21 +845,21 @@ function skin(self, s)
 	})
 
 	-- Checkbox
-        s.checkbox = {}
+	s.checkbox = {}
 	s.checkbox.align = 'center'
 	s.checkbox.padding = CHECKBOX_RADIO_PADDING
 	s.checkbox.h = WH_FILL
-        s.checkbox.img_on = _loadImage(self, "Icons/checkbox_on.png")
-        s.checkbox.img_off = _loadImage(self, "Icons/checkbox_off.png")
+	s.checkbox.img_on = _loadImage(self, "Icons/checkbox_on.png")
+	s.checkbox.img_off = _loadImage(self, "Icons/checkbox_off.png")
+	
 
-
-        -- Radio button
-        s.radio = {}
+	-- Radio button
+	s.radio = {}
 	s.radio.align = 'center'
 	s.radio.padding = CHECKBOX_RADIO_PADDING
 	s.radio.h = WH_FILL
-        s.radio.img_on = _loadImage(self, "Icons/radiobutton_on.png")
-        s.radio.img_off = _loadImage(self, "Icons/radiobutton_off.png")
+	s.radio.img_on = _loadImage(self, "Icons/radiobutton_on.png")
+	s.radio.img_off = _loadImage(self, "Icons/radiobutton_off.png")
 
 	s.item_choice = _uses(s.item, {
 		order  = { 'icon', 'text', 'check' },
@@ -910,7 +878,7 @@ function skin(self, s)
 			align = ITEM_ICON_ALIGN,
 			padding = CHECK_PADDING,
 			img = _loadImage(self, "Icons/icon_check_5line.png")
-	      	}
+		}
 	})
 
 	s.item_info = _uses(s.item, {
@@ -943,28 +911,28 @@ function skin(self, s)
 	})
 
 	s.selected = {
-		item               = _uses(s.item, {
+		item = _uses(s.item, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_play           = _uses(s.item_play, {
+		item_play = _uses(s.item_play, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_add            = _uses(s.item_add, {
+		item_add = _uses(s.item_add, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_checked        = _uses(s.item_checked, {
+		item_checked = _uses(s.item_checked, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_no_arrow        = _uses(s.item_no_arrow, {
+		item_no_arrow = _uses(s.item_no_arrow, {
 			bgImg = fiveItemSelectionBox
 		}),
 		item_checked_no_arrow = _uses(s.item_checked_no_arrow, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_choice         = _uses(s.item_choice, {
+		item_choice = _uses(s.item_choice, {
 			bgImg = fiveItemSelectionBox
 		}),
-		item_info         = _uses(s.item_info, {
+		item_info = _uses(s.item_info, {
 			bgImg = fiveItemSelectionBox
 		}),
 	}
@@ -991,7 +959,7 @@ function skin(self, s)
 		item_choice = _uses(s.item_choice, {
 			bgImg = fiveItemPressedBox,
 		}),
-		item_info         = _uses(s.item_info, {
+		item_info = _uses(s.item_info, {
 			bgImg = fiveItemPressedBox,
 		}),
 	}
@@ -1015,7 +983,7 @@ function skin(self, s)
 		item_checked_no_arrow = _uses(s.item_checked_no_arrow, {
 			arrow = smallSpinny
 		}),
-		item_info         = _uses(s.item_info, {
+		item_info = _uses(s.item_info, {
 			arrow = smallSpinny,
 		}),
 	}
@@ -1075,10 +1043,10 @@ function skin(self, s)
 
 	s.slider = {
 		border = 10,
-                position = LAYOUT_SOUTH,
-                horizontal = 1,
-                bgImg = _progressBackground,
-                img = _progressBar,
+		position = LAYOUT_SOUTH,
+		horizontal = 1,
+		bgImg = _progressBackground,
+		img = _progressBar,
 	}
 
 	s.slider_group = {
@@ -1093,7 +1061,7 @@ function skin(self, s)
 
 	-- text input
 	s.textinput = {
-		h = 72, --Justblair Old Value 36
+		h = 72,
 		padding = { 12, 0, 12, 0 },
 		font = _boldfont(TEXTINPUT_FONT_SIZE),
 		cursorFont = _boldfont(TEXTINPUT_FONT_SIZE),
@@ -1106,12 +1074,7 @@ function skin(self, s)
 	}
 
 	-- keyboard
-	s.keyboard = {
-		w = WH_FILL,
-		h = WH_FILL,
-		border = { 8, 6, 8, 0 },
-		padding = { 2, 0, 2, 0 },
-	}
+	s.keyboard = { hidden = 1 }
 
 	s.keyboard_textinput = {
 		bgImg = textinputBackground,
@@ -1123,186 +1086,6 @@ function skin(self, s)
 		},
 	}
 
-	s.keyboard.key = {
-        	font = _boldfont(48),
-        	fg = { 0xDC, 0xDC, 0xDC },
-        	align = 'center',
-		bgImg = keyMiddle,
-	}
-
-	s.keyboard.key_topLeft     = _uses(s.keyboard.key, { bgImg = keyTopLeft })
-	s.keyboard.key_top         = _uses(s.keyboard.key, { bgImg = keyTop })
-	s.keyboard.key_topRight    = _uses(s.keyboard.key, { bgImg = keyTopRight })
-	s.keyboard.key_left        = _uses(s.keyboard.key, { bgImg = keyLeft })
-	s.keyboard.key_middle      = _uses(s.keyboard.key, { bgImg = keyMiddle })
-	s.keyboard.key_right       = _uses(s.keyboard.key, { bgImg = keyRight })
-	s.keyboard.key_bottomLeft  = _uses(s.keyboard.key, { bgImg = keyBottomLeft })
-	s.keyboard.key_bottom      = _uses(s.keyboard.key, { bgImg = keyBottom })
-	s.keyboard.key_bottomRight = _uses(s.keyboard.key, { bgImg = keyBottomRight })
-
-	-- styles for keys that use smaller font 
-	s.keyboard.key_bottom_small      = _uses(s.keyboard.key_bottom, { font = _boldfont(36) } )
-	s.keyboard.key_bottomRight_small = _uses(s.keyboard.key_bottomRight, { 
-			font = _boldfont(36), 
-			fg = { 0xe7, 0xe7, 0xe7 },
-	} )
-	s.keyboard.key_bottomLeft_small  = _uses(s.keyboard.key_bottomLeft, { font = _boldfont(36) } )
-	s.keyboard.key_left_small        = _uses(s.keyboard.key_left, { font = _boldfont(36) } )
-
-
-	s.keyboard.spacer_topLeft     = _uses(s.keyboard.key_topLeft)
-	s.keyboard.spacer_top         = _uses(s.keyboard.key_top)
-	s.keyboard.spacer_topRight    = _uses(s.keyboard.key_topRight)
-	s.keyboard.spacer_left        = _uses(s.keyboard.key_left)
-	s.keyboard.spacer_middle      = _uses(s.keyboard.key_middle)
-	s.keyboard.spacer_right       = _uses(s.keyboard.key_right)
-	s.keyboard.spacer_bottomLeft  = _uses(s.keyboard.key_bottomLeft)
-	s.keyboard.spacer_bottom      = _uses(s.keyboard.key_bottom)
-	s.keyboard.spacer_bottomRight = _uses(s.keyboard.key_bottomRight)
-
-	s.keyboard.shiftOff = _uses(s.keyboard.key_left, {
-		img = _loadImage(self, "Icons/icon_shift_off.png"),
-		padding = { 1, 0, 0, 0 },
-	})
-	s.keyboard.shiftOn = _uses(s.keyboard.key_left, {
-		img = _loadImage(self, "Icons/icon_shift_on.png"),
-		padding = { 1, 0, 0, 0 },
-	})
-
-	s.keyboard.arrow_left_middle = _uses(s.keyboard.key_middle, {
-		img = _loadImage(self, "Icons/icon_arrow_left.png")
-	})
-	s.keyboard.arrow_right_right = _uses(s.keyboard.key_right, {
-		img = _loadImage(self, "Icons/icon_arrow_right.png")
-	})
-	s.keyboard.arrow_left_bottom = _uses(s.keyboard.key_bottom, {
-		img = _loadImage(self, "Icons/icon_arrow_left.png")
-	})
-	s.keyboard.arrow_right_bottom = _uses(s.keyboard.key_bottom, {
-		img = _loadImage(self, "Icons/icon_arrow_right.png")
-	})
-
-
-	s.keyboard.done = {
-		text = _uses(s.keyboard.key_bottomRight_small, {
-			text = self:string("ENTER_SMALL"),
-			fg = { 0x00, 0xbe, 0xbe },
-			sh = { },
-			h = WH_FILL,
-			padding = { 0, 0, 0, 1 },
-		}),
-		icon = { hidden = 1 },
-	}
-
-	s.keyboard.doneDisabled =  _uses(s.keyboard.done, {
-		text = {
-			fg = { 0x66, 0x66, 0x66 },
-		}
-	})
-
-	s.keyboard.doneSpinny =  {
-		icon = _uses(s.keyboard.key_bottomRight, {
-			bgImg = keyBottomRight,
-			hidden = 0,
-            img = _loadImage(self, "Alerts/wifi_connecting_sm.png"),
-			frameRate = 8,
-			frameWidth = 26,
-			w = WH_FILL, 
-			h = WH_FILL,
-			align = 'center',
-		}),
-		text = { hidden = 1, w = 0 },
-    }
-	
-	s.keyboard.space = _uses(s.keyboard.key_bottom_small, {
-		bgImg = keyBottom,
-		text = self:string("SPACEBAR_SMALL"),
-	})
-
-	s.keyboard.pressed = {
-		shiftOff = _uses(s.keyboard.shiftOff, {
-			bgImg = keyLeftPressed
-		}),
-		shiftOn = _uses(s.keyboard.shiftOn, {
-			bgImg = keyLeftPressed
-		}),
-		done = _uses(s.keyboard.done, {
-			bgImg = keyBottomRightPressed,
-		}),
-		doneDisabled = _uses(s.keyboard.doneDisabled, {
-			-- disabled, not set
-		}),
-		doneSpinny = _uses(s.keyboard.doneSpinny, {
-			-- disabled, not set
-		}),
-		space = _uses(s.keyboard.space, {
-			bgImg = keyBottomPressed
-		}),
-		arrow_right_bottom = _uses(s.keyboard.arrow_right_bottom, {
-			bgImg = keyBottomPressed
-		}),
-		arrow_right_right = _uses(s.keyboard.arrow_right_right, {
-			bgImg = keyRightPressed
-		}),
-		arrow_left_bottom = _uses(s.keyboard.arrow_left_bottom, {
-			bgImg = keyBottomPressed
-		}),
-		arrow_left_middle = _uses(s.keyboard.arrow_left_middle, {
-			bgImg = keyMiddlePressed
-		}),
-		key = _uses(s.keyboard.key, {
-			bgImg = keyMiddlePressed
-		}),
-		key_topLeft     = _uses(s.keyboard.key_topLeft, {
-			bgImg = keyTopLeftPressed
-		}),
-		key_top         = _uses(s.keyboard.key_top, {
-			bgImg = keyTopPressed
-		}),
-		key_topRight    = _uses(s.keyboard.key_topRight, {
-			bgImg = keyTopRightPressed
-		}),
-		key_left        = _uses(s.keyboard.key_left, {
-			bgImg = keyLeftPressed
-		}),
-		key_middle      = _uses(s.keyboard.key_middle, {
-			bgImg = keyMiddlePressed
-		}),
-		key_right       = _uses(s.keyboard.key_right, {
-			bgImg = keyRightPressed
-		}),
-		key_bottomLeft  = _uses(s.keyboard.key_bottomLeft, {
-			bgImg = keyBottomLeftPressed
-		}),
-		key_bottom      = _uses(s.keyboard.key_bottom, {
-			bgImg = keyBottomPressed
-		}),
-		key_bottomRight = _uses(s.keyboard.key_bottomRight, {
-			bgImg = keyBottomRightPressed
-		}),
-		key_left_small  = _uses(s.keyboard.key_left_small, {
-			bgImg = keyLeftPressed
-		}),
-		key_bottomLeft_small  = _uses(s.keyboard.key_bottomLeft_small, {
-			bgImg = keyBottomLeftPressed
-		}),
-		key_bottom_small      = _uses(s.keyboard.key_bottom_small, {
-			bgImg = keyBottomPressed
-		}),
-		key_bottomRight_small = _uses(s.keyboard.key_bottomRight_small, {
-			bgImg = keyBottomRightPressed
-		}),
-
-		spacer_topLeft     = _uses(s.keyboard.spacer_topLeft),
-		spacer_top         = _uses(s.keyboard.spacer_top),
-		spacer_topRight    = _uses(s.keyboard.spacer_topRight),
-		spacer_left        = _uses(s.keyboard.spacer_left),
-		spacer_middle      = _uses(s.keyboard.spacer_middle),
-		spacer_right       = _uses(s.keyboard.spacer_right),
-		spacer_bottomLeft  = _uses(s.keyboard.spacer_bottomLeft),
-		spacer_bottom      = _uses(s.keyboard.spacer_bottom),
-		spacer_bottomRight = _uses(s.keyboard.spacer_bottomRight),
-	}
 
 	local _timeFirstColumnX12h = 123
 	local _timeFirstColumnX24h = 164
@@ -1445,7 +1228,7 @@ function skin(self, s)
 	s.text_list = _uses(s.window)
 
 	-- text_only removes icons
-        s.text_only = _uses(s.text_list, {
+	s.text_only = _uses(s.text_list, {
 		menu = {
 			item = {
 				order = { 'text', 'arrow', },
@@ -1475,7 +1258,7 @@ function skin(self, s)
 					fg   = { 0xB3, 0xB3, 0xB3 },
 				},
 			},
-                },
+		},
 	})
 
 	s.text_list.title.textButton = _uses(s.text_list.title.text, {
@@ -1997,7 +1780,7 @@ function skin(self, s)
 
 		multiline_text = {
 			w = WH_FILL,
-			h = 172,
+			h = WH_FILL, --172,
 			padding = { 18, 2, 14, 18 },
 			border = { 0, 0, 6, 15 },
 			lineHeight = 22,
@@ -2006,13 +1789,13 @@ function skin(self, s)
 			sh = { },
 			align = "top-left",
 			scrollbar = {
-				h = 164,
+				h = WH_FILL - 10, --164,
 				border = {0, 2, 2, 10},
 			},
 		},
 
 		title = {
-		layer = LAYER_TITLE,
+			layer = LAYER_TITLE,
 			h = 52,
 			padding = {10,10,10,5},
 			bgImg = false,
@@ -2039,11 +1822,11 @@ function skin(self, s)
 
 		},
 		menu = {
-			h = CM_MENU_HEIGHT * 8,
+			h = screenHeight - 48, --CM_MENU_HEIGHT * 8,
 			border = { 7, 0, 7, 0 },
 			padding = { 0, 0, 0, 100 },
 			scrollbar = { 
-				h = CM_MENU_HEIGHT * 8,
+				h = screenHeight - 96, --CM_MENU_HEIGHT * 8,
 			},
 			item = {
 				h = CM_MENU_HEIGHT,
@@ -2109,10 +1892,52 @@ function skin(self, s)
 		},
 	}
 	
+	-- FIXME find why the bgImg needs to be included here...
 	s.context_menu.menu.item_play = _uses(s.context_menu.menu.item, {
-		order = { 'text' },
+		arrow = {img = playArrow.img},
+		bgImg = fiveItemBox,
 	})
 	s.context_menu.menu.selected.item_play = _uses(s.context_menu.menu.selected.item, {
+		arrow = {img = playArrow.img},
+	})
+
+	s.context_menu.menu.item_insert = _uses(s.context_menu.menu.item, {
+		arrow = {img = addArrow.img},
+		bgImg = fiveItemBox,
+	})
+	s.context_menu.menu.selected.item_insert = _uses(s.context_menu.menu.selected.item, {
+		arrow = {img = addArrow.img},
+	})
+
+	s.context_menu.menu.item_add = _uses(s.context_menu.menu.item, {
+		arrow = {img = addArrow.img},
+		bgImg = fiveItemBox,
+	})
+	s.context_menu.menu.selected.item_add = _uses(s.context_menu.menu.selected.item, {
+		arrow = {img = addArrow.img},
+	})
+
+	s.context_menu.menu.item_playall = _uses(s.context_menu.menu.item, {
+		arrow = {img = playArrow.img},
+		bgImg = fiveItemBox,
+	})
+	s.context_menu.menu.selected.item_playall = _uses(s.context_menu.menu.selected.item, {
+		arrow = {img = playArrow.img},
+	})
+
+	s.context_menu.menu.item_fav = _uses(s.context_menu.menu.item, {
+		arrow = {img = favItem.img},
+		bgImg = fiveItemBox,
+	})
+	s.context_menu.menu.selected.item_fav = _uses(s.context_menu.menu.selected.item, {
+		arrow = {img = favItem.img},
+	})
+
+	s.context_menu.menu.item_no_arrow = _uses(s.context_menu.menu.item, {
+		order = { 'text' },
+		bgImg = fiveItemBox,
+	})
+	s.context_menu.menu.selected.item_no_arrow = _uses(s.context_menu.menu.selected.item, {
 		order = { 'text' },
 	})
 
@@ -2130,10 +1955,10 @@ function skin(self, s)
 
 	-- alarm popup
 	s.alarm_header = {
-			w = screenWidth,
-			--padding = { 50, 0, 50, 0 },
-			--order = { 'icon', 'time' },
-			order = { 'time' },
+		w = screenWidth,
+		--padding = { 50, 0, 50, 0 },
+		--order = { 'icon', 'time' },
+		order = { 'time' },
 	}
 
 	s.alarm_time = {
@@ -2929,22 +2754,22 @@ function skin(self, s)
 			fwd   = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_ffwd.png"),
 			}),
-			shuffleMode   = _uses(_transportControlButton, {
+			shuffleMode = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_off.png"),
 			}),
-			shuffleOff   = _uses(_transportControlButton, {
+			shuffleOff = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_off.png"),
 			}),
-			shuffleSong  = _uses(_transportControlButton, {
+			shuffleSong = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_on.png"),
 			}),
 			shuffleAlbum = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_album_on.png"),
 			}),
-			repeatMode   = _uses(_transportControlButton, {
+			repeatMode = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_off.png"),
 			}),
-			repeatOff   = _uses(_transportControlButton, {
+			repeatOff = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_off.png"),
 			}),
 			repeatPlaylist = _uses(_transportControlButton, {
@@ -2953,40 +2778,40 @@ function skin(self, s)
 			repeatSong = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_song_on.png"),
 			}),
-			volDown   = _uses(_transportControlButton, {
+			volDown = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_vol_down.png"),
 			}),
-			volUp   = _uses(_transportControlButton, {
+			volUp = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_vol_up.png"),
 			}),
-			thumbsUp   = _uses(_transportControlButton, {
+			thumbsUp = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_thumbup.png"),
 			}),
-			thumbsDown   = _uses(_transportControlButton, {
+			thumbsDown = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_thumbdown.png"),
 			}),
-			thumbsUpDisabled   = _uses(_transportControlButton, {
+			thumbsUpDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_thumbup_dis.png"),
 			}),
-			thumbsDownDisabled   = _uses(_transportControlButton, {
+			thumbsDownDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_thumbdown_dis.png"),
 			}),
-			love   = _uses(_transportControlButton, {
+			love = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_love_on.png"),
 			}),
-			hate   = _uses(_transportControlButton, {
+			hate = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_love_off.png"),
 			}),
-			fwdDisabled   = _uses(_transportControlButton, {
+			fwdDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_ffwd_dis.png"),
 			}),
-			rewDisabled   = _uses(_transportControlButton, {
+			rewDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_rew_dis.png"),
 			}),
-			shuffleDisabled   = _uses(_transportControlButton, {
+			shuffleDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_dis.png"),
 			}),
-			repeatDisabled   = _uses(_transportControlButton, {
+			repeatDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_dis.png"),
 			}),
 		},
@@ -3122,272 +2947,6 @@ function skin(self, s)
 		rewDisabled = _uses(s.nowplaying.npcontrols.rewDisabled),
 	}
 	
-	--[[
-	s.nowplaying_art_only = _uses(s.nowplaying, {
-
-		bgImg = nocturneWallpaper,
-		title            = { hidden = 1 },
-		nptitle          = { hidden = 1 },
-		npcontrols       = { hidden = 1 },
-		npprogress       = { hidden = 1 },
-		npprogressNB     = { hidden = 1 },
-		npartistgroup    = { hidden = 1 },
-		npalbumgroup     = { hidden = 1 },
-		npartwork = {
-			w = 600,
-			position = LAYOUT_CENTER,
-			align = "center",
-			h = 500,
-			border = 0,
-			padding = 5,
-			artwork = {
-				w = 600,
-				border = 0,
-				padding = 0,
-				img = false,
-			},
-		},
-
-		npvisu = { hidden = 1 },
-
-	})
-	s.nowplaying_art_only.pressed = s.nowplaying_art_only
-
-	s.nowplaying_text_only = _uses(s.nowplaying, {
-		nptitle          = { 
-                        x          = 10,
-                        nptrack =  {
-                                w          = screenWidth - 20,
-                        },
-		},
-		npartistgroup    = { 
-                        x          = 10,
-                        npartist =  {
-                                w          = screenWidth - 20,
-                        },
-		},
-		npalbumgroup     = { 
-                        x          = 10,
-                        npalbum =  {
-                                w          = screenWidth - 20,
-                        },
-		},
-		npartwork = { hidden = 1 },
-
-		npvisu = { hidden = 1 },
-
-		npprogress = {
-			x = 10,
-			y = 325,
-			w = screenWidth - 100,
-			elapsed = {
-				w = 50,
-			},
-			remain = {
-				w = 50,
-			},
-			elapsedSmall = {
-				w = 50,
-			},
-			remainSmall = {
-				w = 50,
-			},
-			npprogressB = {
-				w = WH_FILL,
-				h = 25,
-				padding     = { 0, 0, 0, 18 },
-		                position = LAYOUT_SOUTH,
-				horizontal = 1,
-				bgImg = _songProgressBackground,
-				img = _songProgressBar,
-			},
-
-		},
-		npprogressNB = {
-			x = 10,
-			y = 325,
-			padding = { 0, 0, 0, 5 },
-		},
-	})
-	s.nowplaying_text_only.npprogress.npprogressB_disabled = _uses(s.nowplaying_text_only.npprogress.npprogressB, {
-		img = _songProgressBarDisabled,
-	})
-	s.nowplaying_text_only.pressed = s.nowplaying_text_only
-	s.nowplaying_text_only.nptitle.pressed = _uses(s.nowplaying_text_only.nptitle)
-	s.nowplaying_text_only.npalbumgroup.pressed = _uses(s.nowplaying_text_only.npalbumgroup)
-	s.nowplaying_text_only.npartistgroup.pressed = _uses(s.nowplaying_text_only.npartistgroup)
-
-	-- Visualizer: Container with titlebar, progressbar and controls.
-	--  The space between title and controls is used for the visualizer.
-	s.nowplaying_visualizer_common = _uses(s.nowplaying, {
-		bgImg = nocturneWallpaper,
-
-		npartistgroup = { hidden = 1 },
-		npalbumgroup = { hidden = 1 },
-		npartwork = { hidden = 1 },
-
-		title = _uses(s.title, {
-			zOrder = 1,
-			h = TITLE_HEIGHT,
-			text = {
-				-- Hack: text needs to be there to fill the space, but is not visible
-				padding = { screenWidth, 0, 0, 0 }
-			},
-		}),
-
-		-- Drawn over regular test between buttons
-		nptitle = { 
-			zOrder = 2,
-			position = LAYOUT_NONE,
-			x = 80,
-			y = 0,
-			w = screenWidth - 100,
-			h = TITLE_HEIGHT,
-			border = { 0, 0 ,0, 0 },
-			padding = { 20, 17, 5, 5 },
-			nptrack = {
-				align = "center",
-			},
-		},
-
-		npartistalbum = {
-			hidden = 0,
-			zOrder = 2,
-			position = LAYOUT_NONE,
-			x = 0,
-			y = TITLE_HEIGHT,
-			w = screenWidth,
-			h = 38,
-			bgImg = titleBox,
-			align = "center",
-			fg = { 0xb3, 0xb3, 0xb3 },
-			padding = { 50, 0, 50, 5 },
-			font = _font(NP_ARTISTALBUM_FONT_SIZE),
-		},
-
-		npprogress = {
-			zOrder = 3,
-			position = LAYOUT_NONE,
-			x = 10,
-			y = TITLE_HEIGHT,
-			h = 38,
-			w = screenWidth - 20,
-			elapsed = {
-				w = 50,
-			},
-			remain = {
-				w = 50,
-			},
-			elapsedSmall = {
-				w = 50,
-			},
-			remainSmall = {
-				w = 50,
-			},
-			npprogressB = {
-				h = 38,
-				w = WH_FILL,
-				zOrder = 10,
-				padding = { 0, 19, 0, 15 },
-				horizontal = 1,
-				bgImg = false,
-				img = _vizProgressBar,
-                		pillImg = _vizProgressBarPill,
-			},
-		},
-
-		npprogressNB = {
-			x = screenWidth - 40,
-			y = TITLE_HEIGHT,
-			h = 38,
-			padding = { 0, 15, 0, 0 },
-		},
-	})
-	s.nowplaying_visualizer_common.npprogress.npprogressB_disabled = s.nowplaying_visualizer_common.npprogress.npprogressB
-
-	-- Visualizer: Spectrum Visualizer
-	s.nowplaying_spectrum_text = _uses(s.nowplaying_visualizer_common, {
-		npvisu = {
-			hidden = 0,
-			position = LAYOUT_NONE,
-			x = 40,
-			y = 175,
-			w = 690,
-			h = 400 - (2 * TITLE_HEIGHT + 4 + 45),
-			border = { 0, 0, 0, 0 },
-			padding = { 0, 0, 0, 0 },
-
-			spectrum = {
-				position = LAYOUT_NONE,
-				x = 0,
-				y = 2 * TITLE_HEIGHT + 4,
-				w = 690,
-				h = 400 - (2 * TITLE_HEIGHT + 4 + 45),
-				border = { 0, 0, 0, 0 },
-				padding = { 0, 0, 0, 0 },
-
-				bg = { 0x00, 0x00, 0x00, 0x00 },
-
-				barColor = { 0x14, 0xbc, 0xbc, 0xff },
-				capColor = { 0xb4, 0x56, 0xa1, 0xff },
-
-				isMono = 0,				-- 0 / 1
-
-				capHeight = { 4, 4 },			-- >= 0
-				capSpace = { 4, 4 },			-- >= 0
-				channelFlipped = { 0, 1 },		-- 0 / 1
-				barsInBin = { 2, 2 },			-- > 1
-				barWidth = { 1, 1 },			-- > 1
-				barSpace = { 3, 3 },			-- >= 0
-				binSpace = { 6, 6 },			-- >= 0
-				clipSubbands = { 1, 1 },		-- 0 / 1
-			}
-		},
-	})
-	s.nowplaying_spectrum_text.pressed = s.nowplaying_spectrum_text
-
-	s.nowplaying_spectrum_text.title.pressed = _uses(s.nowplaying_spectrum_text.title, {
-		text = {
-			-- Hack: text needs to be there to fill the space, not visible
-			padding = { screenWidth, 0, 0, 0 }
-		},
-	})
-
-	-- Visualizer: Analog VU Meter
-	s.nowplaying_vuanalog_text = _uses(s.nowplaying_visualizer_common, {
-		npvisu = {
-			hidden = 0,
-			position = LAYOUT_NONE,
-			x = 0,
-			y = TITLE_HEIGHT + 38,
-			w = 672,
-			h = 272,
-			border = { 0, 0, 0, 0 },
-			padding = { 0, 0, 0, 0 },
-
-			vumeter_analog = {
-				position = LAYOUT_NONE,
-				x = 0,
-				y = TITLE_HEIGHT + 38,
-				w = 672,
-				h = 272,
-				border = { 0, 0, 0, 0 },
-				padding = { 0, 0, 0, 0 },
-				bgImg = _loadImage(self, "UNOFFICIAL/VUMeter/vu_analog_25seq_b.png"),
-			}
-		},
-	})
-	s.nowplaying_vuanalog_text.pressed = s.nowplaying_vuanalog_text
-
-	s.nowplaying_vuanalog_text.title.pressed = _uses(s.nowplaying_vuanalog_text.title, {
-		text = {
-			-- Hack: text needs to be there to fill the space, not visible
-			padding = { screenWidth, 0, 0, 0 }
-		},
-	})
-
-	--]]
-
 	s.brightness_group = {
 		order = {  'down', 'div1', 'slider', 'div2', 'up' },
 		position = LAYOUT_SOUTH,
@@ -3467,7 +3026,7 @@ function skin(self, s)
 	}
 
 	s.debug_canvas = {
-			zOrder = 9999
+		zOrder = 9999
 	}
 
 	s.demo_text = {
