@@ -648,6 +648,7 @@ function skin(self, s)
 		padding = 0,
 		h = WH_FILL,
 	}
+	--[[
 	local largeSpinny = {
 		img = _loadImage(self, "Alerts/wifi_connecting.png"),
 		position = LAYOUT_CENTER,
@@ -657,6 +658,7 @@ function skin(self, s)
 		frameWidth = 120,
 		padding = { 0, 0, 0, 10 }
 	}
+	--]]
 	-- convenience method for removing a button from the window
 	local noButton = { 
 		img = false, 
@@ -2257,6 +2259,7 @@ function skin(self, s)
 		img = _loadImage(self, "Alerts/wifi_connecting.png"),
 		frameRate = 8,
 		frameWidth = 120,
+		h = WH_FILL,
 		padding = { 0, 2, 0, 10 },
 	})
 

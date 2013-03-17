@@ -1144,6 +1144,7 @@ function fetchArtwork(self, iconId, icon, size, imgFormat)
 		if string.find(iconId, "^http") then
 			-- Bug 13937, if URL references a private IP address, don't use imageproxy
 			-- Tests for a numeric IP first to avoid extra string.find calls
+			--[[
 			if string.find(iconId, "^http://%d") and (
 				string.find(iconId, "^http://192%.168") or
 				string.find(iconId, "^http://172%.16%.") or
@@ -1153,6 +1154,8 @@ function fetchArtwork(self, iconId, icon, size, imgFormat)
 			else
 				url = 'http://' .. jnt:getSNHostname() .. '/public/imageproxy?w=' .. sizeW .. '&h=' .. sizeH .. '&f=' .. (imgFormat or '') .. '&u=' .. string.urlEncode(iconId)
 			end
+			--]]
+			url = iconId
 		else
 			url = string.gsub(iconId, "(.+)(%.%a+)", "%1" .. resizeFrag .. "%2")
 

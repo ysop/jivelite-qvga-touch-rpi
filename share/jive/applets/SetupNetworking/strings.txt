@@ -1,0 +1,27 @@
+APPLET_NAME
+	EN	Configure Wifi
+
+DISABLE_WIFI
+	EN	Disable Wifi
+
+ENTER_PSK
+	EN	Enter Wifi Key for 
+
+ENTER_SSID
+	EN	Enter Wifi Network/SSID
+
+SELECT_WIFI_NETWORK
+	EN	Select Wifi Network
+
+DISABLE_WIFI
+	EN	Disable Wifi
+
+WIFI_DISABLED
+	EN	Wifi Is Currently Disabled
+
+CONNECTING
+	EN	Connecting to 
+
+HIDDEN_NETWORK
+	EN	Other Network
+
