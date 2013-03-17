@@ -77,17 +77,18 @@ function networkMenu(self, menuItem)
 
 		local cb = function(scan, status)
 					   if count == instance then
-						   -- FIXME - change status text to icons...
 						   -- current configure network first
 						   if current then
-							   local state = ""
+							   local iconstyle
 							   if status.ssid and status.ssid == current and status.wpa_state == "COMPLETED" then
-								   state = " (Connected)"
+								   iconstyle = "wirelessWaiting"
 							   else
-								   state = " (Failed)"
+								   iconstyle = "wirelessDisabled"
 							   end
 							   items[#items+1] = {
-								   text = current .. state,
+								   text = current,
+								   style = 'item_checked',
+								   arrow = Icon(iconstyle),
 								   callback = function(event, menuItem)
 												  self:pskMenu(current)
 											  end
@@ -100,6 +101,7 @@ function networkMenu(self, menuItem)
 							   if v.ssid ~= current and string.match(v.flags, "PSK") then
 								   items[#items+1] = {
 									   text = v.ssid,
+									   arrow = Icon("wirelessLevel" .. (v.quality or 0)),
 									   callback = function(event, menuItem)
 													  self:pskMenu(v.ssid)
 												  end
@@ -278,8 +280,21 @@ function _scan(self, cb)
 			function(res)
 				for line in string.gmatch(res, "(.-)\n") do
 					local bssid, freq, signal, flags, ssid = string.match(line, "(%x+:%x+:%x+:%x+:%x+:%x+)%s+(.+)%s+(.+)%s+(.+)%s+(.+)")
+					local quality
+					signal = tonumber(signal)
+					if signal then
+						if signal > -25 then
+							quality = 4
+						elseif signal > -40 then
+							quality = 3
+						elseif signal > -60 then
+							quality = 2
+						else
+							quality = 1
+						end
+					end
 					if ssid then
-						scan[#scan+1] = { ssid = ssid, flags = flags }
+						scan[#scan+1] = { ssid = ssid, flags = flags, quality = quality }
 					end
 				end
 				cb(scan, status)

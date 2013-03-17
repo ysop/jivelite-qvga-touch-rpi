@@ -2578,6 +2578,14 @@ function skin(self, s)
 		img = _loadImage(self, "Icons/icon_wireless_4.png")
 	})
 
+	s.wirelessDisabled = _uses(_indicator, {
+		img = _loadImage(self, "Icons/icon_wireless_disabled.png")
+	})
+
+	s.wirelessWaiting = _uses(_indicator, {
+		img = _loadImage(self, "Icons/icon_wireless_waiting.png")
+	})
+
 
 --------- ICONBAR ---------
 
