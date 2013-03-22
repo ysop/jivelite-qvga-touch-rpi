@@ -7,11 +7,8 @@ ENABLE_SQUEEZELITE
 OUTPUT_DEVICE
 	EN	Active Output Device
 
-ACTIVE
-	EN	 [Active]
-
 ACTIVE_DEVICE
-	EN	[Active Device]
+	EN	Device Selected
 
 SELECT_DEVICE
 	EN	Select Device

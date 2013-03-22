@@ -64,7 +64,8 @@ function deviceMenu(self, menuItem)
 
 			for num, card in ipairs(info) do
 				items[#items+1] = {
-					text = card.desc .. (self:_isDevice(card.id) and tostring(self:string("ACTIVE")) or ""),
+					text = card.desc,
+					style = self:_isDevice(card.id) and "item_checked" or "item",
 					callback = function(event, menuItem)
 								   timer:stop()
 								   self:cardMenu(card.id, card.desc)
@@ -174,7 +175,7 @@ function cardMenu(self, card, desc)
 
 	local activeEntry = {
 		text = self:string("ACTIVE_DEVICE"),
-		style = "item_no_arrow",
+		style = "item_checked",
 	}
 
 	if isSelected then
@@ -380,21 +381,6 @@ end
 
 
 -- make these system specific...
-
---[[
-This is the format of the config file we want to parse and change lines in:
-NAME="-n SqueezeLiteNC10"
-MAC="-m 00:21:63:a3:b9:0d"
-MAX_RATE="-r 192000"
-AUDIO_DEV="-o hw:CARD=Intel,DEV=0"
-LOG_FILE="-f /var/log/squeezelite/squeezelite.log"
-# LOG_LEVEL="-d <log>=<level>"
-# PRIORITY="-p <priority>"
-# BUFFER="-b <stream>:<output>"
-# CODEC="-c <codec1>,<codec2>"
-# ALSA_PARAMS="-a <b>:<c>:<f>:<m>"
-SERVER_IP="192.168.0.20"
---]]
 
 local configFile    = "/etc/sysconfig/squeezelite"
 local configFileTmp = "/tmp/squeezelite.config"
