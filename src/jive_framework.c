@@ -1507,6 +1507,7 @@ static const struct luaL_Reg surface_methods[] = {
 	{ "rotozoom", jiveL_surface_rotozoomSurface },
 	{ "zoom", jiveL_surface_zoomSurface },
 	{ "shrink", jiveL_surface_shrinkSurface },
+	{ "resize", jiveL_surface_resize },
 	{ "pixel", jiveL_surface_pixelColor },
 	{ "hline", jiveL_surface_hlineColor },
 	{ "vline", jiveL_surface_vlineColor },
