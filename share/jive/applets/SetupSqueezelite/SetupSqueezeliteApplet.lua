@@ -494,7 +494,7 @@ function _writeConfig(self)
 	inconf:close()
 	outconf:close()
 
-	os.execute("sudo cp " .. configFileTmp .. " " .. configFile)
+	os.execute("sudo csos-squeezeliteConfigUpdate " .. configFileTmp)
 
 	if self:_slIsEnabled() then
 		os.execute("sudo systemctl restart squeezelite.service")

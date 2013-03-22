@@ -310,8 +310,8 @@ end
 
 local configFile    = "/etc/sysconfig/network-scripts/ifcfg-wlan0"
 local configFileTmp = "/tmp/ifcfg-wlan0"
-local pskFile       = "/etc/sysconfig/network-scripts/keys-wlan0"
 local pskFileTmp    = "/tmp/tmp.txt"
+local wlanInterface = "wlan0"
 
 
 function _setSSID(self, ssid)
@@ -339,7 +339,7 @@ function _setSSID(self, ssid)
 	inconf:close()
 	outconf:close()
 
-	os.execute("sudo cp " .. configFileTmp .. " " .. configFile)
+	os.execute("sudo csos-ifcfgUpdate " .. configFileTmp .. " " .. wlanInterface)
 end
 
 
@@ -374,12 +374,11 @@ function _setPSK(self, psk)
 		psk = "*** YOUR_PSK_HERE ***"
 	end
 
-	-- FIXME: would prefer to avoid writing a tmp file here
 	local file = io.open(pskFileTmp, "w")
 	file:write('WPA_PSK=' .. "'" .. psk .. "'\n")
 	file:close()
-	os.execute("sudo cp " .. pskFileTmp .. " " .. pskFile)
-	os.execute("sudo rm -f " .. pskFileTmp)
+	os.execute("sudo csos-keysUpdate " .. pskFileTmp .. " " .. wlanInterface)
+	os.execute("rm " .. pskFileTmp)
 end
 
 
@@ -398,11 +397,13 @@ function _wifiRestart(self, cb)
 					res = res .. chunk
 				else
 					log:info(res)
-					cb()
+					if cb then
+						cb()
+					end
 				end
 			end
 		)
 	end
 
-	exec("sudo ifdown wlan0", function() exec("sudo ifup wlan0", cb) end)
+	exec("ifdown wlan0", function() exec("ifup wlan0", cb) end)
 end
