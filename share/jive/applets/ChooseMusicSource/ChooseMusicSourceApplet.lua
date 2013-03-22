@@ -95,7 +95,7 @@ function selectMusicSource(self, playerConnectedCallback, titleStyle, includedSe
 	self.serverList = {}
 	self.ignoreServerConnected = ignoreServerConnected
 	self.confirmOnChange = confirmOnChange
-	self.offerSn = offerSn
+	self.offerSn = false --offerSn
 
 	if specificServer then
 		log:debug("selecting specific server ", specificServer)

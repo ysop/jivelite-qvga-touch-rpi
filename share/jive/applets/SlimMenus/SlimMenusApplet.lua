@@ -140,7 +140,7 @@ function notify_serverLinked(self, server)
 	if server:isSqueezeNetwork() then
 		local currentPlayer = appletManager:callService("getCurrentPlayer")
 		if currentPlayer and not (currentPlayer:getSlimServer() and currentPlayer:getSlimServer():isSqueezeNetwork()) then
-			self:_addSwitchToSnMenuItem()
+			--self:_addSwitchToSnMenuItem()
 		end
 	end
 end
@@ -154,9 +154,10 @@ end
 
 --service method
 function addSwitchToSnMenuItem(self)
-	self:_addSwitchToSnMenuItem(self)
+	--self:_addSwitchToSnMenuItem(self)
 end
 
+--[[
 function _addSwitchToSnMenuItem(self)
 	log:debug("_addSwitchToSnMenuItem")
 
@@ -182,7 +183,7 @@ function _addSwitchToSnMenuItem(self)
 		})
 
 end
-
+--]]
 
 function notify_networkOrServerNotOK(self, iface)
 	log:warn('notify_networkOrServerNotOK')
@@ -805,11 +806,13 @@ local function _menuSink(self, isCurrentServer, server)
 			jnt:notify("playerLoaded", _player)
 			appletManager:callService("hideConnectingToServer")
 
+			--[[
 			if _server:isSqueezeNetwork() then
 				self:_removeSwitchToSnMenuItem()
 			else
 				self:_addSwitchToSnMenuItem()
 			end
+			--]]
 
 		end
          end
