@@ -323,7 +323,7 @@ function _setSSID(self, ssid)
 	end
 
 	if ssid == nil then
-		ssid = "*** YOUR_ESSID_HERE ***"
+		ssid = "YOUR_ESSID_HERE"
 	end
 
 	log:info("setting wifi ssid")
@@ -359,7 +359,7 @@ function _getSSID(self)
 
 	conf:close()
 
-	if ssid == "*** YOUR_ESSID_HERE ***" then
+	if ssid == "YOUR_ESSID_HERE" then
 		ssid = nil
 	end
 
@@ -371,7 +371,7 @@ function _setPSK(self, psk)
 	log:info("setting wifi psk")
 
 	if psk == nil then
-		psk = "*** YOUR_PSK_HERE ***"
+		psk = "YOUR_PSK_HERE"
 	end
 
 	local file = io.open(pskFileTmp, "w")

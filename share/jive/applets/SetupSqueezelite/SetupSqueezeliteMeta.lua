@@ -28,15 +28,22 @@ end
 
 
 function registerApplet(meta)
+	-- only load on community squeeze control instance
+	local load = false
+	if string.match(arg[0], "jivelite%-cs") then
+		load = true
+	end
 	for _, a in ipairs(arg) do
-		-- only loaded for community squeeze ui
-		if string.match(a, "jivelite%-cs") or a == "--cs-applets" then
-			jiveMain:addItem(
-				meta:menuItem('appletSetupSqueezelite', 'settingsAudio', meta:string("APPLET_NAME"), 
-							  function(applet, ...) applet:deviceMenu(...) end
-				)
-			)
-			return
+		if a == "--cs-applets" then
+			load = true
 		end
+	end
+
+	if load then
+		jiveMain:addItem(
+			meta:menuItem('appletSetupSqueezelite', 'settingsAudio', meta:string("APPLET_NAME"), 
+						  function(applet, ...) applet:deviceMenu(...) end
+			)
+		)
 	end
 end
