@@ -213,7 +213,7 @@ end
 
 
 function _request(self, req, cb)
-	local cmd = "wpa_cli " .. req
+	local cmd = "sudo wpa_cli " .. req
 	local res = ""
 	
 	Process(jnt, cmd):read(
@@ -405,5 +405,5 @@ function _wifiRestart(self, cb)
 		)
 	end
 
-	exec("ifdown wlan0", function() exec("ifup wlan0", cb) end)
+	exec("sudo ifdown wlan0", function() exec("sudo ifup wlan0", cb) end)
 end

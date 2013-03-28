@@ -465,6 +465,7 @@ function _writeConfig(self)
 	end
 
 	log:info("writing config")
+	local wrote_dev, wrote_params, wrote_rate
 
 	for line in inconf:lines() do
 		if string.match(line, "AUDIO_DEV") then
@@ -473,6 +474,7 @@ function _writeConfig(self)
 			else
 				outconf:write('# AUDIO_DEV=""\n')
 			end
+			wrote_dev = true
 		elseif string.match(line, "ALSA_PARAMS") then
 			if current.buffer or current.count or current.format or current.mmap then
 				outconf:write('ALSA_PARAMS="-a ' .. (current.buffer or "") .. ":" .. (current.count or "") .. ":" ..
@@ -480,18 +482,32 @@ function _writeConfig(self)
 			else
 				outconf:write('# ALSA_PARAMS=""\n')
 			end
+			wrote_params = true
 		elseif string.match(line, "MAX_RATE") then
 			if current.maxrate then
 				outconf:write('ALSA_PARAMS="-r ' .. current.maxrate .. '"\n')
 			else
 				outconf:write('# ALSA_PARAMS=""\n')
 			end
+			wrote_rate = true
 		else
 			outconf:write(line .. "\n")
 		end
 	end
 
 	inconf:close()
+
+	if current.device and not wrote_dev then
+		outconf:write('AUDIO_DEV="-o hw:CARD=' .. current.device .. ',DEV=0"\n')
+	end
+	if (current.buffer or current.count or current.format or current.mmap) and not wrote_params then
+		outconf:write('ALSA_PARAMS="-a ' .. (current.buffer or "") .. ":" .. (current.count or "") .. ":" ..
+					  (current.format or "") .. ":" .. (current.mmap or "") .. '"\n')
+	end
+	if current.maxrate and not wrote_rate then
+		outconf:write('ALSA_PARAMS="-r ' .. current.maxrate .. '"\n')
+	end
+
 	outconf:close()
 
 	os.execute("sudo csos-squeezeliteConfigUpdate " .. configFileTmp)
