@@ -9,7 +9,7 @@ LUA_INC= /usr/local/include/luajit-2.0
 EXPAT_INC= /usr/local/include
 
 # OS dependent
-LIB_OPTION= -shared #for Linux
+#LIB_OPTION= -shared #for Linux
 #LIB_OPTION= -bundle -undefined dynamic_lookup #for MacOS X
 
 LIBNAME= $T.so.$V

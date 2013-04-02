@@ -1,0 +1,16 @@
+# Jivelite makefile
+
+all: srcs libs
+
+srcs:
+	cd src; make -f Makefile.osx
+
+libs: lib
+
+lib:
+	cd lib-src; make -f Makefile.osx
+
+clean:
+	cd src; make clean
+	cd lib-src; make -f Makefile.osx clean
+	rm -Rf lib
