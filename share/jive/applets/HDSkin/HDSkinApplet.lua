@@ -816,8 +816,10 @@ function skin(self, s)
 		},
 	}
 
+	local menu_height = math.floor((screenHeight - TITLE_HEIGHT) / FIVE_ITEM_HEIGHT) * FIVE_ITEM_HEIGHT
+
 	s.menu = {
-		h = math.floor((screenHeight - TITLE_HEIGHT) / FIVE_ITEM_HEIGHT) * FIVE_ITEM_HEIGHT, 
+		h = menu_height,
 		position = LAYOUT_CENTER,
 		padding = { 0, 0, 0, 0 },
 		itemHeight = FIVE_ITEM_HEIGHT,
@@ -2647,6 +2649,8 @@ function skin(self, s)
 		w = WH_FILL,
 	})
 
+	local coverSize = math.floor(math.min((screenHeight - TITLE_HEIGHT - 20), screenWidth/2 - 50) / 10) * 10
+
 	local _tracklayout = {
 		border = { 10, 0, 10, 0 },
 		position = LAYOUT_NONE,
@@ -2654,7 +2658,7 @@ function skin(self, s)
 		align = "left",
 		lineHeight = NP_TRACK_FONT_SIZE,
 		fg = TEXT_COLOR,
-		x = 1050,
+		x = 100 + coverSize,
 	}
 
 	s.nowplaying = _uses(s.window, {
@@ -2684,7 +2688,7 @@ function skin(self, s)
 			y          = TITLE_HEIGHT + 150,
 			h          = 70,
 			nptrack =  {
-				w          = screenWidth - _tracklayout.x - 100,
+				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2701,7 +2705,7 @@ function skin(self, s)
 			h          = 70,
 			npartist = {
 				padding    = { 0, 6, 0, 0 },
-				w          = screenWidth - _tracklayout.x - 100,
+				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2717,7 +2721,7 @@ function skin(self, s)
 			y          = TITLE_HEIGHT + 350,
 			h          = 70,
 			npalbum = {
-				w          = screenWidth - _tracklayout.x - 100,
+				w          = screenWidth - _tracklayout.x - 50,
 				padding    = { 0, 6, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2732,16 +2736,16 @@ function skin(self, s)
 	
 		-- cover art
 		npartwork = {
-			w = 900,
+			w = coverSize,
 			position = LAYOUT_NONE,
 			x = 50,
-			y = TITLE_HEIGHT + 20,
+			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2,
 			align = "center",
-			h = 900,
+			h = coverSize,
 
 			artwork = {
-				w = 900,
-				h = 900,
+				w = coverSize,
+				h = coverSize,
 				align = "center",
 				padding = 0,
 				img = false,
@@ -2750,8 +2754,10 @@ function skin(self, s)
 
 		npvisu = { hidden = 1 },
 	
-		--transport controls
+		--transport controls - hidden
 		npcontrols = {
+			hidden = 1,
+			--[[
 			order = { 'rew', 'div1', 'play', 'div2', 'fwd', 'div3', 'repeatMode', 'div4', 'shuffleMode', 
 					  'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
 			position = LAYOUT_SOUTH,
@@ -2839,13 +2845,14 @@ function skin(self, s)
 			repeatDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_dis.png"),
 			}),
+			--]]
 		},
 	
 		-- Progress bar
 		npprogress = {
 			position = LAYOUT_NONE,
-			x = 1000,
-			y = TITLE_HEIGHT + 780,
+			x = coverSize + 100,
+			y = screenHeight - 100,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
@@ -2881,7 +2888,7 @@ function skin(self, s)
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = 760,
+				w = screenWidth - coverSize - 50 - 220,
 				h = 50,
 				padding     = { 0, 0, 0, 0 },
 				position = LAYOUT_SOUTH,
@@ -2895,8 +2902,8 @@ function skin(self, s)
 		npprogressNB = {
 			order = { "elapsed" },
 			position = LAYOUT_NONE,
-			x = 1000,
-			y = TITLE_HEIGHT + 790,
+			x = coverSize + 100,
+			y = screenHeight - 100,
 			elapsed = {
 				w = 55, --WH_FILL,
 				align = "left",
@@ -2947,6 +2954,8 @@ function skin(self, s)
 	s.nowplaying.npartwork.pressed = s.nowplaying.npartwork
 
 	s.nowplaying.npcontrols.pressed = {
+		hidden = 1,
+		--[[
 		rew     = _uses(s.nowplaying.npcontrols.rew, { bgImg = keyMiddlePressed }),
 		play    = _uses(s.nowplaying.npcontrols.play, { bgImg = keyMiddlePressed }),
 		pause   = _uses(s.nowplaying.npcontrols.pause, { bgImg = keyMiddlePressed }),
@@ -2970,6 +2979,7 @@ function skin(self, s)
 		hate        = _uses(s.nowplaying.npcontrols.hate, { bgImg = keyMiddlePressed }),
 		fwdDisabled = _uses(s.nowplaying.npcontrols.fwdDisabled),
 		rewDisabled = _uses(s.nowplaying.npcontrols.rewDisabled),
+		--]]
 	}
 	
 	s.brightness_group = {
