@@ -212,9 +212,23 @@ end
 
 -- skin
 -- The meta arranges for this to be called to skin the interface.
-function skin(self, s)
+function skin_1080p(self, s)
 	Framework:setVideoMode(1920, 1080, 0, false)
+	self:skin(s)
+end
 
+function skin_720p(self, s)
+	Framework:setVideoMode(1280, 720, 0, false)
+	self:skin(s)
+end
+
+function skin_1280_1024(self, s)
+	Framework:setVideoMode(1280, 1024, 0, false)
+	self:skin(s)
+end
+
+
+function skin(self, s)
 	local screenWidth, screenHeight = Framework:getScreenSize()
 
 	--init lastInputType so selected item style is not shown on skin load

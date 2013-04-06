@@ -113,7 +113,7 @@ function registerApplet(meta)
 	
 	appletManager:addDefaultSetting("ScreenSavers", "whenStopped", "false:false")
 
-	jiveMain:setDefaultSkin("HDSkin")
+	jiveMain:setDefaultSkin("HDSkin-1080")
 
 	Framework:addActionListener("soft_reset", self, _softResetAction, true)
 

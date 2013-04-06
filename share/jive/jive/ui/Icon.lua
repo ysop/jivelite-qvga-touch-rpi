@@ -65,7 +65,7 @@ Constructs a Icon widget. I<style> is the Icon style. I<image> is an option L<ji
 --]]
 function __init(self, style, image)
 	_assert(type(style) == "string")
-	_assert(image == nil or tolua.type(image) == "Surface")
+	--_assert(image == nil or tolua.type(image) == "Surface")
 
 	local obj = oo.rawnew(self, Widget(style))
 	obj.image = image

@@ -28,7 +28,9 @@ function defaultSettings(self)
 end
 
 function registerApplet(self)
-	jiveMain:registerSkin(self:string("HD_SKIN"), "HDSkin", "skin")
+	jiveMain:registerSkin(self:string("HD_SKIN_1080"), "HDSkin", "skin_1080p", "HDSkin-1080")
+	jiveMain:registerSkin(self:string("HD_SKIN_720"),  "HDSkin", "skin_720p", "HDSkin-720")
+	jiveMain:registerSkin(self:string("HD_SKIN_1280_1024"),  "HDSkin", "skin_1280_1024", "HDSkin-1280-1024")
 end
 
 
