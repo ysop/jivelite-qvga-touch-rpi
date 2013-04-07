@@ -72,6 +72,7 @@ function init(self)
 	self.tiles = {}
 end
 
+local coverSize = 900 -- default value, change by calling skin
 
 function param(self)
 	return {
@@ -91,7 +92,7 @@ function param(self)
 			-- every skin needs to start off with a nowplaying style
 			{
 				style = 'nowplaying', 
-				artworkSize = '900x900',
+				artworkSize = coverSize .. "x" .. coverSize,
 				text = self:string("ART_AND_TEXT"),
 			},
 		},
@@ -2649,7 +2650,7 @@ function skin(self, s)
 		w = WH_FILL,
 	})
 
-	local coverSize = math.floor(math.min((screenHeight - TITLE_HEIGHT - 20), screenWidth/2 - 50) / 10) * 10
+	coverSize = math.floor(math.min((screenHeight - TITLE_HEIGHT - 20), screenWidth/2 - 50) / 10) * 10
 
 	local _tracklayout = {
 		border = { 10, 0, 10, 0 },
