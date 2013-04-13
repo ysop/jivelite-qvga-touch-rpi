@@ -1,27 +1,45 @@
 APPLET_NAME
 	EN	Configure Wifi
+	NL	Instellingen voor Wifi
+	FR	Configuration du réseau sans fil
 
 DISABLE_WIFI
 	EN	Disable Wifi
+	NL	Schakel Wifi uit
+	FR	Désactivez le réseau sans fil
 
 ENTER_PSK
-	EN	Enter Wifi Key for 
+	EN	Enter Wifi Key for
+	NL	Geef de beveilingingscode voor
+	FR	Entrez le code de sécurité pour
 
 ENTER_SSID
 	EN	Enter Wifi Network/SSID
+	NL	Geef de naam van het Wifi netwerk (SSID)
+	FR	Entrez le nom du réseau sans fil (SSID)
 
 SELECT_WIFI_NETWORK
 	EN	Select Wifi Network
+	NL	Kies het Wifi netwerk
+	FR	Choisissez le réseau sans fil
 
 DISABLE_WIFI
 	EN	Disable Wifi
+	NL	Schakel Wifi uit
+	FR	Désactivez le réseau sans fil
 
 WIFI_DISABLED
 	EN	Wifi Is Currently Disabled
+	NL	Wifi is momenteel uitgeschakeld
+	FR	Le réseau sans fil est désactivé pour le moment
 
 CONNECTING
 	EN	Connecting to 
+	NL	Verbinding aan het maken met
+	FR	En phase de connection avec
 
 HIDDEN_NETWORK
 	EN	Other Network
+
+
 
