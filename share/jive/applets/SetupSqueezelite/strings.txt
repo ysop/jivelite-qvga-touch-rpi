@@ -1,4 +1,5 @@
 APPLET_NAME
+	DE	Audio Ausgabegerät
 	EN	Audio Output Device
 	NL	Audio Weergave Apparaat
 	FR	Appareil de Sortie Audio
@@ -9,26 +10,31 @@ ENABLE_SQUEEZELITE
 	FR	Joueur Squeezelite
 
 OUTPUT_DEVICE
+	DE	Aktives Ausgabegerät
 	EN	Active Output Device
 	NL	Actief Weergave Apparaat
-	FR Appareil de Sortie Actif
+	FR	Appareil de Sortie Actif
 
 ACTIVE_DEVICE
+	DE	Gerät gewählt
 	EN	Device Selected
 	NL	Geselecteerd Apparaat
 	FR	Appareil sélectionné
 
 SELECT_DEVICE
+	DE	Wähle Gerät
 	EN	Select Device
 	NL	Kies Apparaat
 	FR	Sélection d'Appareil
 
 OPTIONS
+	DE	Erweiterte Einstellungen (Fortgeschritten)
 	EN	Optional Parameters (Advanced)
 	NL	Optionele Parameters (Geavanceerd)
 	FR	Paramêtres Optionels (Avancé)
 
 OPT_BUFFER
+	DE	Alsa Puffergrösse
 	EN	Alsa Buffer Size
 	NL	Alse Buffer Grootte
 	FR	Taille du Tampon Alsa
@@ -44,21 +50,25 @@ OPT_FORMAT
 	FR	Format Alsa
 
 OPT_MMAP
+	DE	Verwende Alsa MMAP
 	EN	Use Alsa MMAP
 	NL	Gebruik Alsa MMAP
 	FR	Emploie Alsa MMAP
 
 OPT_MAXRATE
+	DE	Maximla Sample Rate
 	EN	Max Sample Rate
 	NL	Maximum Sample Frequentie
 	FR	Fréquence d'Echantillonnage Maximale
 
 DEFAULT
+	DE	Standard
 	EN	Default
 	NL	Standaard
 	FR	Standard
 
 HELP_BUFFER
+	DE	Definiere den alsa Ausgabepuffer. Du musst ev. die Puffergrösse erhöhen, wenn der Standardwert zu stotternder Wiedergabe führt.
 	EN	Specify the alsa output buffer size.  You may need to increase this from the default value if audio stutters.
 	NL	Geef de grootte van de alsa weergave buffer op.  Indien audio stottert kan je dit hoger instellen dan de standaardwaarde.
 	FR	Donnez la taille du tampon de sortie alsa.  En cas de audio "bégaiant" vous pouvez augmenter au dessus de la valeur par défaut.
@@ -69,17 +79,20 @@ HELP_COUNT
 	FR	Donnez le nombre de périodes alsa.  Pour utilisateurs avancés.
 
 HELP_FORMAT
+	DE	Definiere das alsa Sample Format. Nur für fortgeschrittene Anwender.
 	EN	Specify the alsa sample format to use.  For advanced users.
 	NL	Geef het alsa sample formaat op.  Voor gevorderde gebruikers.
 	FR	Donnez le format d'échantillonnage alsa.  Pour utilisateurs avancés.
 	
 
 HELP_MMAP
+	DE	Definiere of alsa MMAP Modus verwendet werden soll. Nur für fortgeschrittene Anwender.
 	EN	Specify whether alsa mmap mode should be used.  For advanced users.
 	NL	Geef aan of de alsa mmap wijze gebruikt moet worden.  Voor gevorderde gebruikers.
 	FR	Indiquez si la façon alsa mmap doit être utilisée.  Pour utilisateurs avancés.
 
 HELP_MAXRATE
+	DE	Definiere die höchste Samplerate, die dein DAC unterstützt. Falls dieser Wert nicht gesetzt wird, dann muss der DAC verbunden sein, bevor der SqueezeLite Player gestartet wird. Der Server berechnet höhere Sampleraten um, falls der angegebene Wert nicht unterstützt wird.
 	EN	Specify the maximum sample rate supported by your DAC.  If this is not set the squeezelite player requires the DAC to be active when started.  Setting this option allows squeezelite to startup without the DAC connected or powered on.  The server will resample streams which are higher sample rate than the value specified.
 	NL	Geef de maximale sample frequentie op die je DAC ondersteunt.  Indien je deze waarde niet opgeeft vereist de squeezelite speler dat de DAC actief is bij het opstarten.  Het instellen van deze waarde laat toe dat de squeezelite speler opstart zonder de DAC aan te sluiten of op te zetten.  De server zal de sample frequentie van de stream aanpassen wanneer deze hoger is dan de ingestelde waarde.
 	FR	Donnez la fréquence d'échantillonnage maximale supportée  par votre DAC.  Si vous ne spécifiez pas cette valeur le joueur squeezelit nécessite que le DAC soit actif lors du démarrage.  Précisant cette valeur permet à squeezelite de démarrer sans que le DAC soit connecté ou allumé.  Le serveur modifiera la fréquence d'échantillonnage du flux audio si elle dépasse la valeur spécifiée.
