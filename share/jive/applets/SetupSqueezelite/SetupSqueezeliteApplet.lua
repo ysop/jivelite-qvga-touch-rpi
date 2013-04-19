@@ -485,9 +485,9 @@ function _writeConfig(self)
 			wrote_params = true
 		elseif string.match(line, "MAX_RATE") then
 			if current.maxrate then
-				outconf:write('ALSA_PARAMS="-r ' .. current.maxrate .. '"\n')
+				outconf:write('MAX_RATE="-r ' .. current.maxrate .. '"\n')
 			else
-				outconf:write('# ALSA_PARAMS=""\n')
+				outconf:write('# MAX_RATE=""\n')
 			end
 			wrote_rate = true
 		else
