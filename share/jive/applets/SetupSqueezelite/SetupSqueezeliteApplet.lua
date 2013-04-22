@@ -505,7 +505,7 @@ function _writeConfig(self)
 					  (current.format or "") .. ":" .. (current.mmap or "") .. '"\n')
 	end
 	if current.maxrate and not wrote_rate then
-		outconf:write('ALSA_PARAMS="-r ' .. current.maxrate .. '"\n')
+		outconf:write('MAX_RATE="-r ' .. current.maxrate .. '"\n')
 	end
 
 	outconf:close()
