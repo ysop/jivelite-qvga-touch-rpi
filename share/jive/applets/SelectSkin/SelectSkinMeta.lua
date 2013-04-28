@@ -42,7 +42,7 @@ end
 function registerApplet(meta)
 	jiveMain:addItem(meta:menuItem('appletSelectSkin', 'screenSettings', 'SELECT_SKIN', function(applet, ...) applet:selectSkinEntryPoint(...) end))
 	meta:registerService("getSelectedSkinNameForType")
-	
+	meta:registerService("selectSkinStartup")
 end
 
 

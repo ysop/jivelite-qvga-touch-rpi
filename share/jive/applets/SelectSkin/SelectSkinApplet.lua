@@ -88,7 +88,12 @@ function selectSkinEntryPoint(self, menuItem)
 end
 
 
-function selectSkin(self, title, skinType, previouslySelectedSkin)
+function selectSkinStartup(self, setupNext)
+	return selectSkin(self, self:string("SELECT_SKIN"), "skin", JiveMain:getSelectedSkin(), setupNext)
+end
+
+
+function selectSkin(self, title, skinType, previouslySelectedSkin, setupNext)
 	local window = Window("text_list", title, 'settingstitle')
 	local menu = SimpleMenu("menu")
 	menu:setComparator(menu.itemComparatorAlpha)
@@ -136,7 +141,11 @@ function selectSkin(self, title, skinType, previouslySelectedSkin)
 								check = RadioButton("radio", confirmGroup, function(event, menuItem)
 																			   log:info("keep skin choice")
 																			   timer:stop()
-																			   window:hide()
+																			   if setupNext then
+																				   setupNext()
+																			   else
+																				   window:hide()
+																			   end
 																		   end, false)
 							},
 						}

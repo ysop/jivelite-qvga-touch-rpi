@@ -105,15 +105,18 @@ function registerApplet(meta)
 	})
 
 	-- SN hosthame
+	--[[
 	if settings.snaddress then
 		jnt:setSNHostname(settings.snaddress)
 	else
 		jnt:setSNHostname("jive.squeezenetwork.com")
 	end
+	--]]
 	
 	appletManager:addDefaultSetting("ScreenSavers", "whenStopped", "false:false")
 
-	jiveMain:setDefaultSkin("HDSkin-1080")
+	-- this is the startup skin - expect user to select an alternative
+	jiveMain:setDefaultSkin("HDSkin-VGA")
 
 	Framework:addActionListener("soft_reset", self, _softResetAction, true)
 
