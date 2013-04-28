@@ -143,6 +143,7 @@ function selectSkin(self, title, skinType, previouslySelectedSkin, setupNext)
 																			   timer:stop()
 																			   if setupNext then
 																				   setupNext()
+																				   setupNext = nil
 																			   else
 																				   window:hide()
 																			   end
@@ -173,6 +174,9 @@ function selectSkin(self, title, skinType, previouslySelectedSkin, setupNext)
 		function()
 			if self.changed then
 				self:storeSettings()
+			end
+			if setupNext then
+				setupNext()
 			end
 		end
 	)
