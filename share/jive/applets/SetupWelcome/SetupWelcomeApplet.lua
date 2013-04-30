@@ -30,6 +30,9 @@ oo.class(_M, Applet)
 
 
 function setupFirstStartup(self)
+	self:getSettings().setupDone = true
+	self:storeSettings()
+
 	local step1, step2
 
 	step1 = function()
@@ -45,16 +48,16 @@ end
 
 
 function setupDone(self)
-	self:getSettings().setupDone = true
-	self:storeSettings()
-
-	jiveMain:closeToHome(true, Window.transitionPushLeft)
-
 	for i, player in Player.iterate() do
 		if player:getId() == System:getMacAddress() then
+			jiveMain:closeToHome(true, Window.transitionPushLeft)
 			return appletManager:callService("selectPlayer", player)
 		end
 	end
 
-	return appletManager:callService("setupShowSelectPlayer", function() end, 'setuptitle')
+	return appletManager:callService("setupShowSelectPlayer", 
+									 function()
+										 jiveMain:closeToHome(true, Window.transitionPushLeft)
+									 end, 
+									 'setuptitle')
 end
