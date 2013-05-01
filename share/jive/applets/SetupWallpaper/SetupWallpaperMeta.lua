@@ -36,22 +36,8 @@ end
 function defaultSettings(meta)
 	return { 
 		WQVGAsmallSkin = "fab4_encore.png",
-		WQVGAlargeSkin = "fab4_encore.png",
-		FullscreenSkin = "jive_midnight.png",
-		QVGAportraitSkin  = "jive_encore.png",
-		QVGAlandscapeSkin = _getQVGAlandscapeSkinWallpaper(meta),
 	}
 end
-
-function _getQVGAlandscapeSkinWallpaper(meta)
-	local wallpaper = appletManager:callService("getDefaultWallpaper")
-
-	if not wallpaper then
-		wallpaper = "bb_encore.png"
-	end
-	return wallpaper
-end
-
 
 function registerApplet(meta)
 	meta:registerService("showBackground")
@@ -62,7 +48,6 @@ function registerApplet(meta)
 end
 
 function configureApplet(meta)
-
 	-- load default wallpaper before connecting to a player (nil will load default)
 	appletManager:callService("setBackground", nil)
 end

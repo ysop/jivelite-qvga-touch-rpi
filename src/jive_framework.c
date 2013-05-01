@@ -867,7 +867,11 @@ int jiveL_set_background(lua_State *L) {
 	if (jive_background) {
 		jive_tile_free(jive_background);
 	}
-	jive_background = jive_tile_ref(*(JiveTile **)lua_touserdata(L, 2));
+	if (lua_isnil(L, 2)) {
+		jive_background = jive_tile_fill_color(0x000000FF);
+	} else {
+		jive_background = jive_tile_ref(*(JiveTile **)lua_touserdata(L, 2));
+	}
 	next_jive_origin++;
 
 	return 0;
