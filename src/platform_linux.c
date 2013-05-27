@@ -36,92 +36,45 @@ char *platform_get_home_dir() {
     return dir;
 }
 
-
-
-static char *iface_mac_address(int sock, char *name) {
-    struct ifreq ifr;
-    unsigned char *ptr;
-    char *macaddr = NULL;
-
-    strcpy(ifr.ifr_name, name);
-    if (ioctl(sock, SIOCGIFFLAGS, &ifr) != 0) {
-	return NULL;
-    }
-
-    if ((ifr.ifr_flags & IFF_LOOPBACK) == IFF_LOOPBACK) {
-	return NULL;
-    }
-
-    if (ioctl(sock, SIOCGIFHWADDR, &ifr) != 0) {
-	return NULL;
-    }
-
-    ptr = (unsigned char *) ifr.ifr_hwaddr.sa_data;
-
-    macaddr = malloc(18);
-    sprintf(macaddr, "%02x:%02x:%02x:%02x:%02x:%02x", *ptr,*(ptr+1), *(ptr+2),*(ptr+3), *(ptr+4), *(ptr+5));
-	
-    return macaddr;
-}
-
-
-static char *iface[] = { "eth0", "eth1", "wlan0", "wlan1" };
-
+// search first 4 interfaces returned by IFCONF - same method used by squeezelite
 char *platform_get_mac_address() {
-    FILE *fh;
-    char buf[512], *macaddr = NULL;
-    size_t i;
-    int sock;
+    struct ifconf ifc;
+    struct ifreq *ifr, *ifend;
+    struct ifreq ifreq;
+    struct ifreq ifs[4];
+	u8_t mac[6];
 
+	mac[0] = mac[1] = mac[2] = mac[3] = mac[4] = mac[5] = 0;
 
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock < 0) {
-        return NULL;
-    }
+    int s = socket(AF_INET, SOCK_DGRAM, 0);
+ 
+    ifc.ifc_len = sizeof(ifs);
+    ifc.ifc_req = ifs;
 
-    /* test the common interfaces first */
-    for (i=0; i<sizeof(iface)/sizeof(char *); i++) {
-	macaddr = iface_mac_address(sock, iface[i]);
-	if (macaddr) {
-	    close(sock);
-	    return macaddr;
+    if (ioctl(s, SIOCGIFCONF, &ifc) == 0) {
+		ifend = ifs + (ifc.ifc_len / sizeof(struct ifreq));
+
+		for (ifr = ifc.ifc_req; ifr < ifend; ifr++) {
+			if (ifr->ifr_addr.sa_family == AF_INET) {
+
+				strncpy(ifreq.ifr_name, ifr->ifr_name, sizeof(ifreq.ifr_name));
+				if (ioctl (s, SIOCGIFHWADDR, &ifreq) == 0) {
+					memcpy(mac, ifreq.ifr_hwaddr.sa_data, 6);
+					if (mac[0]+mac[1]+mac[2] != 0) {
+						break;
+					}
+				}
+			}
+		}
 	}
-    }
 
-    /* SIOCGIFCONF does not always return interfaces without an ipv4 address
-     * so we need to parse /proc/net/dev.
-     */
+	close(s);
 
-    fh = fopen("/proc/net/dev", "r");
-    if (!fh) {
-	return NULL;
-    }
+	char *macaddr = malloc(18);
 
-    fgets(buf, sizeof(buf), fh); /* eat line */
-    fgets(buf, sizeof(buf), fh);
+    sprintf(macaddr, "%02x:%02x:%02x:%02x:%02x:%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
-    while (fgets(buf, sizeof(buf), fh)) {
-	char *name, *s = buf;
-
-	while (*s && isspace(*s)) {
-	    s++;
-	}
-	name = s;
-	while (*s && *s != ':') {
-	    s++;
-	}
-	*s = '\0';
-
-	macaddr = iface_mac_address(sock, name);
-	if (macaddr) {
-	    break;
-	}
-    }
-
-    close(sock);
-    fclose(fh);
-
-    return macaddr;
+	return macaddr;
 }
 
 char *platform_get_arch() {

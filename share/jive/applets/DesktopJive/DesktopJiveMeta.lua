@@ -59,11 +59,6 @@ function registerApplet(meta)
 		settings.uuid = table.concat(uuid)
 	end
 
-	-- fix bogus mac addresses from bad check
-	if settings.mac and string.match(settings.mac, "00:04:20") then
-		settings.mac = nil
-	end
-
 	if not settings.mac then
 		settings.mac = System:getMacAddress()
 		store = true
@@ -92,27 +87,18 @@ function registerApplet(meta)
 	})
 
 	System:setCapabilities({
-		["touch"] = 1,
-		["ir"] = 1,
+	--	["touch"] = 1,
+	--	["ir"] = 1,
 		["powerKey"] = 1,
 		["muteKey"] = 1,
 		["alarmKey"] = 1,
-		["audioByDefault"] = 1,
+	--	["audioByDefault"] = 1,
 		["wiredNetworking"] = 1,
-		["deviceRotation"] = 1,
+	--	["deviceRotation"] = 1,
 		["coreKeys"] = 1,
 		["presetKeys"] = 1,
 	})
 
-	-- SN hosthame
-	--[[
-	if settings.snaddress then
-		jnt:setSNHostname(settings.snaddress)
-	else
-		jnt:setSNHostname("jive.squeezenetwork.com")
-	end
-	--]]
-	
 	appletManager:addDefaultSetting("ScreenSavers", "whenStopped", "false:false")
 
 	-- this is the startup skin - expect user to select an alternative
