@@ -320,17 +320,18 @@ function _parseStreamInfo(self, card)
 	while not eof() do
 
 		local intf = parse("  Interface (%d+)")
-		local alt  = parse("    Altset (%d+)")
-		local fmt  = parse("    Format: (.*)")
-		local chan = parse("    Channels: (%w+)")
-		local type = parse("    Endpoint: %d+ %w+ %((%w+)%)")
-		local rate = parse("    Rates: (.*)")
-		skip(2)
-
-		fmts[#fmts+1] = { intf = intf, alt = alt, fmt = fmt, chan = chan, type = type, rate = rate, int = int }
-
-		if t.interface == intf and t.altset == alt then
-			t.fmt = fmts[#fmts]
+		if intf then 
+			local alt  = parse("    Altset (%d+)")
+			local fmt  = parse("    Format: (.*)")
+			local chan = parse("    Channels: (%w+)")
+			local type = parse("    Endpoint: %d+ %w+ %((%w+)%)")
+			local rate = parse("    Rates: (.*)")
+			
+			fmts[#fmts+1] = { intf = intf, alt = alt, fmt = fmt, chan = chan, type = type, rate = rate, int = int }
+			
+			if t.interface == intf and t.altset == alt then
+				t.fmt = fmts[#fmts]
+			end
 		end
 
 	end
