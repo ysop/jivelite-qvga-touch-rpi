@@ -47,6 +47,17 @@ static int system_get_mac_address(lua_State *L) {
 }
 
 
+static int system_get_ip_address(lua_State *L) {
+	char *addr = platform_get_ip_address();
+	if (addr) {
+		lua_pushstring(L, addr);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+
 static int system_get_uuid(lua_State *L) {
 	if (uuid) {
 		lua_pushstring(L, uuid);
@@ -374,6 +385,7 @@ static const struct luaL_Reg jive_system_methods[] = {
 	{ "getArch", system_lua_get_arch },
 	{ "getMachine", system_lua_get_machine },
 	{ "getMacAddress", system_get_mac_address },
+	{ "getIPAddress", system_get_ip_address },
 	{ "getUUID", system_get_uuid },
 	{ "getUptime", system_get_uptime },
 	{ "getUserDir", system_get_user_dir },

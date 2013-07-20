@@ -322,6 +322,7 @@ void jive_send_char_press_event(Uint16 unicode);
 /* platform functions */
 void platform_init(lua_State *L);
 char *platform_get_mac_address();
+char *platform_get_ip_address(void);
 char *platform_get_home_dir();
 char *platform_get_arch();
 

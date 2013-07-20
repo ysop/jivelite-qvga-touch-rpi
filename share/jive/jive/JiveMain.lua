@@ -46,6 +46,11 @@ local _inputToActionMap = require("jive.InputToActionMap")
 local debug         = require("jive.utils.debug")
 local log           = require("jive.utils.log").logger("jivelite")
 local logheap       = require("jive.utils.log").logger("jivelite.heap")
+
+-- to get access to sleep
+local ffi           = require("ffi")
+ffi.cdef "unsigned int sleep(unsigned int seconds)"
+
 --require("profiler")
 
 local EVENT_IR_ALL         = jive.ui.EVENT_IR_ALL
@@ -264,8 +269,23 @@ end
 function JiveMain:__init()
 	log:info("JiveLite version ", JIVE_VERSION)
 
-	-- Seed the rng
+	-- check network exists before starting up
+	local addr = System:getIPAddress()
+	while addr == nil do
+		log:info("waiting for network")
+		ffi.C.sleep(1)
+		addr = System:getIPAddress()
+	end
+	
+	-- check time has been sychronised
 	local initTime = os.time()
+	while initTime < 1000000000 do
+		log:info("waiting for time update")
+		ffi.C.sleep(1)
+		initTime = os.time()
+	end
+	
+	-- Seed the rng
 	math.randomseed(initTime)
 
 	-- Initialise UI

@@ -77,6 +77,45 @@ char *platform_get_mac_address() {
 	return macaddr;
 }
 
+// find non loopback ip address to allow check for active network
+char *platform_get_ip_address(void) {
+    struct ifconf ifc;
+    struct ifreq *ifr, *ifend;
+    struct ifreq ifreq;
+    struct ifreq ifs[4];
+	struct in_addr addr;
+	
+	int found = 0;
+    int s = socket(AF_INET, SOCK_DGRAM, 0);
+	
+	memset(&addr, 0, sizeof(addr));
+	
+    ifc.ifc_len = sizeof(ifs);
+    ifc.ifc_req = ifs;
+	
+    if (ioctl(s, SIOCGIFCONF, &ifc) == 0) {
+		ifend = ifs + (ifc.ifc_len / sizeof(struct ifreq));
+		
+		for (ifr = ifc.ifc_req; ifr < ifend; ifr++) {
+			if (ifr->ifr_addr.sa_family == AF_INET) {
+				
+				strncpy(ifreq.ifr_name, ifr->ifr_name, sizeof(ifreq.ifr_name));
+				if (ioctl (s, SIOCGIFADDR, &ifreq) == 0) {
+					addr = ((struct sockaddr_in *)&ifreq.ifr_addr)->sin_addr;
+					if (addr.s_addr != 0x0100007f) { // ignore loopback address (fix endian?)
+						found = 1;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	close(s);
+	
+	return found ? inet_ntoa(addr) : NULL;
+}
+
 char *platform_get_arch() {
     struct utsname name;
     char *arch;
