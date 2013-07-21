@@ -20,7 +20,7 @@ module(..., oo.class)
 
 
 -- Limit artwork cache to 8 Mbytes
-local ARTWORK_LIMIT = 8 * 1024 * 1024
+local ARTWORK_LIMIT = 24 * 1024 * 1024
 
 
 function __init(self)

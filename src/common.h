@@ -7,7 +7,9 @@
 #ifndef JIVE_COMMON_H
 #define JIVE_COMMON_H
 
-#define HAVE_SOCKETPAIR
+#define HAVE_SOCKETPAIR    1
+#define HAVE_CLOCK_GETTIME 1
+#define HAVE_SYSLOG        1
 
 #include <assert.h>
 #include <errno.h>

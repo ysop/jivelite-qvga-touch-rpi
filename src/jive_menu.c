@@ -13,6 +13,8 @@ typedef struct menu_widget {
 
 	Uint16 max_height;
 	Uint16 item_height;
+	Uint16 items_per_line;
+
 	bool has_scrollbar;
 
 	JiveFont *font;
@@ -50,11 +52,16 @@ int jiveL_menu_skin(lua_State *L) {
 	lua_pushinteger(L, peer->item_height);
 	lua_setfield(L, 1, "itemHeight");
 
+	peer->items_per_line = jive_style_int(L, 1, "itemsPerLine", 1);
+
+	lua_pushinteger(L, peer->items_per_line);
+	lua_setfield(L, 1, "itemsPerLine");
+
 	peer->font = jive_font_ref(jive_style_font(L, 1, "font"));
 	peer->fg = jive_style_color(L, 1, "fg", JIVE_COLOR_BLACK, NULL);
 
 	/* number of menu items visible */
-	numWidgets = peer->w.bounds.h / peer->item_height;
+	numWidgets = (peer->w.bounds.h / peer->item_height) * peer->items_per_line;
 	lua_pushinteger(L, numWidgets);
 	lua_setfield(L, 1, "numWidgets");
 
@@ -71,12 +78,14 @@ int jiveL_menu_layout(lua_State *L) {
 	JiveInset hwborder;
 	int numWidgets, listSize;
 	bool hide_scrollbar;
+	int num_widgets_per_line = 0;
+
 
 	peer = jive_getpeer(L, 1, &menuPeerMeta);
 
 
 	/* number of menu items visible */
-	numWidgets = peer->w.bounds.h / peer->item_height;
+	numWidgets = (peer->w.bounds.h / peer->item_height) * peer->items_per_line;
 	lua_pushinteger(L, numWidgets);
 	lua_setfield(L, 1, "numWidgets");
 
@@ -213,13 +222,21 @@ int jiveL_menu_layout(lua_State *L) {
 			lua_pushvalue(L, -2);
 			lua_pushinteger(L, x);
 			lua_pushinteger(L, y);
-			lua_pushinteger(L, peer->w.bounds.w - peer->w.padding.left - peer->w.padding.right - sw);
+			lua_pushinteger(L, (peer->w.bounds.w - peer->w.padding.left - peer->w.padding.right - sw) / peer->items_per_line);
 			lua_pushinteger(L, peer->item_height);
 			
 			lua_call(L, 5, 0);
 		}
 
-		y += peer->item_height;
+		num_widgets_per_line++;
+		if (num_widgets_per_line >= peer->items_per_line) {
+			num_widgets_per_line = 0;
+			x = peer->w.bounds.x + peer->w.padding.left;
+			y += peer->item_height;
+		} else {
+			x += (peer->w.bounds.w - peer->w.padding.left - peer->w.padding.right - sw) / peer->items_per_line;
+		}
+
 		lua_pop(L, 1);
 	}
 	lua_pop(L, 1);
@@ -425,7 +442,7 @@ int jiveL_menu_get_preferred_bounds(lua_State *L) {
 		int max_height = INT_MAX;
 
 		lua_getfield(L, 1, "listSize");
-		max_height = lua_tointeger(L, -1) * peer->item_height;
+		max_height = (lua_tointeger(L, -1) * peer->item_height) / peer->items_per_line;
 		lua_pop(L, 1);
 
 		lua_pushinteger(L, MIN(max_height, peer->max_height));

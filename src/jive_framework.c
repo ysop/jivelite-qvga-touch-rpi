@@ -78,10 +78,16 @@ static Uint32 pointer_timeout = 0;
 static Uint16 mouse_origin_x, mouse_origin_y;
 
 static struct jive_keymap keymap[] = {
-	{ SDLK_RIGHT,		JIVE_KEY_GO },
+	{ SDLK_LEFT,		JIVE_KEY_LEFT },
+	{ SDLK_RIGHT,		JIVE_KEY_RIGHT },
+	{ SDLK_UP,			JIVE_KEY_UP },
+	{ SDLK_DOWN,		JIVE_KEY_DOWN },
 	{ SDLK_RETURN,		JIVE_KEY_GO },
-	{ SDLK_LEFT,		JIVE_KEY_BACK },
+	{ SDLK_END,			JIVE_KEY_BACK },
 	{ SDLK_HOME,		JIVE_KEY_HOME },
+
+	//{ SDLK_RIGHT,		JIVE_KEY_GO },
+	//{ SDLK_LEFT,		JIVE_KEY_BACK },
 	//	{ SDLK_AudioPlay,	JIVE_KEY_PLAY },
 	//	{ SDLK_AudioPause,	JIVE_KEY_PAUSE },
 	{ SDLK_KP_PLUS,		JIVE_KEY_ADD },
@@ -1073,6 +1079,9 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		break;
 
 	case SDL_KEYDOWN:
+		/*
+		  this emulates the scrollwheel using keypresses - remove for them moment as we want 4 way navigation
+
 		if (event->key.keysym.mod == KMOD_NONE || event->key.keysym.mod == KMOD_NUM) {
 			if (event->key.keysym.sym == SDLK_UP) {
 				jevent.type = JIVE_EVENT_SCROLL;
@@ -1085,6 +1094,7 @@ static int process_event(lua_State *L, SDL_Event *event) {
 				break;
 			}
 		}
+		*/
 		// Fall through
 
 	case SDL_KEYUP: {
@@ -1145,7 +1155,8 @@ static int process_event(lua_State *L, SDL_Event *event) {
 		}
 
 		/* handle pgup/upgn as repeatable keys */
-		else if (entry->keysym == SDLK_PAGEUP || entry->keysym == SDLK_PAGEDOWN) {
+		else if (entry->keysym == SDLK_PAGEUP || entry->keysym == SDLK_PAGEDOWN ||
+				 entry->keysym == SDLK_UP || entry->keysym == SDLK_DOWN || entry->keysym == SDLK_LEFT || entry->keysym == SDLK_RIGHT ) {
 			if (event->type == SDL_KEYDOWN) {
 				jevent.type = JIVE_EVENT_KEY_PRESS;
 				jevent.ticks = jive_jiffies();

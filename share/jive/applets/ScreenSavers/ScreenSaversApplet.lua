@@ -82,7 +82,7 @@ function init(self, ...)
 	self.defaultSettings = self:getDefaultSettings()
 
 	-- listener to restart screensaver timer
-	Framework:addListener(bit.bor(ACTION, EVENT_SCROLL, EVENT_MOUSE_ALL, EVENT_MOTION, EVENT_IR_ALL),
+	Framework:addListener(bit.bor(ACTION, EVENT_SCROLL, EVENT_MOUSE_ALL, EVENT_MOTION, EVENT_IR_ALL, EVENT_KEY_ALL),
 		function(event)
 			if bit.band(event:getType(), EVENT_IR_ALL) > 0 then
 				if (not Framework:isValidIRCode(event)) then
@@ -172,7 +172,7 @@ function init(self, ...)
 	)
 
 	--last resort listener to close SS on any unused action/scroll/mousing (for instance when user hits pause when no server connected)
-	Framework:addListener(bit.bor(ACTION, EVENT_SCROLL, EVENT_MOUSE_PRESS, EVENT_MOUSE_HOLD, EVENT_MOUSE_DRAG),
+	Framework:addListener(bit.bor(ACTION, EVENT_SCROLL, EVENT_MOUSE_PRESS, EVENT_MOUSE_HOLD, EVENT_MOUSE_DRAG, EVENT_KEY_ALL),
 		function(event)
 
 			-- screensaver is not active

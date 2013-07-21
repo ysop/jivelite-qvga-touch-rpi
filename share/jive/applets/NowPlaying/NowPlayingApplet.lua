@@ -1161,6 +1161,22 @@ function _installListeners(self, window)
 	
 	end
 
+	-- FIXME: hack to deal with removing actions from left/right - fix this in more generic way?
+	window:addListener(EVENT_KEY_PRESS,
+		function(event)
+			local keycode = event:getKeycode()
+			if keycode == KEY_LEFT then
+				Framework:pushAction("back")
+				return EVENT_CONSUME
+			end
+			if keycode == KEY_RIGHT then
+				Framework:pushAction("go")
+				return EVENT_CONSUME
+			end
+			return EVENT_UNUSED
+		end
+	)
+
 	window:addActionListener("go", self, showPlaylistAction)
 	window:addActionListener("go_home", self, _goHomeAction)
 	window:addActionListener("go_now_playing", self, toggleNPScreenStyle)
