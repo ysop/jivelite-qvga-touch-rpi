@@ -8,8 +8,11 @@
 #define JIVE_COMMON_H
 
 #define HAVE_SOCKETPAIR    1
-#define HAVE_CLOCK_GETTIME 1
 #define HAVE_SYSLOG        1
+
+#if defined(linux)
+#define HAVE_CLOCK_GETTIME 1
+#endif
 
 #include <assert.h>
 #include <errno.h>
