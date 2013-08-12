@@ -56,6 +56,32 @@ char *platform_get_mac_address() {
     return macaddr;
 }
 
+// find non loopback ip address to allow check for active network
+char *platform_get_ip_address(void) {
+	struct ifaddrs* ifaphead;
+	struct ifaddrs* ifap;
+	struct in_addr addr;
+	bool found = false;
+	
+	if ( getifaddrs( &ifaphead ) != 0 )
+		return NULL;
+	
+	// iterate over the net interfaces
+	for ( ifap = ifaphead; ifap; ifap = ifap->ifa_next ) {
+		if (ifap->ifa_addr->sa_family == AF_INET) {
+			addr = ((struct sockaddr_in *)ifap->ifa_addr)->sin_addr;
+			if (addr.s_addr != 0x0100007f) { // igore loopback address - FIXME endian specific
+				found = true;
+				break;
+			}
+		}
+	}
+	
+	freeifaddrs( ifaphead );
+	
+	return found ? inet_ntoa(addr) : NULL;
+}
+
 char *platform_get_arch() {
     // FIXME
     return "unknown";
