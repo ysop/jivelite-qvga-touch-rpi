@@ -4,7 +4,7 @@
 TARGET   ?= linux
 LD_FLAGS ?= "-shared"
 
-LIBS = cjson luaexpat luafilesystem luamd5 luasocket
+LIBS = cjson luaexpat luafilesystem luamd5 luasocket luazipfilter
 
 all: $(LIBS)
 
@@ -13,6 +13,7 @@ luaexpat: ../lib/lua/5.1/lxp.so
 luafilesystem: ../lib/lua/5.1/lfs.so
 luamd5: ../lib/lua/5.1/md5.so
 luasocket: ../lib/lua/5.1/socket.so
+luazipfilter: ../lib/lua/5.1/zipfilter.so
 
 ../lib/lua/5.1/cjson.so:
 	cd lua-cjson-2.1.0; make CJSON_LDFLAGS=${LD_FLAGS}
@@ -42,6 +43,11 @@ luasocket: ../lib/lua/5.1/socket.so
 	cp luasocket-2.0.2/src/socket.so.2.0.2 ../lib/lua/5.1/socket.so
 	cp luasocket-2.0.2/src/mime.so.1.0.2 ../lib/lua/5.1/mime.so
 
+../lib/lua/5.1/zipfilter.so:
+	cd luazipfilter; make MYLDFLAGS=${LD_FLAGS}
+	mkdir -p ../lib/lua/5.1
+	cp luazipfilter/zipfilter.so ../lib/lua/5.1/zipfilter.so
+
 clean:
 	cd lua-cjson-2.1.0; make clean
 	cd luaexpat-1.2.0; make clean
@@ -49,5 +55,6 @@ clean:
 	cd luamd5; make MYNAME=sha1 clean
 	cd luamd5; make MYNAME=md5 clean
 	cd luasocket-2.0.2; make PLATFORM=linux clean
-	rm ../lib/lua/5.1/cjson.so ../lib/lua/5.1/lxp.so ../lib/lua/5.1/lfs.so ../lib/lua/5.1/socket.so ../lib/lua/5.1/mime.so
+	cd luazipfilter; make clean
+	rm ../lib/lua/5.1/cjson.so ../lib/lua/5.1/lxp.so ../lib/lua/5.1/lfs.so ../lib/lua/5.1/socket.so ../lib/lua/5.1/mime.so ../lib/lua/5.1/zipfilter.so
 
