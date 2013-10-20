@@ -30,8 +30,8 @@ local Tile             = require("jive.ui.Tile")
 local Timer            = require("jive.ui.Timer")
 local Player           = require("jive.slim.Player")
 
---local VUMeter          = require("jive.audio.VUMeter")
---local SpectrumMeter    = require("jive.audio.SpectrumMeter")
+local VUMeter          = require("jive.vis.VUMeter")
+local SpectrumMeter    = require("jive.vis.SpectrumMeter")
 
 local debug            = require("jive.utils.debug")
 local datetime         = require("jive.utils.datetime")
@@ -1513,7 +1513,6 @@ function _createUI(self)
 	)
 
 	-- Visualizer: Spectrum Visualizer - only load if needed
-	--[[
 	if self.windowStyle == "nowplaying_spectrum_text" then
 		self.visuGroup = Button(
 			Group('npvisu', {
@@ -1525,10 +1524,8 @@ function _createUI(self)
 			end
 		)
 	end
-	--]]
 
 	-- Visualizer: Analog VU Meter - only load if needed
-	--[[
 	if self.windowStyle == "nowplaying_vuanalog_text" then
 		self.visuGroup = Button(
 			Group('npvisu', {
@@ -1540,7 +1537,6 @@ function _createUI(self)
 			end
 		)
 	end
-	--]]
 
 	local playIcon = Button(Icon('play'),
 				function() 

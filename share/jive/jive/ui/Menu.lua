@@ -1601,6 +1601,11 @@ function _scrollList(self)
 	local selected = _coerce(self.selected or 1, self.listSize)
 	local topItem = self.topItem
 
+	if self.numWidgets == 1 then
+		self.topItem = selected
+		return
+	end
+
 --	log:info("*********")
 --	log:info("*** listSize: ", self.listSize, " numWid: ", self.numWidgets)
 --	log:info("*** topItem ", topItem, " selected: ", selected)

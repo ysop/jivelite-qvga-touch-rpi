@@ -15,7 +15,7 @@
 #include <net/if_types.h>
 
 
-#define PREF_DIR "/Library/Preferences/SqueezePlay"
+#define PREF_DIR "/Library/Preferences/Jivelite"
 
 char *platform_get_home_dir() {
     char *dir;

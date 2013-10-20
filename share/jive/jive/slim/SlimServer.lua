@@ -69,6 +69,7 @@ module(..., oo.class)
 
 -- we must load this after the module declartion to dependancy loops
 local Player      = require("jive.slim.Player")
+local LocalPlayer = require("jive.slim.LocalPlayer")
 
 
 -- minimum support server version, can be set per device
@@ -257,7 +258,11 @@ function _serverstatusSink(self, event, err)
 	
 			-- create new players
 			if not self.players[playerId] then
-				self.players[playerId] = Player(self.jnt, playerId)
+				if playerId == System:getMacAddress() then
+					self.players[playerId] = LocalPlayer(self.jnt, playerId)
+				else
+					self.players[playerId] = Player(self.jnt, playerId)
+				end
 			end
 			
 			local player = self.players[playerId]
