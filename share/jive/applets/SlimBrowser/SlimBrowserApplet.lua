@@ -902,11 +902,12 @@ local function _renderSlider(step, item)
 				item.actions['do'].params[valtag] = value - item.adjust
 			end
 			_performJSONAction(jsonAction, nil, nil, nil, nil)
-
+			--[[ FIXME - this would never have worked!
                         if done then
                                 window:playSound("WINDOWSHOW")
                                 window:hide(Window.transitionPushLeft)
-                        end
+							end
+			--]]
                 end)
 	local help, text
 	if item.text then
