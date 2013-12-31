@@ -2768,14 +2768,16 @@ function skin(self, s)
 	
 		--transport controls - hidden
 		npcontrols = {
-			hidden = 1,
-			--[[
-			order = { 'rew', 'div1', 'play', 'div2', 'fwd', 'div3', 'repeatMode', 'div4', 'shuffleMode', 
-					  'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
-			position = LAYOUT_SOUTH,
+			--hidden = 1,
+			--order = { 'rew', 'div1', 'play', 'div2', 'fwd', 'div3', 'repeatMode', 'div4', 'shuffleMode', 
+			--		  'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
+			order = { 'repeatMode', 'shuffleMode' },
+			position = LAYOUT_NONE,
+			x = coverSize + 100 + (screenWidth - (coverSize + 120))/2 - controlWidth,
+			y = screenHeight - 100,
 			h = controlHeight,
 			w = WH_FILL,
-			bgImg = touchToolbarBackground,
+			--bgImg = touchToolbarBackground,
 
 			div1 = _uses(_transportControlBorder),
 			div2 = _uses(_transportControlBorder),
@@ -2857,14 +2859,13 @@ function skin(self, s)
 			repeatDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_dis.png"),
 			}),
-			--]]
 		},
 	
 		-- Progress bar
 		npprogress = {
 			position = LAYOUT_NONE,
 			x = coverSize + 100,
-			y = screenHeight - 100,
+			y = screenHeight - 150,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
@@ -2915,7 +2916,7 @@ function skin(self, s)
 			order = { "elapsed" },
 			position = LAYOUT_NONE,
 			x = coverSize + 100,
-			y = screenHeight - 100,
+			y = screenHeight - 150,
 			elapsed = {
 				w = 55, --WH_FILL,
 				align = "left",

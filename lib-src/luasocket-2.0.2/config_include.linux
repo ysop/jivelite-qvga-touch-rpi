@@ -7,7 +7,7 @@
 # Compiler and linker settings
 # for Linux
 #CC=gcc
-DEF=-DLUASOCKET_DEBUG 
+#DEF=-DLUASOCKET_DEBUG 
 MYCFLAGS= $(LUAINC) -I$(COMPAT) $(DEF) -pedantic -Wall -O2 -fpic
 MYLDFLAGS=-O -fpic -shared
 #LD=gcc 

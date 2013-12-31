@@ -2,7 +2,7 @@
 
 # change these to reflect your Lua installation
 #LUA= /tmp/lhf/lua-5.1.4
-LUAINC= /usr/local/include/luajit-2.0
+LUAINC= $(PREFIX)/include/luajit-2.0
 LUALIB= $(LUA)/lib
 LUABIN= $(LUA)/bin
 
