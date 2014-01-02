@@ -480,15 +480,11 @@ local function _artworkItem(step, item, group, menuAccel)
 	local icon = group and group:getWidget("icon")
 	local iconSize
 
-	local THUMB_SIZE = jiveMain:getSkinParam("THUMB_SIZE")
-	iconSize = THUMB_SIZE
-
-	-- FIXME JIVELITE: reduce icon size if height smaller than iconSize - used for playlist in gridview
-	if icon then
-		local w, h = icon:getSize()
-		if iconSize > h then
-			iconSize = jiveMain:getSkinParam('THUMB_SIZE_LINEAR')
-		end
+	-- FIXME JIVELITE: select icon size based on whether playlist icon or not - used for playlist in gridview
+	if icon and icon:getStyle() == 'icon_no_artwork_playlist' then
+		iconSize = jiveMain:getSkinParamOrNil("THUMB_SIZE_PLAYLIST") or jiveMain:getSkinParam("THUMB_SIZE")
+	else
+		iconSize = jiveMain:getSkinParam("THUMB_SIZE")
 	end
 	
 	local iconId = item["icon-id"] or item["icon"]
@@ -661,18 +657,18 @@ local function _decoratedLabel(group, labelStyle, item, step, menuAccel)
 
 		group:setWidgetValue("text", item.text)
 
+		-- FIXME JIVELITE: select icon style based on whether window is playlist or not
+		local iconStyle = 'icon_no_artwork'
+		if windowStyle == 'play_list' then
+			iconStyle = 'icon_no_artwork_playlist'
+		end
+
 		if showIcons then
 			--set "no artwork" unless it has already been set (avoids high cpu looping)
 			local iconWidget = group:getWidget('icon')
 			if iconWidget then
-				if windowStyle ~= 'play_list' then
-					if group:getWidget('icon'):getStyle() ~= 'icon_no_artwork' then
-						group:setWidget('icon', Icon('icon_no_artwork'))
-					end
-				else
-					if group:getWidget('icon'):getStyle() ~= 'icon_no_artwork_playlist' then
-						group:setWidget('icon', Icon('icon_no_artwork_playlist'))
-					end
+				if group:getWidget('icon'):getStyle() ~= iconStyle then
+					group:setWidget('icon', Icon(iconStyle))
 				end
 			end
 		end
@@ -698,7 +694,7 @@ local function _decoratedLabel(group, labelStyle, item, step, menuAccel)
 		else
 			if group._type then
 				if showIcons then
-					group:setWidget("icon", Icon("icon_no_artwork"))
+					group:setWidget("icon", Icon(iconStyle))
 				end
 				group._type = nil
 			end
@@ -709,7 +705,7 @@ local function _decoratedLabel(group, labelStyle, item, step, menuAccel)
 	else
 		if group._type then
 			if showIcons then
-				group:setWidget("icon", Icon("icon_no_artwork"))
+				group:setWidget("icon", Icon(iconStyle))
 			end
 			group._type = nil
 		end

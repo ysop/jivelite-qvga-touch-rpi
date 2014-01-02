@@ -37,7 +37,9 @@ function defaultSettings(self)
 end
 
 function registerApplet(self)
+	--[[ disabled as this skin is not actively developed
 	jiveMain:registerSkin(self:string("WQVGA_GRID_SKIN"), "WQVGAgridSkin", "skin")
+	--]]
 end
 
 

@@ -600,6 +600,19 @@ function JiveMain:setSelectedSkin(skinId)
 end
 
 
+function JiveMain:getSkinParamOrNil(key)
+	if self._skin then
+		local param = self._skin:param()
+
+		if key and param[key] ~= nil then
+			return param[key]
+		end
+	end
+
+	return nil
+end
+
+
 function JiveMain:getSkinParam(key)
 	if self._skin then
 		local param = self._skin:param()
