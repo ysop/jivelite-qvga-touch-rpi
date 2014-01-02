@@ -1,16 +1,19 @@
 # Jivelite makefile
 
+PREFIX ?= /usr/local
+
 all: srcs libs
 
 srcs:
-	cd src; make -f Makefile.osx
+	cd src; PREFIX=$(PREFIX) make -f Makefile.osx
 
 libs: lib
 
 lib:
-	cd lib-src; make -f Makefile.osx
+	cd lib-src; PREFIX=$(PREFIX) make -f Makefile.osx
 
 clean:
+	rm -Rf lib
 	cd src; make clean
 	cd lib-src; make -f Makefile.osx clean
-	rm -Rf lib
+

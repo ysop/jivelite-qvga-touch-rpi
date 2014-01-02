@@ -120,7 +120,8 @@ local _inputParams = {}
 -- legacy map of menuStyles to windowStyles
 -- this allows SlimBrowser to make an educated guess at window style when one is not sent but a menu style is
 local menu2window = {
-	album = 'icon_list',
+	album    = 'icon_list',
+	playlist = 'play_list',
 }
 
 -- legacy map of item styles to new item style names
@@ -451,6 +452,12 @@ local function _newWindowSpec(db, item, isContextMenu)
 	local windowStyle = (iWindow and iWindow['windowStyle']) or menu2window[menuStyle] or 'text_list'
 	local windowId = (bWindow and bWindow.windowId) or (iWindow and iWindow.windowId) or nil
 
+	-- FIXME JIVELITE: special case of playlist - override server based windowStyle to play_list
+	-- (requires another patch in _browseSink)
+	if item.type and item.type == 'playlist' then
+		windowStyle = "play_list"
+	end
+
 	return {
 		["isContextMenu"]    = isContextMenu,
 		['windowId']         = windowId,
@@ -475,6 +482,14 @@ local function _artworkItem(step, item, group, menuAccel)
 
 	local THUMB_SIZE = jiveMain:getSkinParam("THUMB_SIZE")
 	iconSize = THUMB_SIZE
+
+	-- FIXME JIVELITE: reduce icon size if height smaller than iconSize - used for playlist in gridview
+	if icon then
+		local w, h = icon:getSize()
+		if iconSize > h then
+			iconSize = jiveMain:getSkinParam('THUMB_SIZE_LINEAR')
+		end
+	end
 	
 	local iconId = item["icon-id"] or item["icon"]
 
@@ -578,16 +593,18 @@ end
 -- updates or generates a label cum decoration in the given labelStyle
 local function _decoratedLabel(group, labelStyle, item, step, menuAccel)
 	local db = step.db
+	local windowStyle = db:windowStyle() 
 
 	-- if item is a windowSpec, then the icon is kept in the spec for nothing (overhead)
 	-- however it guarantees the icon in the title is not shared with (the same) icon in the menu.
 	local showIcons = true
-	if db:windowStyle() == 'text_list' then
+	if windowStyle == 'text_list' then
 		showIcons = false
 	end
+	
 	-- if multiline_text_list is the window style, use a textarea not a Label for the text
 	local useTextArea = false
-	if db:windowStyle() == 'multiline_text_list' then
+	if windowStyle == 'multiline_text_list' then
 		useTextArea = true
 	end
 
@@ -648,8 +665,14 @@ local function _decoratedLabel(group, labelStyle, item, step, menuAccel)
 			--set "no artwork" unless it has already been set (avoids high cpu looping)
 			local iconWidget = group:getWidget('icon')
 			if iconWidget then
-				if group:getWidget('icon'):getStyle() ~= 'icon_no_artwork' then
-					group:setWidget('icon', Icon('icon_no_artwork'))
+				if windowStyle ~= 'play_list' then
+					if group:getWidget('icon'):getStyle() ~= 'icon_no_artwork' then
+						group:setWidget('icon', Icon('icon_no_artwork'))
+					end
+				else
+					if group:getWidget('icon'):getStyle() ~= 'icon_no_artwork_playlist' then
+						group:setWidget('icon', Icon('icon_no_artwork_playlist'))
+					end
 				end
 			end
 		end
@@ -1282,7 +1305,18 @@ local function _browseSink(step, chunk, err)
 				step.window:addWidget(textArea)
 			end
 		elseif step.menu then
+
+			-- FIXME JIVELITE: override server based icon_list style for playlists...
+			-- (requires another patch in _newWindowSpec)
+			if step.window and step.window:getStyle() == 'play_list' then
+				if data.window.windowStyle == 'icon_list' then
+					log:debug("overriding server based playlist window style")
+					data.window.windowStyle = 'play_list'
+				end
+			end
+
 			_stepSetMenuItems(step, data)
+
 			if _player then
 				local lastBrowseIndex = _player:getLastBrowseIndex(step.commandString)
 				-- we don't do browse history callback when we're using a simple menu overlay so the help text doesn't get lost
@@ -3443,7 +3477,7 @@ end
 -- if the player playlist is empty, we replace _statusStep with this window
 function showEmptyPlaylist(token)
 
-	local window = Window("icon_list", _string('SLIMBROWSER_PLAYLIST'))
+	local window = Window("play_list", _string('SLIMBROWSER_PLAYLIST'))
 	local menu = SimpleMenu("menu")
 	menu:addItem({
 		     text = _string(token),
@@ -3806,7 +3840,7 @@ function _attachPlayer(self, player)
 			{
 				text = _string("SLIMBROWSER_PLAYLIST"),
 				window = { 
-					["menuStyle"] = "album", 
+					["menuStyle"] = "playlist", 
 				}
 			}
 		),

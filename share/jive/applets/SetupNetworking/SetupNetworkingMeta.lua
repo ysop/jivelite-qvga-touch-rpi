@@ -2,7 +2,7 @@
 
 Setup Networking Meta - configuration support for Networking for Community Squeeze Instance
 
-(c) 2013, Adrian Smith, triode1@btinternet.com
+(c) 2013-2014, Adrian Smith, triode1@btinternet.com
 
 --]]
 

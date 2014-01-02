@@ -643,7 +643,7 @@ function skin(self, s)
 	local SELECT_SH_COLOR = { }
 
 	local TITLE_HEIGHT = 65
-	local TITLE_FONT_SIZE = 25
+	local TITLE_FONT_SIZE = 30
 	local ALBUMMENU_FONT_SIZE = 32
 	local ALBUMMENU_SMALL_FONT_SIZE = 24
 	local TEXTMENU_FONT_SIZE = 40
@@ -782,9 +782,9 @@ function skin(self, s)
 		h = TITLE_HEIGHT,
 		border = 0,
 		position = LAYOUT_NORTH,
-		bgImg = titleBox,
+		--bgImg = titleBox,
 		padding = { 0, 5, 0, 5 },
-		order = { "lbutton", "text", "rbutton" },
+		order = { "text" }, -- { "lbutton", "text", "rbutton" },
 		lbutton = {
 			border = { 8, 0, 8, 0 },
 			h = WH_FILL,
@@ -803,7 +803,7 @@ function skin(self, s)
 	}
 
 	s.title.textButton = _uses(s.title.text, {
-		bgImg = titlebarButtonBox,
+		--bgImg = titlebarButtonBox,
 		padding = { 4, 15, 4, 15 },
 	})
 
@@ -1280,7 +1280,7 @@ function skin(self, s)
 		text = {
 			line = {
 				{
-					font = _boldfont(30),
+					font = _boldfont(TITLE_FONT_SIZE),
 					height = 32,
 				},
 				{
@@ -1292,7 +1292,7 @@ function skin(self, s)
 	})
 
 	s.text_list.title.textButton = _uses(s.text_list.title.text, {
-		bgImg = titlebarButtonBox,
+		--bgImg = titlebarButtonBox,
 		padding = { 4, 15, 4, 15 },
 	})
 	s.text_list.title.pressed = {}
@@ -1575,6 +1575,8 @@ function skin(self, s)
 		}),
 	}
 
+	s.play_list = _uses(s.icon_list)
+
 	-- list window with help text
 	s.help_list = _uses(s.text_list)
 
@@ -1620,7 +1622,7 @@ function skin(self, s)
 	s.track_list = _uses(s.text_list)
 
 	s.track_list.title = _uses(s.title, {
-		order = { 'lbutton', 'icon', 'text', 'rbutton' },
+		order = { 'icon' }, -- { 'lbutton', 'icon', 'text', 'rbutton' },
 		icon  = {
 			w = THUMB_SIZE,
 			h = WH_FILL,
@@ -1628,57 +1630,6 @@ function skin(self, s)
 		},
 	})
 
-	--playlist window
-	-- identical to icon_list but with some different formatting on the text
-	s.play_list = _uses(s.icon_list, {
-		menu = {
-			item = {
-				text = {
-					padding = MENU_PLAYLISTITEM_TEXT_PADDING,
-					line = {
-						{
-							font = _boldfont(ALBUMMENU_FONT_SIZE),
-							height = ALBUMMENU_FONT_SIZE
-						},
-						{
-							height = ALBUMMENU_SMALL_FONT_SIZE + 2
-						},
-						{
-							height = ALBUMMENU_SMALL_FONT_SIZE + 2
-						},
-					},	
-				},
-			},
-		},
-	})
-	s.play_list.menu.item_checked = _uses(s.play_list.menu.item, {
-		order = { 'icon', 'text', 'check', 'arrow' },
-		check = {
-			align = ITEM_ICON_ALIGN,
-			padding = CHECK_PADDING,
-			img = _loadImage(self, "Icons/icon_check_5line.png")
-		},
-	})
-	s.play_list.menu.selected = {
-		item = _uses(s.play_list.menu.item, {
-			bgImg = fiveItemSelectionBox
-		}),
-		item_checked = _uses(s.play_list.menu.item_checked, {
-			bgImg = fiveItemSelectionBox
-		}),
-        }
-        s.play_list.menu.pressed = {
-			item = _uses(s.play_list.menu.item, { bgImg = fiveItemPressedBox }),
-			item_checked = _uses(s.play_list.menu.item_checked, { bgImg = fiveItemPressedBox }),
-        }
-	s.play_list.menu.locked = {
-		item = _uses(s.play_list.menu.pressed.item, {
-			arrow = smallSpinny
-		}),
-		item_checked = _uses(s.play_list.menu.pressed.item_checked, {
-			arrow = smallSpinny
-		}),
-	}
 
 	-- toast_popup popup (is now text only)
 	s.toast_popup_textarea = {
@@ -2283,6 +2234,8 @@ function skin(self, s)
 		align = 'center',
 	}
 
+	s.icon_no_artwork_playlist = _uses(s.icon_no_artwork)
+
 	s.icon_connecting = _uses(_icon, {
 		img = _loadImage(self, "Alerts/wifi_connecting.png"),
 		frameRate = 8,
@@ -2626,8 +2579,6 @@ function skin(self, s)
 		hidden = 1,
 	}
 
-
-
 	-- BEGIN NowPlaying skin code
 
 	local NP_ARTISTALBUM_FONT_SIZE = 42
@@ -2635,7 +2586,6 @@ function skin(self, s)
 
 	local controlHeight = 66
 	local controlWidth = 100
-	local volumeBarWidth = 750
 	local buttonPadding = 0
 
 	local _transportControlButton = {
@@ -2649,16 +2599,6 @@ function skin(self, s)
 		w = 2,
 		padding = 0,
 		img = touchToolbarKeyDivider,		
-	})
-
-	local _transportVolumeBorder = _uses(_transportControlButton, {
-		w = 450,
-		padding = { 440, 0, 0, 0 },
-		--img = touchToolbarKeyDivider,
-	}) 
-
-	s.toolbar_spacer = _uses(_transportControlButton, {
-		w = WH_FILL,
 	})
 
 	coverSize = math.floor(math.min((screenHeight - TITLE_HEIGHT - 20), screenWidth/2 - 50) / 10) * 10
@@ -2679,8 +2619,9 @@ function skin(self, s)
 			zOrder = 1,
 			text = {
 				font = _boldfont(TITLE_FONT_SIZE),
-				bgImg   = titlebarButtonBox,
+				--bgImg   = titlebarButtonBox,
 			},
+			--[[
 			rbutton  = {
 				font    = _font(14),
 				fg      = TEXT_COLOR,
@@ -2689,6 +2630,7 @@ function skin(self, s)
 				padding = { 8, 0, 8, 0},
 				align   = 'center',
 			}
+			--]]
 		}),
 	
 		-- Song metadata
@@ -2768,37 +2710,12 @@ function skin(self, s)
 	
 		--transport controls - hidden
 		npcontrols = {
-			--hidden = 1,
-			--order = { 'rew', 'div1', 'play', 'div2', 'fwd', 'div3', 'repeatMode', 'div4', 'shuffleMode', 
-			--		  'div5', 'volDown', 'div6', 'volSlider', 'div7', 'volUp' },
 			order = { 'repeatMode', 'shuffleMode' },
 			position = LAYOUT_NONE,
 			x = coverSize + 100 + (screenWidth - (coverSize + 120))/2 - controlWidth,
 			y = screenHeight - 100,
 			h = controlHeight,
 			w = WH_FILL,
-			--bgImg = touchToolbarBackground,
-
-			div1 = _uses(_transportControlBorder),
-			div2 = _uses(_transportControlBorder),
-			div3 = _uses(_transportControlBorder),
-			div4 = _uses(_transportControlBorder),
-			div5 = _uses(_transportVolumeBorder),
-			div6 = _uses(_transportControlBorder),
-			div7 = _uses(_transportControlBorder),
-
-			rew   = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_rew.png"),
-			}),
-			play  = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_play.png"),
-			}),
-			pause = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_pause.png"),
-			}),
-			fwd   = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_ffwd.png"),
-			}),
 			shuffleMode = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_off.png"),
 			}),
@@ -2822,36 +2739,6 @@ function skin(self, s)
 			}),
 			repeatSong = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_repeat_song_on.png"),
-			}),
-			volDown = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_vol_down.png"),
-			}),
-			volUp = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_vol_up.png"),
-			}),
-			thumbsUp = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_thumbup.png"),
-			}),
-			thumbsDown = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_thumbdown.png"),
-			}),
-			thumbsUpDisabled = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_thumbup_dis.png"),
-			}),
-			thumbsDownDisabled = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_thumbdown_dis.png"),
-			}),
-			love = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_love_on.png"),
-			}),
-			hate = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_love_off.png"),
-			}),
-			fwdDisabled = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_ffwd_dis.png"),
-			}),
-			rewDisabled = _uses(_transportControlButton, {
-				img = _loadImage(self, "Icons/icon_toolbar_rew_dis.png"),
 			}),
 			shuffleDisabled = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_dis.png"),
@@ -2918,7 +2805,7 @@ function skin(self, s)
 			x = coverSize + 100,
 			y = screenHeight - 150,
 			elapsed = {
-				w = 55, --WH_FILL,
+				w = 55,
 				align = "left",
 				padding = { 0, 0, 4, 20 },
 				font = _boldfont(18),
@@ -2933,17 +2820,6 @@ function skin(self, s)
 	s.nowplaying.npprogress.npprogressB_disabled = _uses(s.nowplaying.npprogress.npprogressB, {
 		img = _songProgressBarDisabled,
 	})
-
-	s.npvolumeB = {
-		w = volumeBarWidth,
-		border = { 5, 20, 5, 0 },
-		padding = { 6, 0, 6, 0 },
-		position = LAYOUT_SOUTH,
-		horizontal = 1,
-		bgImg = _volumeSliderBackground,
-		img = _volumeSliderBar,
-		pillImg = _volumeSliderPill,
-	}
 
 	-- pressed styles
 	s.nowplaying.title.pressed = _uses(s.nowplaying.title, {
@@ -2968,38 +2844,12 @@ function skin(self, s)
 
 	s.nowplaying.npcontrols.pressed = {
 		hidden = 1,
-		--[[
-		rew     = _uses(s.nowplaying.npcontrols.rew, { bgImg = keyMiddlePressed }),
-		play    = _uses(s.nowplaying.npcontrols.play, { bgImg = keyMiddlePressed }),
-		pause   = _uses(s.nowplaying.npcontrols.pause, { bgImg = keyMiddlePressed }),
-		fwd     = _uses(s.nowplaying.npcontrols.fwd, { bgImg = keyMiddlePressed }),
-		repeatPlaylist  = _uses(s.nowplaying.npcontrols.repeatPlaylist, { bgImg = keyMiddlePressed }),
-		repeatSong      = _uses(s.nowplaying.npcontrols.repeatSong, { bgImg = keyMiddlePressed }),
-		repeatOff       = _uses(s.nowplaying.npcontrols.repeatOff, { bgImg = keyMiddlePressed }),
-		repeatMode      = _uses(s.nowplaying.npcontrols.repeatMode, { bgImg = keyMiddlePressed }),
-		shuffleAlbum    = _uses(s.nowplaying.npcontrols.shuffleAlbum, { bgImg = keyMiddlePressed }),
-		shuffleSong     = _uses(s.nowplaying.npcontrols.shuffleSong, { bgImg = keyMiddlePressed }),
-		shuffleMode      = _uses(s.nowplaying.npcontrols.shuffleMode, { bgImg = keyMiddlePressed }),
-		shuffleOff      = _uses(s.nowplaying.npcontrols.shuffleOff, { bgImg = keyMiddlePressed }),
-		volDown = _uses(s.nowplaying.npcontrols.volDown, { bgImg = keyMiddlePressed }),
-		volUp   = _uses(s.nowplaying.npcontrols.volUp, { bgImg = keyMiddlePressed }),
-
-		thumbsUp    = _uses(s.nowplaying.npcontrols.thumbsUp, { bgImg = keyMiddlePressed }),
-		thumbsDown  = _uses(s.nowplaying.npcontrols.thumbsDown, { bgImg = keyMiddlePressed }),
-		thumbsUpDisabled    = s.nowplaying.npcontrols.thumbsUpDisabled,
-		thumbsDownDisabled  = s.nowplaying.npcontrols.thumbsDownDisabled,
-		love        = _uses(s.nowplaying.npcontrols.love, { bgImg = keyMiddlePressed }),
-		hate        = _uses(s.nowplaying.npcontrols.hate, { bgImg = keyMiddlePressed }),
-		fwdDisabled = _uses(s.nowplaying.npcontrols.fwdDisabled),
-		rewDisabled = _uses(s.nowplaying.npcontrols.rewDisabled),
-		--]]
 	}
 
 	
 	-- Visualizer: Container with titlebar, progressbar and controls.
 	--  The space between title and controls is used for the visualizer.
 	s.nowplaying_visualizer_common = _uses(s.nowplaying, {
-		--bgImg = nocturneWallpaper,
 
 		npartistgroup = { hidden = 1 },
 		npalbumgroup = { hidden = 1 },
@@ -3037,7 +2887,7 @@ function skin(self, s)
 			y = TITLE_HEIGHT,
 			w = screenWidth,
 			h = 38,
-			bgImg = titleBox,
+			--bgImg = titleBox,
 			align = "center",
 			fg = { 0xb3, 0xb3, 0xb3 },
 			padding = { 50, 0, 50, 5 },
@@ -3133,9 +2983,6 @@ function skin(self, s)
 		},
 	})
 
-
-
-
 	s.brightness_group = {
 		order = {  'down', 'div1', 'slider', 'div2', 'up' },
 		position = LAYOUT_SOUTH,
@@ -3172,7 +3019,7 @@ function skin(self, s)
 		img = _volumeSliderBar,
 		pillImg = _volumeSliderPill,
 	}
-	
+
 	s.settings_slider_group = _uses(s.brightness_group, {
 		down = {
 			img = _loadImage(self, "Icons/icon_toolbar_minus.png"),

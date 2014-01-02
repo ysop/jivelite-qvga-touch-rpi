@@ -27,6 +27,7 @@ local jiveMain      = jiveMain
 local EVENT_CONSUME = jive.ui.EVENT_CONSUME
 local EVENT_QUIT    = jive.ui.EVENT_QUIT
 
+local arg, ipairs, string = arg, ipairs, string
 
 module(...)
 oo.class(_M, AppletMeta)
@@ -41,20 +42,33 @@ function registerApplet(self)
 end
 
 function configureApplet(self)
-	-- add ourselves to the end of the main menu
-	jiveMain:addItem({
-		id = 'appletQuit',
-		iconStyle = 'hm_quit',
-		node = 'home',
-		text = self:string("QUIT"),
-		callback = function() 
-			-- disconnect from Player/SqueezeCenter
-			appletManager:callService("disconnectPlayer")
+	-- don't load on community squeeze control instance
+	local load = true
+	if string.match(arg[0], "jivelite%-cs") then
+		load = false
+	end
+	for _, a in ipairs(arg) do
+		if a == "--cs-applets" then
+			load = false
+		end
+	end
 
-			return (bit.bor(EVENT_CONSUME, EVENT_QUIT))
-		end,
-		weight = 1010,
-	})
+	if load then
+		-- add ourselves to the end of the main menu
+		jiveMain:addItem({
+			id = 'appletQuit',
+			iconStyle = 'hm_quit',
+			node = 'home',
+			text = self:string("QUIT"),
+			callback = function() 
+				-- disconnect from Player/SqueezeCenter
+				appletManager:callService("disconnectPlayer")
+
+				return (bit.bor(EVENT_CONSUME, EVENT_QUIT))
+			end,
+			weight = 1010,
+		})
+	end
 end
 
 

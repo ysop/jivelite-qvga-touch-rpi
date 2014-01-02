@@ -2,7 +2,7 @@
 
 SetupNetworking Applet - configuration for network
 
-(c) 2012, 2013, Adrian Smith, triode1@btinternet.com
+(c) 2013-2014, Adrian Smith, triode1@btinternet.com
 
 --]]
 
