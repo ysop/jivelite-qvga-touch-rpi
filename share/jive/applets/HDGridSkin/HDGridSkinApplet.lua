@@ -268,10 +268,16 @@ function skin(self, s)
 		 imgpath .. "5_line_lists/menu_sel_box_5line_press_r.png",
 	})
 
-	local gridItemSelectionBox    = _loadHTile(self, {
-		 nil,
-		 imgpath .. "5_line_lists/menu_sel_box_grid.png",
-		 nil,
+	local gridItemSelectionBox    = _loadTile(self, {
+		imgpath .. "grid_list/button_titlebar.png",
+		imgpath .. "grid_list/button_titlebar_tl.png",
+		imgpath .. "grid_list/button_titlebar_t.png",
+		imgpath .. "grid_list/button_titlebar_tr.png",
+		imgpath .. "grid_list/button_titlebar_r.png",
+		imgpath .. "grid_list/button_titlebar_br.png",
+		imgpath .. "grid_list/button_titlebar_b.png",
+		imgpath .. "grid_list/button_titlebar_bl.png",
+		imgpath .. "grid_list/button_titlebar_l.png",
 	})
 
 	local threeItemSelectionBox            = _loadHTile(self, {

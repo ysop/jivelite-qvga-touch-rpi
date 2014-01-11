@@ -188,7 +188,7 @@ static int jiveL_initSDL(lua_State *L) {
 	platform_init(L);
 
 	/* open window */
-	SDL_WM_SetCaption("JiveLite Alpha", "JiveLite Alpha");
+	SDL_WM_SetCaption("JiveLite", "JiveLite");
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_EnableKeyRepeat (100, 100);
 	SDL_EnableUNICODE(1);
