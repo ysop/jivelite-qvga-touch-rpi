@@ -2642,6 +2642,7 @@ function skin(self, s)
 			y          = TITLE_HEIGHT + 150,
 			h          = 70,
 			nptrack =  {
+				padding    = { 0, 10, 0, 0 },
 				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2658,7 +2659,7 @@ function skin(self, s)
 			y          = TITLE_HEIGHT + 250,
 			h          = 70,
 			npartist = {
-				padding    = { 0, 6, 0, 0 },
+				padding    = { 0, 10, 0, 0 },
 				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2676,7 +2677,7 @@ function skin(self, s)
 			h          = 70,
 			npalbum = {
 				w          = screenWidth - _tracklayout.x - 50,
-				padding    = { 0, 6, 0, 0 },
+				padding    = { 0, 10, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
