@@ -715,21 +715,21 @@ function skin(self, s)
 	})
 
 	local _songProgressBackground = _loadHTile(self, {
-		imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_bkgrd_l.png",
-		imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_bkgrd.png",
-		imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_bkgrd_r.png",
+		imgpath .. "NowPlaying/np_progressbar_bkgrd_l.png",
+		imgpath .. "NowPlaying/np_progressbar_bkgrd.png",
+		imgpath .. "NowPlaying/np_progressbar_bkgrd_r.png",
 	})
 
 	local _songProgressBar = _loadHTile(self, {
 		nil,
 		nil,
-		imgpath .. "Song_Progress_Bar/SP_Bar_Touch/tch_progressbar_slider.png"
+		imgpath .. "NowPlaying/np_progressbar_slider_10ft.png"
 	})
 
 	local _songProgressBarDisabled = _loadHTile(self, {
 		nil,
 		nil,
-		imgpath .. "Song_Progress_Bar/SP_Bar_Remote/rem_progressbar_slider.png"
+		imgpath .. "NowPlaying/np_progressbar_slider_10ft.png"
 	})
 
 	local _vizProgressBar = _loadHTile(self, {
@@ -2581,8 +2581,8 @@ function skin(self, s)
 
 	-- BEGIN NowPlaying skin code
 
-	local NP_ARTISTALBUM_FONT_SIZE = 42
-	local NP_TRACK_FONT_SIZE = 42
+	local NP_ARTISTALBUM_FONT_SIZE = 72
+	local NP_TRACK_FONT_SIZE = 72
 
 	local controlHeight = 66
 	local controlWidth = 100
@@ -2639,10 +2639,10 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 150,
-			h          = 70,
+			y          = TITLE_HEIGHT + coverSize * 150 / 900,
+			h          = 90,
 			nptrack =  {
-				padding    = { 0, 10, 0, 0 },
+				padding    = { 0, 20, 0, 0 },
 				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2656,10 +2656,10 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 250,
-			h          = 70,
+			y          = TITLE_HEIGHT + coverSize * 300 / 900,
+			h          = 90,
 			npartist = {
-				padding    = { 0, 10, 0, 0 },
+				padding    = { 0, 20, 0, 0 },
 				w          = screenWidth - _tracklayout.x - 50,
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2673,11 +2673,11 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + 350,
-			h          = 70,
+			y          = TITLE_HEIGHT + coverSize * 450 / 900,
+			h          = 90,
 			npalbum = {
 				w          = screenWidth - _tracklayout.x - 50,
-				padding    = { 0, 10, 0, 0 },
+				padding    = { 0, 20, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2757,39 +2757,39 @@ function skin(self, s)
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
-				w = 55,
+				w = 80,
 				align = 'left',
 				padding = { 0, 0, 4, 20 },
-				font = _boldfont(18),
+				font = _boldfont(28),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remain = {
-				w = 55,
+				w = 90,
 				align = 'right',
 				padding = { 4, 0, 0, 20 },
-				font = _boldfont(18),
+				font = _boldfont(28),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			elapsedSmall = {
-				w = 70,
+				w = 80,
 				align = 'left',
-				padding = { 0, 0, 4, 20 },
-				font = _boldfont(18),
+				padding = { 0, 0, 0, 20 },
+				font = _boldfont(28),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remainSmall = {
-				w = 70,
+				w = 90,
 				align = 'right',
 				padding = { 4, 0, 0, 20 },
-				font = _boldfont(18),
+				font = _boldfont(28),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = screenWidth - coverSize - 50 - 220,
+				w = screenWidth - coverSize - 50 - 220 - 40,
 				h = 50,
 				padding     = { 0, 0, 0, 0 },
 				position = LAYOUT_SOUTH,
