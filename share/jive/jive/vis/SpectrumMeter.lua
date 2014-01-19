@@ -113,7 +113,7 @@ function _layout(self)
 		self.clipSubbands[2]
 	)
 
-	log:warn("** 1: " .. numBars[1] .. " 2: " .. numBars[2])
+	log:debug("** 1: " .. numBars[1] .. " 2: " .. numBars[2])
 
 	local barHeight = {}
 

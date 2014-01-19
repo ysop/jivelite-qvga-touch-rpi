@@ -10,3 +10,8 @@ HD_SKIN_1280_1024
 HD_SKIN_VGA
 	EN	HD Skin (640x480)
 
+ART_AND_TEXT
+	EN	Artwork and Text
+
+SPECTRUM_ANALYZER
+	EN	Spectrum Analyzer
