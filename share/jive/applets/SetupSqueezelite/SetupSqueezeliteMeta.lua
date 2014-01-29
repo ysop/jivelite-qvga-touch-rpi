@@ -1,6 +1,7 @@
 --[[
 
-Setup Squeezelite Meta - configuration support for Squeezelite player to set alsa params for Community Squeeze Instance
+Setup Squeezelite Meta - configuration support for Squeezelite player to set 
+alsa params for Wandboard Squeeze Player Instance
 
 (c) 2013-2014, Adrian Smith, triode1@btinternet.com
 
@@ -28,13 +29,13 @@ end
 
 
 function registerApplet(meta)
-	-- only load on community squeeze control instance
+	-- only load on Wandboard Squeeze Player control instance
 	local load = false
-	if string.match(arg[0], "jivelite%-cs") then
+	if string.match(arg[0], "jivelite%-wsp") then
 		load = true
 	end
 	for _, a in ipairs(arg) do
-		if a == "--cs-applets" then
+		if a == "--wsp-applets" then
 			load = true
 		end
 	end

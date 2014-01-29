@@ -42,13 +42,13 @@ function registerApplet(self)
 end
 
 function configureApplet(self)
-	-- don't load on community squeeze control instance
+	-- don't load on Wandboard Squeeze Player control instance
 	local load = true
-	if string.match(arg[0], "jivelite%-cs") then
+	if string.match(arg[0], "jivelite%-wsp") then
 		load = false
 	end
 	for _, a in ipairs(arg) do
-		if a == "--cs-applets" then
+		if a == "--wsp-applets" then
 			load = false
 		end
 	end

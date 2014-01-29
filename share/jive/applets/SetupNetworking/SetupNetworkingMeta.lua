@@ -1,6 +1,7 @@
 --[[
 
-Setup Networking Meta - configuration support for Networking for Community Squeeze Instance
+Setup Networking Meta - configuration support for Networking on Wandboard 
+Squeeze Player Instance
 
 (c) 2013-2014, Adrian Smith, triode1@btinternet.com
 
@@ -28,13 +29,13 @@ end
 
 
 function registerApplet(meta)
-	-- only load on community squeeze control instance
+	-- only load on Wandboard Squeeze Player control instance
 	local load = false
-	if string.match(arg[0], "jivelite%-cs") then
+	if string.match(arg[0], "jivelite%-wsp") then
 		load = true
 	end
 	for _, a in ipairs(arg) do
-		if a == "--cs-applets" then
+		if a == "--wsp-applets" then
 			load = true
 		end
 	end
