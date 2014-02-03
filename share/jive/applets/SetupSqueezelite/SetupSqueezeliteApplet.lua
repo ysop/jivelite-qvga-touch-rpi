@@ -310,8 +310,9 @@ function _parseStreamInfo(self, card)
 	if t.status == "Running" then
 		t.interface = parse("    Interface = (%d+)")
 		t.altset    = parse("    Altset = (%d+)")
-		skip(2)
-		t.momfreq   = parse("    Momentary freq = (%d+) Hz")
+		while not eof() and not t.momfreq do
+		    t.momfreq   = parse("    Momentary freq = (%d+) Hz")
+		end
 		t.feedbkfmt = parse("    Feedback Format = (.*)", true)
 	end
 	
