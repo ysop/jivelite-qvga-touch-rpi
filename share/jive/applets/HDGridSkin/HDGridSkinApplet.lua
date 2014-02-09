@@ -643,7 +643,7 @@ function skin(self, s)
 	local SELECT_SH_COLOR = { }
 
 	local TITLE_HEIGHT = 65
-	local TITLE_FONT_SIZE = 30
+	local TITLE_FONT_SIZE = math.floor(30 * screenHeight / 720)
 	local ALBUMMENU_FONT_SIZE = 32
 	local ALBUMMENU_SMALL_FONT_SIZE = 24
 	local TEXTMENU_FONT_SIZE = 40
@@ -2784,8 +2784,8 @@ function skin(self, s)
 
 	-- BEGIN NowPlaying skin code
 
-	local NP_ARTISTALBUM_FONT_SIZE = 72
-	local NP_TRACK_FONT_SIZE = 72
+	local NP_ARTISTALBUM_FONT_SIZE = math.floor(72*screenWidth/1920)
+	local NP_TRACK_FONT_SIZE = math.floor(72*screenWidth/1920)
 
 	local controlHeight = 66
 	local controlWidth = 100
@@ -2813,7 +2813,7 @@ function skin(self, s)
 		align = "left",
 		lineHeight = NP_TRACK_FONT_SIZE,
 		fg = TEXT_COLOR,
-		x = 100 + coverSize,
+		x = coverSize + math.floor(100 * screenWidth / 1920), 
 	}
 
 	s.nowplaying = _uses(s.window, {
@@ -2846,7 +2846,7 @@ function skin(self, s)
 			h          = 90,
 			nptrack =  {
 				padding    = { 0, 20, 0, 0 },
-				w          = screenWidth - _tracklayout.x - 50,
+				w          = screenWidth - _tracklayout.x - math.floor(50 * screenWidth / 1920),
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2863,7 +2863,7 @@ function skin(self, s)
 			h          = 90,
 			npartist = {
 				padding    = { 0, 20, 0, 0 },
-				w          = screenWidth - _tracklayout.x - 50,
+				w          = screenWidth - _tracklayout.x - math.floor(50 * screenWidth / 1920),
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
 				fg         = _tracklayout.fg,
@@ -2879,7 +2879,7 @@ function skin(self, s)
 			y          = TITLE_HEIGHT + coverSize * 450 / 900,
 			h          = 90,
 			npalbum = {
-				w          = screenWidth - _tracklayout.x - 50,
+				w          = screenWidth - _tracklayout.x - math.floor(50 * screenWidth / 1920),
 				padding    = { 0, 20, 0, 0 },
 				align      = _tracklayout.align,
 				lineHeight = _tracklayout.lineHeight,
@@ -2896,7 +2896,7 @@ function skin(self, s)
 		npartwork = {
 			w = coverSize,
 			position = LAYOUT_NONE,
-			x = 50,
+			x = math.floor(50 * screenWidth/1920),
 			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2,
 			align = "center",
 			h = coverSize,
@@ -2914,13 +2914,12 @@ function skin(self, s)
 	
 		--transport controls - hidden
 		npcontrols = {
-			order = { 'repeatMode', 'shuffleMode' }, 
+			order = { 'repeatMode', 'shuffleMode' },
 			position = LAYOUT_NONE,
-			x = coverSize + 100 + (screenWidth - (coverSize + 120))/2 - controlWidth,
+			x = coverSize + math.floor(100 * screenWidth/1920) + (screenWidth - _tracklayout.x - math.floor(50 * screenWidth/1920) - 8)/2 - controlWidth,
 			y = screenHeight - 100,
 			h = controlHeight,
 			w = WH_FILL,
-
 			shuffleMode = _uses(_transportControlButton, {
 				img = _loadImage(self, "Icons/icon_toolbar_shuffle_off.png"),
 			}),
@@ -2956,44 +2955,44 @@ function skin(self, s)
 		-- Progress bar
 		npprogress = {
 			position = LAYOUT_NONE,
-			x = coverSize + 100,
+			x = coverSize + math.floor(100 * screenWidth/1920),
 			y = screenHeight - 150,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
-				w = 80,
+				w = 4 + math.floor(80 * screenWidth/1920),
 				align = 'left',
-				padding = { 0, 0, 4, 20 },
-				font = _boldfont(28),
+				padding = { 0, 0, 4, 10 },
+				font = _boldfont(math.floor(28 * screenHeight/1080)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remain = {
-				w = 90,
+				w = 4 + math.floor(90 * screenWidth/1920),
 				align = 'right',
-				padding = { 4, 0, 0, 20 },
-				font = _boldfont(28),
+				padding = { 4, 0, 0, 10 },
+				font = _boldfont(math.floor(28 * screenHeight/1080)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			elapsedSmall = {
-				w = 80,
+				w = 4 + math.floor(80 * screenWidth/1920),
 				align = 'left',
-				padding = { 0, 0, 0, 20 },
-				font = _boldfont(28),
+				padding = { 0, 0, 4, 20 },
+				font = _boldfont(math.floor(28 * screenHeight/1080)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remainSmall = {
-				w = 90,
+				w = 4 + math.floor(90 * screenWidth/1920),
 				align = 'right',
 				padding = { 4, 0, 0, 20 },
-				font = _boldfont(28),
+				font = _boldfont(math.floor(28 * screenHeight/1080)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = screenWidth - coverSize - 50 - 220 - 40,
+				w = screenWidth - _tracklayout.x - math.floor(220 * screenWidth/1920) - 8,
 				h = 50,
 				padding     = { 0, 0, 0, 0 },
 				position = LAYOUT_SOUTH,
@@ -3007,13 +3006,13 @@ function skin(self, s)
 		npprogressNB = {
 			order = { "elapsed" },
 			position = LAYOUT_NONE,
-			x = coverSize + 150,
-			y = screenHeight - 100,
+			x = coverSize + math.floor(100 * screenWidth/1920),
+			y = screenHeight - 150,
 			elapsed = {
-				w = 55,
+				w = 4 + math.floor(80 * screenWidth/1920),
 				align = "left",
-				padding = { 0, 0, 4, 20 },
-				font = _boldfont(18),
+				padding = { 0, 0, 4, 10 },
+				font = _boldfont(math.floor(28 * screenHeight/1080)),
 				fg = { 0xe7, 0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
@@ -3050,7 +3049,6 @@ function skin(self, s)
 	s.nowplaying.npcontrols.pressed = {
 		hidden = 1,
 	}
-	
 
 	-- Visualizer: Container with titlebar, progressbar and controls.
 	--  The space between title and controls is used for the visualizer.
@@ -3136,7 +3134,7 @@ function skin(self, s)
 		img = _volumeSliderBar,
 		pillImg = _volumeSliderPill,
 	}
-	
+
 	s.settings_slider_group = _uses(s.brightness_group, {
 		down = {
 			img = _loadImage(self, "Icons/icon_toolbar_minus.png"),
