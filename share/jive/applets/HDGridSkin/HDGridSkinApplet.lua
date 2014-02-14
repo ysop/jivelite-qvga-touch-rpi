@@ -1826,6 +1826,7 @@ function skin(self, s)
 		},
 	})
 
+
 	-- toast_popup popup (is now text only)
 	s.toast_popup_textarea = {
 		padding = { 8, 8, 8, 8 } ,
@@ -2379,6 +2380,7 @@ function skin(self, s)
                 bgImg = deleteKeyPressedBackground,
 	})
 
+
 	local _buttonicon = {
 		h   = THUMB_SIZE_G,
 		padding = MENU_ITEM_ICON_PADDING_G,
@@ -2842,7 +2844,7 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + coverSize * 150 / 900,
+			y 	   = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 0 / 6,
 			h          = 90,
 			nptrack =  {
 				padding    = { 0, 20, 0, 0 },
@@ -2859,7 +2861,7 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + coverSize * 300 / 900,
+			y 	   = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 1 / 6,
 			h          = 90,
 			npartist = {
 				padding    = { 0, 20, 0, 0 },
@@ -2876,7 +2878,7 @@ function skin(self, s)
 			position   = _tracklayout.position,
 			border     = _tracklayout.border,
 			x          = _tracklayout.x,
-			y          = TITLE_HEIGHT + coverSize * 450 / 900,
+			y 	   = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 2 / 6,
 			h          = 90,
 			npalbum = {
 				w          = screenWidth - _tracklayout.x - math.floor(50 * screenWidth / 1920),
@@ -2917,7 +2919,7 @@ function skin(self, s)
 			order = { 'repeatMode', 'shuffleMode' },
 			position = LAYOUT_NONE,
 			x = coverSize + math.floor(100 * screenWidth/1920) + (screenWidth - _tracklayout.x - math.floor(50 * screenWidth/1920) - 8)/2 - controlWidth,
-			y = screenHeight - 100,
+			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 5.5 / 6,	
 			h = controlHeight,
 			w = WH_FILL,
 			shuffleMode = _uses(_transportControlButton, {
@@ -2956,43 +2958,43 @@ function skin(self, s)
 		npprogress = {
 			position = LAYOUT_NONE,
 			x = coverSize + math.floor(100 * screenWidth/1920),
-			y = screenHeight - 150,
+			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 5 / 6,
 			padding = { 0, 10, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
-				w = 4 + math.floor(80 * screenWidth/1920),
+				w = math.floor(100 * screenWidth/1920),
 				align = 'left',
 				padding = { 0, 0, 4, 10 },
-				font = _boldfont(math.floor(28 * screenHeight/1080)),
+				font = _boldfont(math.ceil(28 * screenWidth/1920)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remain = {
-				w = 4 + math.floor(90 * screenWidth/1920),
+				w = math.floor(100 * screenWidth/1920),
 				align = 'right',
 				padding = { 4, 0, 0, 10 },
-				font = _boldfont(math.floor(28 * screenHeight/1080)),
+				font = _boldfont(math.ceil(28 * screenWidth/1920)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			elapsedSmall = {
-				w = 4 + math.floor(80 * screenWidth/1920),
+				w = math.floor(100 * screenWidth/1920),
 				align = 'left',
 				padding = { 0, 0, 4, 20 },
-				font = _boldfont(math.floor(28 * screenHeight/1080)),
+				font = _boldfont(math.ceil(28 * screenWidth/1920)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remainSmall = {
-				w = 4 + math.floor(90 * screenWidth/1920),
+				w = math.floor(100 * screenWidth/1920),
 				align = 'right',
 				padding = { 4, 0, 0, 20 },
-				font = _boldfont(math.floor(28 * screenHeight/1080)),
+				font = _boldfont(math.ceil(28 * screenWidth/1920)),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = screenWidth - _tracklayout.x - math.floor(220 * screenWidth/1920) - 8,
+				w = screenWidth - _tracklayout.x - math.floor(250 * screenWidth/1920),
 				h = 50,
 				padding     = { 0, 0, 0, 0 },
 				position = LAYOUT_SOUTH,
@@ -3007,12 +3009,12 @@ function skin(self, s)
 			order = { "elapsed" },
 			position = LAYOUT_NONE,
 			x = coverSize + math.floor(100 * screenWidth/1920),
-			y = screenHeight - 150,
+			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 5 / 6,
 			elapsed = {
-				w = 4 + math.floor(80 * screenWidth/1920),
+				w = math.floor(100 * screenWidth/1920),
 				align = "left",
 				padding = { 0, 0, 4, 10 },
-				font = _boldfont(math.floor(28 * screenHeight/1080)),
+				font = _boldfont(math.ceil(28 * screenWidth/1920)),
 				fg = { 0xe7, 0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
@@ -3050,6 +3052,7 @@ function skin(self, s)
 		hidden = 1,
 	}
 
+	
 	-- Visualizer: Container with titlebar, progressbar and controls.
 	--  The space between title and controls is used for the visualizer.
 	s.nowplaying_visualizer_common = _uses(s.nowplaying, {
@@ -3063,12 +3066,14 @@ function skin(self, s)
 		npvisu = {
 			hidden = 0,
 			position = LAYOUT_NONE,
-			x = 50,
-			y = 50,
+			x = math.floor(50 * screenWidth/1920),
+			y = TITLE_HEIGHT + (screenHeight - TITLE_HEIGHT - coverSize) / 2 + coverSize * 6 / 6 - coverSize,
+			align = "center",
 			w = coverSize,
 			h = coverSize,
 			border = { 0, 0, 0, 0 },
 			padding = { 0, 0, 0, 0 },
+			bgImg = _progressBackground,
 
 			spectrum = {
 				position = LAYOUT_NONE,
