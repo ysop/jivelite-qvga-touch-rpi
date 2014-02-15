@@ -1175,8 +1175,6 @@ static int process_event(lua_State *L, SDL_Event *event) {
 			entry++;
 		}
 
-		fprintf(stderr, "keysym: %u mod: %u -> %u\n", event->key.keysym.sym, event->key.keysym.mod, entry->keycode);
-
 		if (entry->keysym == SDLK_UNKNOWN) {
 			// handle regular character keys ('a', 't', etc..)
 			if (event->type == SDL_KEYDOWN && event->key.keysym.unicode != 0) {
