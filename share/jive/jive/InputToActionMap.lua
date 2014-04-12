@@ -18,9 +18,14 @@ charActionMappings.press = {
 	["."]  = "repeat_toggle",
 	["|"]  = "sleep",
 	["Q"]  = "power",
-
 --END temp shortcuts to test action framework
 
+--alternatives for common control buttons avoiding keyboard modifiers
+	["f"]  = "go_favorites",
+	["s"]  = "sleep",
+	["q"]  = "power",
+
+-- original
 	["/"]   = "go_search",
 	["h"]   = "go_home",
 	["J"]   = "go_home_or_now_playing",
