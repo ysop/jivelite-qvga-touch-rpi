@@ -44,11 +44,11 @@ end
 function configureApplet(self)
 	-- don't load on Wandboard Squeeze Player control instance
 	local load = true
-	if string.match(arg[0], "jivelite%-wsp") then
+	if string.match(arg[0], "jivelite%-cs") then
 		load = false
 	end
 	for _, a in ipairs(arg) do
-		if a == "--wsp-applets" then
+		if a == "--cs-applets" then
 			load = false
 		end
 	end
