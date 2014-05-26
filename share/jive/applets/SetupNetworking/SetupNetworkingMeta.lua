@@ -29,13 +29,13 @@ end
 
 
 function registerApplet(meta)
-	-- only load on Wandboard Squeeze Player control instance
+	-- only load on Squeeze Player control instance
 	local load = false
-	if string.match(arg[0], "jivelite%-cs") then
+	if string.match(arg[0], "jivelite%-sp") then
 		load = true
 	end
 	for _, a in ipairs(arg) do
-		if a == "--cs-applets" then
+		if a == "--sp-applets" then
 			load = true
 		end
 	end
