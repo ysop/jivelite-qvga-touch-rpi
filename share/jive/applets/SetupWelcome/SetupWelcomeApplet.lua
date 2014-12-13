@@ -13,6 +13,7 @@ local SimpleMenu       = require("jive.ui.SimpleMenu")
 local Surface          = require("jive.ui.Surface")
 local Textarea         = require("jive.ui.Textarea")
 local Window           = require("jive.ui.Window")
+local Task             = require("jive.ui.Task")
 local System           = require("jive.System")
 local Player           = require("jive.slim.Player")
 
@@ -30,9 +31,6 @@ oo.class(_M, Applet)
 
 
 function setupFirstStartup(self)
-	self:getSettings().setupDone = true
-	self:storeSettings()
-
 	local step1, step2
 
 	step1 = function()
@@ -48,16 +46,25 @@ end
 
 
 function setupDone(self)
+	self:getSettings().setupDone = true
+	self:storeSettings()
+
+	local closeTask = Task('closetohome', self,
+						   function(self)
+							   jiveMain:closeToHome(true, Window.transitionPushLeft)
+						   end
+					   )
+
 	for i, player in Player.iterate() do
 		if player:getId() == System:getMacAddress() then
-			jiveMain:closeToHome(true, Window.transitionPushLeft)
+			closeTask:addTask()
 			return appletManager:callService("selectPlayer", player)
 		end
 	end
 
 	return appletManager:callService("setupShowSelectPlayer", 
 									 function()
-										 jiveMain:closeToHome(true, Window.transitionPushLeft)
+									 	 closeTask:addTask()
 									 end, 
 									 'setuptitle')
 end
