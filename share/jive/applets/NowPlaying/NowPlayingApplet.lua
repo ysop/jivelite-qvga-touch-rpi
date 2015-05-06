@@ -1643,7 +1643,7 @@ function _createUI(self)
 			div5 = Icon('div5'),
 			div6 = Icon('div6'),
 			div7 = Icon('div7'),
-
+			butspacer = Icon('butspacer'),
 		  	rew  = self.rewButton,
 		  	play = playIcon,
 			fwd  = self.fwdButton,
