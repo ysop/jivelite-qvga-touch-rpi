@@ -442,7 +442,7 @@ static int _draw_screen(lua_State *L) {
 	/* Exit if we have no windows, nothing to draw */
 	lua_getfield(L, 1, "windowStack");
 	if (lua_objlen(L, -1) == 0) {
-		lua_pop(L, 1);
+		lua_pop(L, 2);
 
 		JIVEL_STACK_CHECK_ASSERT(L);
 		return 0;
@@ -1086,7 +1086,7 @@ static int process_event(lua_State *L, SDL_Event *event) {
 
 		/* show mouse cursor */
 		if (pointer_timeout == 0) {
-			SDL_ShowCursor(SDL_ENABLE);
+			SDL_ShowCursor(SDL_DISABLE);
 		}
 		pointer_timeout = now + POINTER_TIMEOUT;
 

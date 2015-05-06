@@ -51,7 +51,7 @@ NOW_PLAYING
 	CS	Právě hraje
 	DA	Nu spiller
 	DE	Aktueller Titel
-	EN	Now Playing
+	EN	Playing
 	ES	Reproduciendo
 	FI	Nyt soi
 	FR	Lecture en cours
