@@ -32,7 +32,9 @@ The Keyboard includes the following style parameters in addition to the widgets 
 
 =cut
 --]]
-
+screenWidth = 320   -- because getScreenSize() doesn't always return the true resolution, we set things backwards. 
+screenHeight = 240
+	
 
 local _assert, pairs, tostring, tonumber, type, ipairs, math = _assert, pairs, tostring, tonumber, type, ipairs, math
 
@@ -49,7 +51,8 @@ local table             = require("jive.utils.table")
 local string            = require("jive.utils.string")
 local debug             = require("jive.utils.debug")
 local locale            = require("jive.utils.locale")
-local log               = require("jive.utils.log").logger("jivelite.ui")
+local log               = require("jive.utils.log").logger("squeezeplay.ui")
+
 
 module(..., Framework.constants)
 
@@ -67,8 +70,10 @@ local keyboardButtonText = {
 }
 
 local default = {
-	width = 46,
-	height = 44,
+	width = 31,
+	height = 38,
+	--width = math.floor(screenWidth / 10.3),
+	-- height = math.floor(screenHeight / 6.31),
 }
 
 --[[
@@ -83,7 +88,6 @@ function __init(self, style, kbType, textinput)
 	_assert(type(style) == "string")
 
 	local obj = oo.rawnew(self, Group(style, {}))
-
 	obj.kbType = kbType
 	obj.textinput = textinput
 
@@ -321,7 +325,7 @@ function _layout(self)
 	local screenWidth, screenHeight = Framework:getScreenSize()
 
 	local keyWidth
-	local rowWidth = 460
+	local rowWidth = 310
 
 	-- self.keyboard has the keyboard, table of rows of key objects
 	-- self.rowInfo has metadata about the keyboard, e.g., keyWidth or spacer
@@ -347,7 +351,7 @@ function _layout(self)
 		local extraSpacerPixels = ( rowWidth - nonSpacerKeyWidth) % spacers
 		spacerWidth = math.floor( ( rowWidth - nonSpacerKeyWidth ) / spacers )
 
-		x = 10
+		x = 5
 		local numberOfSpacers = 0
 		for j, key in ipairs(row) do
 			local style = key:getStyle()
